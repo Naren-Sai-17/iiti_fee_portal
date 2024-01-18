@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Dashboard</title>
+</head>
+
+<nav class="bg-blue-500 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <!-- Logo -->
+        <a href="#" class="text-white font-bold text-xl">Your App Name</a>
+
+        <!-- Logout Button -->
+        <a href="{% url "student_portal:index"%}" class="text-white hover:text-gray-300 focus:outline-none">
+            Logout
+        </a>
+    </div>
+</nav>
+
+
+<body class="bg-gray-100 min-h-screen">
+    <div class = "flex items-center justify-center pt-10">
+        <div class="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+            <div>
+                <h2 class="text-2xl font-semibold">Fee Due:</h2>
+                <p class="text-lg text-gray-700">Your payment is due soon. Please click below to pay.</p>
+                <a href="#" class="block w-full text-center bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 transition duration-300 ease-in-out">
+                    Click here to pay
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="flex items-center justify-center pt-10">
+        <strong>Previous payments</strong>
+    </div>
+    <div class="flex items-center justify-center space-x-4">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-blue-200 p-10 px-20 rounded-md">#### ####</div>
+            <div class="bg-blue-200 p-10 px-20 rounded-md">#### ####</div>
+            <div class="bg-blue-200 p-10 px-20 rounded-md">#### ####</div>
+            <div class="bg-blue-200 p-10 px-20 rounded-md">#### ####</div>
+        </div>
+    </div>
+    
+    
+
+    
+</body>
+
+</html>
