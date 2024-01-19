@@ -9,3 +9,12 @@ def base(request):
 
 def dashboard(request): 
     return render(request, "admin_portal/dashboard.html")
+
+def upload(request): 
+    return render(request, "admin_portal/upload.html")
+
+def list(request): 
+    return render(request, "admin_portal/list.html") 
+
+def logs(request): 
+    return render(request, "admin_portal/logs.html") 

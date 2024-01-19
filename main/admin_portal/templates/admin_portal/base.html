@@ -16,7 +16,7 @@
 	<ul class="space-y-2 font-medium">
 		<li>
 			<a
-			href="#"
+			href="{% url "admin_portal:dashboard" %}"
 			class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 			>
 			<span class="ms-3">Dashboard</span>
@@ -32,15 +32,15 @@
 		</li>
 		<li>
 			<a
-			href="#"
+			href="{% url "admin_portal:upload" %}"
 			class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 			>
-			<span class="ms-3">Upload/Edit</span>
+			<span class="ms-3"> Upload/Edit </span>
 			</a>
 		</li>
 		<li>
 			<a
-			href="#"
+			href="{% url "admin_portal:list" %}" 
 			class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 			>
 			<span class="ms-3">Student list</span>
@@ -48,7 +48,7 @@
 		</li>
 		<li>
 			<a
-			href="#"
+			href="{% url "admin_portal:logs" %}" 
 			class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 			>
 			<span class="ms-3">Change log</span>
