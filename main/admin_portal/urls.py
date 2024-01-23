@@ -4,7 +4,7 @@ from . import views
 app_name = "admin_portal" # refer namespacing in django 
 
 urlpatterns = [
-    path("",views.index, name = "index"),
+    path("",views.login, name = "login"),
     path("base", views.base, name = "base"),
     path("dashboard", views.dashboard, name = "dashboard"),
     path("upload", views.upload, name = "upload"), 
