@@ -1,5 +1,9 @@
 {% extends "admin_portal/base.html" %}
 
 {% block content %}
-    upload excel 
+    <form action="/admin/upload_excel" method = "POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ excel_form }}
+        <input type="submit" value="submit">
+    </form>
 {% endblock %}
