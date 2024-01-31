@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 # other files 
+from .add_students import upload_and_save
 from . import forms
 # 3rd party tools 
 import openpyxl
@@ -41,6 +42,7 @@ def logs(request):
 @require_POST   
 def upload_excel(request): 
     excel_file = request.FILES["student_upload_sheet"] 
+    upload_and_save(excel_file)
     ### check recieved data 
     ### handle excel file 
     workbook = openpyxl.load_workbook(excel_file) 
