@@ -5,6 +5,7 @@ from django.views.decorators.http import require_POST
 # other files 
 from . import forms
 # 3rd party tools 
+import openpyxl
 
 def login(request): 
     if request.method == "POST": 
@@ -13,17 +14,23 @@ def login(request):
             return redirect(reverse("admin_portal:dashboard"))
     else: 
         form = forms.LoginForm() 
-    
-    return render(request,"admin_portal/login.html",{"form": form})
+    context = {
+        "form" : form
+    }
+    return render(request,"admin_portal/login.html",context)
 
 def base(request): 
     return render(request,"admin_portal/base.html")
 
 def dashboard(request): 
+    
     return render(request, "admin_portal/dashboard.html")
 
 def upload(request): 
-    return render(request, "admin_portal/upload.html",{"excel_form" : forms.StudentUploadForm})
+    context = {
+        "excel_form" : forms.StudentSheetUploadForm , 
+    }
+    return render(request, "admin_portal/upload.html",context)
 
 def list(request): 
     return render(request, "admin_portal/list.html") 
@@ -36,4 +43,8 @@ def upload_excel(request):
     excel_file = request.FILES["student_upload_sheet"] 
     ### check recieved data 
     ### handle excel file 
+    workbook = openpyxl.load_workbook(excel_file) 
+    sheet = workbook.active
+    for row in sheet.iter_rows(min_row =3 , max_row = 10, min_col = 2, max_col = 6, values_only = True):
+        print(row) 
     return redirect(reverse("admin_portal:upload")) 
