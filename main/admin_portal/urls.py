@@ -8,7 +8,7 @@ urlpatterns = [
     path("base", views.base, name = "base"),
     path("dashboard", views.dashboard, name = "dashboard"),
     path("upload", views.upload, name = "upload"), 
-    path("list", views.list, name = "list"), 
+    path("list", views.list.as_view(), name = "list"), 
     path("logs", views.logs, name = "logs"), 
     path("upload_excel", views.upload_excel, name = "upload_excel")
 ]
