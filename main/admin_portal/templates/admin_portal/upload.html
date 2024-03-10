@@ -1,9 +1,20 @@
 {% extends "admin_portal/base.html" %}
-
 {% block content %}
-    <form action="/admin/upload_excel" method = "POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ excel_form }}
-        <input type="submit" value="submit">
-    </form>
+    <div class="container mx-auto p-8">
+        <h1 class="text-2xl font-bold mb-6">Upload Excel</h1>
+
+        <form action="/admin/upload_excel" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Tailwind CSS classes for form elements -->
+            <div class="mb-4 w-1/3">
+                <label for="excel_file" class="block text-gray-600 text-sm font-semibold mb-2">Choose Excel File</label>
+                <input type="file" id="excel_file" name="excel_file" class="w-full p-2 border border-gray-300 rounded">
+            </div>
+
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
+                Submit
+            </button>
+        </form>
+    </div>
 {% endblock %}

@@ -1,12 +1,37 @@
 {% extends "admin_portal/base.html" %}
 {% block content %}
 <h2>Your Model List</h2>
-<ul>
+{% comment %} <ul>
     {% for student in students_list %}
         <li> {{ student.roll_number }} </li>
     {% endfor %}
-</ul>
-
+</ul> {% endcomment %}
+<table class="min-w-full border border-gray-300">
+    <thead>
+        <tr>
+            <th class="border-b p-2">Roll Number</th>
+            <th class="border-b p-2">Name</th>
+            <th class="border-b p-2">Course</th>
+            <th class="border-b p-2">Category</th>
+            <th class="border-b p-2">Department</th>
+            <th class="border-b p-2">Total Fee</th>
+            <th class="border-b p-2">Fee Receivable</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students_list %}
+            <tr>
+                <td class="border-b p-2">{{ student.roll_number }}</td>
+                <td class="border-b p-2">{{ student.name }}</td>
+                <td class="border-b p-2">{{ student.course }}</td>
+                <td class="border-b p-2">{{ student.category }}</td>
+                <td class="border-b p-2">{{ student.department }}</td>
+                <td class="border-b p-2">{{ student.total_fee }}</td>
+                <td class="border-b p-2">{{ student.fee_receivable }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
