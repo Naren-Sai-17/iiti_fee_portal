@@ -30,6 +30,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# SITE_ID = 1
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'student_portal', 
     'admin_portal', 
+    # 'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

@@ -9,17 +9,29 @@ from .utils.upload import add_students
 from .utils import verify
 from . import forms
 from . import models
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from . import forms
 # 3rd party tools 
 
-def login(request): 
-    if request.method == "POST": 
-        form = forms.LoginForm(request.POST) 
-        if form.is_valid(): 
-            return redirect(reverse("admin_portal:dashboard"))
-    else: 
-        form = forms.LoginForm() 
-    
-    return render(request,"admin_portal/login.html",{"form": form})
+def login(request):
+    if request.method == "POST":
+        form = forms.LoginForm(request.POST)
+        print(form)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                auth_login(request, user)
+                return redirect(reverse("admin_portal:logs"))
+    else:
+        form = forms.LoginForm()
+
+    return render(request, "admin_portal/login.html", {"form": form})
+
 
 def base(request): 
     return render(request,"admin_portal/base.html")
