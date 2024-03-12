@@ -10,5 +10,7 @@ urlpatterns = [
     path("upload", views.upload, name = "upload"), 
     path("list", views.list.as_view(), name = "list"), 
     path("logs", views.logs, name = "logs"), 
-    path("upload_excel", views.upload_excel, name = "upload_excel")
+    path("upload_excel", views.upload_excel, name = "upload_excel"),
+    path("logout", views.logout, name = "logout"), 
+    path("not_authorized", views.not_authorized, name = "not_authorized"), 
 ]

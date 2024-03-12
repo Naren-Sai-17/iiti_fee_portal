@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 class Students(models.Model): 
     # student details 
@@ -58,6 +58,6 @@ class LoanPayments(models.Model):
     student = models.ForeignKey(Students, on_delete=models.CASCADE)
     transaction_id = models.CharField(max_length = 50) 
     amount = models.IntegerField() 
- 
+
 class CustomUser(AbstractUser): 
     isAdmin = models.BooleanField(default = False) 
