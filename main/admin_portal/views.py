@@ -20,8 +20,8 @@ def login(request):
         form = forms.LoginForm(request.POST)
         print(form)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+            username = form.cleaned_data['session_username']
+            password = form.cleaned_data['admin_password']
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
@@ -54,12 +54,12 @@ def logs(request):
 @require_POST   
 def upload_excel(request): 
     # no file found 
-    if "student_upload_sheet" not in request.FILES:
-        return redirect() 
-    excel_file = request.FILES["student_upload_sheet"] 
+    # if "student_upload_sheet" not in request.FILES:
+    #     return redirect() 
+    excel_file = request.FILES["excel_file"] 
     # wrong file type 
-    if not verify.is_excel_file(excel_file): 
-        return redirect(reverse("admin_portal:upload"))
+    # if not verify.is_excel_file(excel_file): 
+        # return redirect(reverse("admin_portal:upload"))
     add_students(excel_file)
     # overview of additions 
     # show errors 
