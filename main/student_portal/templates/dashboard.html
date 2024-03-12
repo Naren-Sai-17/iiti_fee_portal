@@ -8,13 +8,14 @@
     <title>Dashboard</title>
 </head>
 
+{% load account %}
+
 <nav class="bg-blue-500 p-4">
     <div class="container mx-auto flex justify-between items-center">
         <!-- Logo -->
-        <a href="#" class="text-white font-bold text-xl">Your App Name</a>
-
+        <a href="#" class="text-white font-bold text-xl"> {% user_display user %} </a>
         <!-- Logout Button -->
-        <a href="{% url "student_portal:index"%}" class="text-white hover:text-gray-300 focus:outline-none">
+        <a href="{% url 'student_portal:logout' %} " class="text-white hover:text-gray-300 focus:outline-none">
             Logout
         </a>
     </div>
