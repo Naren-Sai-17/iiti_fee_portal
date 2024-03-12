@@ -1,4 +1,30 @@
 {% extends "admin_portal/base.html" %}
 {% block content %}
-    Admin logs
+    <div class="container mx-auto p-8">
+        <h1 class="text-2xl font-bold mb-6">Admin Log</h1>
+
+        <div class="bg-white p-4 rounded-md shadow-md">
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-300">
+                    <thead>
+                        <tr>
+                            <th class="border-b p-2">Date</th>
+                            <th class="border-b p-2">User</th>
+                            <th class="border-b p-2">Action</th>
+                            <th class="border-b p-2">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border-b p-2">2024-02-16 12:30 PM</td>
+                            <td class="border-b p-2">AdminUser</td>
+                            <td class="border-b p-2">Modified</td>
+                            <td class="border-b p-2">Details of the modification...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}
