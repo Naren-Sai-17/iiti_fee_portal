@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.views.generic import ListView
 # other files 
 from .utils.upload import add_students
+from .utils.upload import loan_students
 from .utils import verify
 from . import forms
 from . import models
@@ -13,6 +14,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from . import forms
+from .models import Students
 # 3rd party tools 
 
 def login(request):
@@ -42,6 +44,9 @@ def dashboard(request):
 def upload(request): 
     return render(request, "admin_portal/upload.html",{"excel_form" : forms.StudentUploadForm})
 
+def loan(request): 
+    return render(request, "admin_portal/loan.html")
+
 class list(ListView): 
     model = models.Students
     template_name = "admin_portal/list.html"
@@ -65,3 +70,18 @@ def upload_excel(request):
     # show errors 
     # option to download excel of errors   
     return redirect(reverse("admin_portal:upload")) 
+
+@require_POST   
+def loan_excel(request): 
+    # no file found 
+    # if "student_upload_sheet" not in request.FILES:
+    #     return redirect() 
+    excel_file = request.FILES["excel_file"] 
+    # wrong file type 
+    # if not verify.is_excel_file(excel_file): 
+        # return redirect(reverse("admin_portal:upload"))
+    loan_students(excel_file, Students)
+    # overview of additions 
+    # show errors 
+    # option to download excel of errors   
+    return redirect(reverse("admin_portal:loan")) 

@@ -25,6 +25,7 @@ class Students(models.Model):
     accomodation_charges = models.IntegerField() 
     student_welfare_fund = models.IntegerField() 
     mess_rebate = models.IntegerField() 
+    loan_fee = models.IntegerField(default = 0)
 
     @property
     def total_fee(self):
@@ -47,7 +48,7 @@ class Students(models.Model):
     
     @property 
     def fee_receivable(self): 
-        return self.total_fee - self.mess_rebate
+        return self.total_fee - self.mess_rebate - self.loan_fee
 
 class GatewayPayments(models.Model):
     student = models.ForeignKey(Students, on_delete = models.CASCADE)

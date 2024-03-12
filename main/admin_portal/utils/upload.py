@@ -49,3 +49,26 @@ def add_students_insert(student_data):
     except Exception as e:
         print(e) 
 
+#loan
+def loan_students(excel_file, students_model):
+    try:
+        # Read the Excel file into a DataFrame
+        excel_data = pd.read_excel(excel_file)
+        
+        # Iterate over each row in the DataFrame
+        for index, row in excel_data.iterrows():
+            roll_number = row['Roll Number']
+            received_amount = row['Received Amount']
+            
+            # Search for student by roll number in the model
+            try:
+                student = students_model.objects.get(roll_number=roll_number)
+                # Reduce fees for the student
+                student.loan_fee += received_amount
+                student.save()
+                print(f"Fees reduced for roll number {roll_number}. Remaining fees: {student.fees}")
+            except students_model.DoesNotExist:
+                print(f"Student with roll number {roll_number} not found.")
+    except Exception as e:
+        print(f"Error processing file: {e}")
+
