@@ -13,6 +13,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from . import forms
+from .filters import studentfilter
 # 3rd party tools 
 
 def login(request):
@@ -47,6 +48,16 @@ class list(ListView):
     template_name = "admin_portal/list.html"
     context_object_name = 'students_list'
     paginate_by = 100
+
+    def get_queryset(self):
+        queryset=super().get_queryset()
+        self.filterset=studentfilter(self.request.GET,queryset=queryset)
+        return self.filterset.qs
+    
+    def get_context_data(self,**kwargs):
+        context=super().get_context_data(**kwargs)
+        context['filter']=self.filterset
+        return context
 
 def logs(request): 
     return render(request, "admin_portal/logs.html") 
