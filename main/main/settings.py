@@ -159,3 +159,5 @@ SOCIALACCOUNT_PROVIDERS = {
 
     }    
 }
+
+LOGIN_REDIRECT_URL = '/student/dashboard'
