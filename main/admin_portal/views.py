@@ -7,6 +7,12 @@ from .utils.upload import add_students
 from django.views.generic import ListView
 from . import forms
 from . import models
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import render, redirect
+
+
+from .filters import studentfilter
+# 3rd party tools 
 from django.utils.decorators import method_decorator
 from .decorators import is_admin
 from django.contrib.auth import logout
@@ -43,6 +49,16 @@ class list(ListView):
     context_object_name = 'students_list'
     paginate_by = 100
 
+    def get_queryset(self):
+        queryset=super().get_queryset()
+        self.filterset=studentfilter(self.request.GET,queryset=queryset)
+        return self.filterset.qs
+    
+    def get_context_data(self,**kwargs):
+        context=super().get_context_data(**kwargs)
+        context['filter']=self.filterset
+        return context
+
     # to apply is_admin decorator to the class 
     @method_decorator(is_admin)
     def dispatch(self, *args, **kwargs):
@@ -56,8 +72,17 @@ def logs(request):
 @require_POST  
 @is_admin
 def upload_excel(request): 
+    # no file found 
+    # if "student_upload_sheet" not in request.FILES:
+    #     return redirect() 
     excel_file = request.FILES["excel_file"] 
+    # wrong file type 
+    # if not verify.is_excel_file(excel_file): 
+        # return redirect(reverse("admin_portal:upload"))
     add_students(excel_file)
+    # overview of additions 
+    # show errors 
+    # option to download excel of errors   
     return redirect(reverse("admin_portal:upload")) 
 
 def logout(request): 
