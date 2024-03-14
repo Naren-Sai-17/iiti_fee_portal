@@ -56,17 +56,8 @@ def logs(request):
 @require_POST  
 @is_admin
 def upload_excel(request): 
-    # no file found 
-    # if "student_upload_sheet" not in request.FILES:
-    #     return redirect() 
     excel_file = request.FILES["excel_file"] 
-    # wrong file type 
-    # if not verify.is_excel_file(excel_file): 
-        # return redirect(reverse("admin_portal:upload"))
     add_students(excel_file)
-    # overview of additions 
-    # show errors 
-    # option to download excel of errors   
     return redirect(reverse("admin_portal:upload")) 
 
 def logout(request): 
