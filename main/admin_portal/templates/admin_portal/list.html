@@ -35,17 +35,20 @@
     </tr>
   </thead>
   <tbody>
+    {% comment %} <a href = {% url 'admin_portal:profile' student.roll_number %}> </a> {% endcomment %}
     {% for student in students_list %}
-    <tr>
-      <td class="border-b p-2">{{ student.roll_number }}</td>
-      <td class="border-b p-2">{{ student.name }}</td>
-      <td class="border-b p-2">{{ student.course }}</td>
-      <td class="border-b p-2">{{ student.category }}</td>
-      <td class="border-b p-2">{{ student.department }}</td>
-      <td class="border-b p-2">{{ student.total_fee }}</td>
-      <td class="border-b p-2">{{ student.fee_receivable }}</td>
-    </tr>
-    {% endfor %}
+        <tr onclick="location.href='{% url 'admin_portal:profile' student.roll_number %}'" style="cursor:pointer;" class = "hover:bg-blue-200">
+            <td class="border-b p-2">{{ student.roll_number }}</td>
+            <td class="border-b p-2">{{ student.name }}</td>
+            <td class="border-b p-2">{{ student.course }}</td>
+            <td class="border-b p-2">{{ student.category }}</td>
+            <td class="border-b p-2">{{ student.department }}</td>
+            <td class="border-b p-2">{{ student.total_fee }}</td>
+            <td class="border-b p-2">{{ student.fee_receivable }}</td>
+        </tr>
+    </a>
+{% endfor %}
+
   </tbody>
 </table>
 <div class="pagination">

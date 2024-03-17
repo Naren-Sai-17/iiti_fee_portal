@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .details {
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .details p {
+            margin: 10px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .details p:last-child {
+            border-bottom: none;
+        }
+
+        .details strong {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .details span {
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Profile</h1>
+        <!-- Display profile photo -->
+        <div class="details">
+            <p><strong>Roll Number:</strong> <span>{{ student_details.roll_number }}</span></p>
+            <p><strong>Name:</strong> <span>{{ student_details.name }}</span></p>
+            <p><strong>Course:</strong> <span>{{ student_details.course }}</span></p>
+            <p><strong>Category:</strong> <span>{{ student_details.category }}</span></p>
+            <p><strong>Department:</strong> <span>{{ student_details.department }}</span></p>
+            <p><strong>Tuition Fee:</strong> <span>{{ student_details.tuition_fee }}</span></p>
+            <p><strong>Insurance Fee:</strong> <span>{{ student_details.insurance_fee }}</span></p>
+            <p><strong>Examination Fee:</strong> <span>{{ student_details.examination_fee }}</span></p>
+            <p><strong>Registration Fee:</strong> <span>{{ student_details.registration_fee }}</span></p>
+            <p><strong>Gymkhana Fee:</strong> <span>{{ student_details.gymkhana_fee }}</span></p>
+            <p><strong>Medical Fee:</strong> <span>{{ student_details.medical_fee }}</span></p>
+            <p><strong>Student Benevolent Fund:</strong> <span>{{ student_details.student_benevolent_fund }}</span></p>
+            <p><strong>Lab Fee:</strong> <span>{{ student_details.lab_fee }}</span></p>
+            <p><strong>Semester Mess Advance:</strong> <span>{{ student_details.semester_mess_advance }}</span></p>
+            <p><strong>One-time Fee:</strong> <span>{{ student_details.one_time_fee }}</span></p>
+            <p><strong>Refundable Security Deposit:</strong> <span>{{ student_details.refundable_security_deposit }}</span></p>
+            <p><strong>Accommodation Charges:</strong> <span>{{ student_details.accommodation_charges }}</span></p>
+            <p><strong>Student Welfare Fund:</strong> <span>{{ student_details.student_welfare_fund }}</span></p>
+            <p><strong>Mess Rebate:</strong> <span>{{ student_details.mess_rebate }}</span></p>
+        </div>
+    </div>
+</body>
+</html>
