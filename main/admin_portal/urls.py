@@ -13,4 +13,5 @@ urlpatterns = [
     path("upload_excel", views.upload_excel, name = "upload_excel"),
     path("logout", views.logout, name = "logout"), 
     path("not_authorized", views.not_authorized, name = "not_authorized"), 
+    path("profile/<str:roll_number>/",views.profile,name = "profile")
 ]
