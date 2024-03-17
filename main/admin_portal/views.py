@@ -9,7 +9,7 @@ from . import forms
 from . import models
 from django.contrib.auth import authenticate, login as auth_login
 from django.shortcuts import render, redirect
-
+from django.http import HttpResponse
 
 from .filters import studentfilter
 # 3rd party tools 
@@ -63,6 +63,43 @@ class list(ListView):
     @method_decorator(is_admin)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
+
+    import hashlib
+import re
+
+
+@is_admin
+def profile(request, roll_number): 
+    try:
+        student_details = models.Students.objects.get(roll_number=roll_number)
+        return render(request, 'admin_portal/profile.html', {
+            'student_details': student_details,
+        })
+    except Exception as e:
+        error_message = f"An error occurred: {str(e)}"
+        print(error_message)
+        return HttpResponse(error_message)
+
+# @is_admin
+# def profile(request,roll_number):
+#     print("here")
+#     try:
+#         student_details = models.Students.objects.get(roll_number=roll_number)
+#         print("here")
+#         return render(request, 'admin_portal/profile.html', {
+#             'student_details': student_details,
+#         })
+#     except Exception as e:
+#         error_message = f"An error occurred: {str(e)}"
+#         print(error_message)
+#         return HttpResponse(error_message)
+
+# Function to get the Gravatar image URL based on the email address
+def get_gravatar_url(email):
+    hash_value = hashlib.md5(email.lower().encode()).hexdigest()
+    return f"https://www.gravatar.com/avatar/{hash_value}?d=identicon&s=200"
+
+    
 
 
 @is_admin
