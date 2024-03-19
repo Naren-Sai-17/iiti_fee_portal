@@ -1,5 +1,76 @@
 {% extends "admin_portal/base.html" %}
-
 {% block content %}
-	Content here 
+<div class="bg-gray-100 min-h-screen p-8">
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+	  <div class="bg-white rounded-lg shadow-md p-6">
+		<h3 class="text-lg font-semibold mb-2">Today's Revenue</h3>
+		<p class="text-4xl font-bold text-pink-600">$53,000</p>
+	  </div>
+	  <div class="bg-white rounded-lg shadow-md p-6">
+		<h3 class="text-lg font-semibold mb-2">New Users</h3>
+		<p class="text-4xl font-bold text-pink-600">75,642</p>
+	  </div>
+	  <div class="bg-white rounded-lg shadow-md p-6">
+		<h3 class="text-lg font-semibold mb-2">Today's Users</h3>
+		<p class="text-4xl font-bold text-pink-600">2,300</p>
+	  </div>
+	  <div class="bg-white rounded-lg shadow-md p-6">
+		<h3 class="text-lg font-semibold mb-2">Revenue</h3>
+		<p class="text-4xl font-bold text-pink-600">$182,439</p>
+	  </div>
+	</div>
+  
+	<div class="mt-8">
+	  <h2 class="text-xl font-semibold mb-4">Sales by Country</h2>
+	  <div class="bg-white rounded-lg shadow-md p-6">
+		<div class="flex items-center mb-4">
+		  <div class="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
+		  <span>United States</span>
+		  <span class="ml-auto">2,640 (23.6%)</span>
+		</div>
+		<div class="flex items-center mb-4">
+		  <div class="w-4 h-4 rounded-full bg-yellow-500 mr-2"></div>
+		  <span>Germany</span>
+		  <span class="ml-auto">1,860 (16.72%)</span>
+		</div>
+		<div class="flex items-center mb-4">
+		  <div class="w-4 h-4 rounded-full bg-pink-500 mr-2"></div>
+		  <span>Great Britain</span>
+		  <span class="ml-auto">1,455 (13.06%)</span>
+		</div>
+		<div class="flex items-center">
+		  <div class="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
+		  <span>Brazil</span>
+		  <span class="ml-auto">982 (8.82%)</span>
+		</div>
+	  </div>
+	</div>
+  
+	<div class="mt-8 flex justify-between">
+	  <div class="bg-white rounded-lg shadow-md p-6 w-1/2 mr-4">
+		<h3 class="text-lg font-semibold mb-4">Sales Overview</h3>
+		<div class="flex items-center justify-between mb-2">
+		  <span>75% (992 of 1,284)</span>
+		  <div class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-white">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+			  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+			</svg>
+		  </div>
+		</div>
+		<div class="bg-navy-500 h-16 rounded-md flex justify-between items-center px-4">
+		  <div class="w-8 h-8 rounded-full bg-white"></div>
+		  <div class="w-8 h-8 rounded-full bg-white"></div>
+		  <div class="w-16 h-16 rounded-full bg-white"></div>
+		  <div class="w-8 h-8 rounded-full bg-white"></div>
+		  <div class="w-8 h-8 rounded-full bg-white"></div>
+		</div>
+	  </div>
+	  <div class="bg-white rounded-lg shadow-md p-6 w-1/2">
+		<h3 class="text-lg font-semibold mb-4">Globe Image Placeholder</h3>
+		<div class="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
+		  <span class="text-gray-500">Globe Image</span>
+		</div>
+	  </div>
+	</div>
+  </div>	
 {% endblock %}

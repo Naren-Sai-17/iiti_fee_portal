@@ -2,71 +2,75 @@
 <h2>Your Model List</h2>
 {% comment %}
 <ul>
-  {% for student in students_list %}
-  <li>{{ student.roll_number }}</li>
-  {% endfor %}
+	{% for student in students_list %}
+	<li>{{ student.roll_number }}</li>
+	{% endfor %}
 </ul>
 {% endcomment %}
 
 <div class="container mx-auto py-8">
-  <form method="GET" class="flex items-center space-x-4">
-    <div
-      class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover: focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0369a1]"
-    >
-      {{filter.form.as_p}}
-    </div>
-    <input
-      type="submit"
-      value="submit"
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    />
-  </form>
+	<form method="GET" class="flex items-center space-x-4">
+		<div>
+			<div
+				class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover: focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0369a1]">
+				{{filter.form.as_p}}
+			</div>
+			<div>
+				<input type="submit" value="submit"
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" />
+			</div>
+		</div>
+	</form>
 </div>
 <table class="min-w-full border border-gray-300">
-  <thead>
-    <tr>
-      <th class="border-b p-2">Roll Number</th>
-      <th class="border-b p-2">Name</th>
-      <th class="border-b p-2">Course</th>
-      <th class="border-b p-2">Category</th>
-      <th class="border-b p-2">Department</th>
-      <th class="border-b p-2">Total Fee</th>
-      <th class="border-b p-2">Fee Receivable</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% comment %} <a href = {% url 'admin_portal:profile' student.roll_number %}> </a> {% endcomment %}
-    {% for student in students_list %}
-        <tr onclick="location.href='{% url 'admin_portal:profile' student.roll_number %}'" style="cursor:pointer;" class = "hover:bg-blue-200">
-            <td class="border-b p-2">{{ student.roll_number }}</td>
-            <td class="border-b p-2">{{ student.name }}</td>
-            <td class="border-b p-2">{{ student.course }}</td>
-            <td class="border-b p-2">{{ student.category }}</td>
-            <td class="border-b p-2">{{ student.department }}</td>
-            <td class="border-b p-2">{{ student.total_fee }}</td>
-            <td class="border-b p-2">{{ student.fee_receivable }}</td>
-        </tr>
-    </a>
-{% endfor %}
+	<thead>
+		<tr>
+			<th class="border-b p-2">Roll Number</th>
+			<th class="border-b p-2">Name</th>
+			<th class="border-b p-2">Course</th>
+			<th class="border-b p-2">Category</th>
+			<th class="border-b p-2">Department</th>
+			<th class="border-b p-2">Total Fee</th>
+			<th class="border-b p-2">Fee Receivable</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% comment %} <a href="{% url 'admin_portal:profile' student.roll_number %}"> </a> {% endcomment %}
+		{% for student in students_list %}
+		<tr onclick=location.href="{% url 'admin_portal:profile' student.roll_number %}" style="cursor:pointer;"
+			class="hover:bg-blue-200">
+			<td class="border-b p-2">{{ student.roll_number }}</td>
+			<td class="border-b p-2">{{ student.name }}</td>
+			<td class="border-b p-2">{{ student.course }}</td>
+			<td class="border-b p-2">{{ student.category }}</td>
+			<td class="border-b p-2">{{ student.department }}</td>
+			<td class="border-b p-2">{{ student.total_fee }}</td>
+			<td class="border-b p-2">{{ student.fee_receivable }}</td>
+		</tr>
+		</a>
+		{% endfor %}
 
-  </tbody>
+	</tbody>
 </table>
-<div class="pagination">
-  <span class="step-links">
-    {% if page_obj.has_previous %}
-    <a href="?page=1">&laquo; first</a>
-    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-    {% endif %}
+<div class="pagination mt-6">
+	<span class="step-links">
+		{% if page_obj.has_previous %}
+		<a href="?page=1" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">&laquo;
+			first</a>
+		<a href="?page={{ page_obj.previous_page_number }}"
+			class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">previous</a>
+		{% endif %}
 
-    <span class="current">
-      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-    </span>
+		<span class="current">
+			Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+		</span>
 
-    {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}">next</a>
-    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-    {% endif %}
-  </span>
+		{% if page_obj.has_next %}
+		<a href="?page={{ page_obj.next_page_number }}"
+			class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">next</a>
+		<a href="?page={{ page_obj.paginator.num_pages }}"
+			class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">last &raquo;</a>
+		{% endif %}
+	</span>
 </div>
-
 {% endblock %}
