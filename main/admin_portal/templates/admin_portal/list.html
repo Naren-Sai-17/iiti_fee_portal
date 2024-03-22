@@ -1,5 +1,4 @@
 {% extends "admin_portal/base.html" %} {% block content %}
-<h2>Your Model List</h2>
 {% comment %}
 <ul>
 	{% for student in students_list %}
@@ -10,12 +9,12 @@
 
 <div class="container mx-auto py-8">
 	<form method="GET" class="flex items-center space-x-4">
-		<div>
+		<div class="flex flex-col">
 			<div
-				class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover: focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0369a1]">
+				class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover: focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0369a1] mb-4">
 				{{filter.form.as_p}}
 			</div>
-			<div>
+			<div class="flex justify-center">
 				<input type="submit" value="submit"
 					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" />
 			</div>

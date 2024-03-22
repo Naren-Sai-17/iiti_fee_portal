@@ -1,0 +1,76 @@
+{% extends "admin_portal/base.html" %}
+{% block content %}
+
+<div class="table-container">
+    <table class="table-auto bg-white shadow-md rounded-lg overflow-hidden">
+        <thead class="bg-gray-200 text-gray-700">
+            <tr>
+                <th class="px-4 py-2">Submit</th>
+                <th class="px-4 py-2">Course</th>
+                <th class="px-4 py-2">Category</th>
+                <th class="px-4 py-2">Tuition Fee</th>
+                <th class="px-4 py-2">Insurance Fee</th>
+                <th class="px-4 py-2">Examination Fee</th>
+                <th class="px-4 py-2">Registration Fee</th>
+                <th class="px-4 py-2">Gymkhana Fee</th>
+                <th class="px-4 py-2">Medical Fee</th>
+                <th class="px-4 py-2">Student Benevolent Fund</th>
+                <th class="px-4 py-2">Lab Fee</th>
+                <th class="px-4 py-2">Semester Mess Advance</th>
+                <th class="px-4 py-2">One Time Fee</th>
+                <th class="px-4 py-2">Refundable Security Deposit</th>
+                <th class="px-4 py-2">Accommodation Charges</th>
+                <th class="px-4 py-2">Student Welfare Fund</th>
+            </tr>
+        </thead>
+        <tbody class="text-gray-700">
+            {% for fee_structure in fee_structures %}
+            <tr>
+                <form action="{% url 'admin_portal:structure' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="fee_structure_id" name="fee_structure_id" value="{{ fee_structure.id }}">
+                    <td class="border px-4 py-2"><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button></td>
+                    <td class="border px-4 py-2"><input type="text" name="course" value="{{ fee_structure.course }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="text" name="category" value="{{ fee_structure.category }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="tuition_fee" value="{{ fee_structure.tuition_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="insurance_fee" value="{{ fee_structure.insurance_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="examination_fee" value="{{ fee_structure.examination_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="registration_fee" value="{{ fee_structure.registration_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="gymkhana_fee" value="{{ fee_structure.gymkhana_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="medical_fee" value="{{ fee_structure.medical_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="student_benevolent_fund" value="{{ fee_structure.student_benevolent_fund }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="lab_fee" value="{{ fee_structure.lab_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="semester_mess_advance" value="{{ fee_structure.semester_mess_advance }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="one_time_fee" value="{{ fee_structure.one_time_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="refundable_security_deposit" value="{{ fee_structure.refundable_security_deposit }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="accommodation_charges" value="{{ fee_structure.accommodation_charges }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="student_welfare_fund" value="{{ fee_structure.student_welfare_fund }}" class="border rounded-md px-4 py-2"></td>
+                </form>
+            </tr>            
+            {% endfor %}
+            <tr>
+                <form action="{% url 'admin_portal:structure' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="fee_structure_id" name="fee_structure_id" value="{{ fee_structure.id }}">
+                    <td class="border px-4 py-2"><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add</button></td>
+                    <td class="border px-4 py-2"><input type="text" name="course" value="{{ fee_structure.course }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="text" name="category" value="{{ fee_structure.category }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="tuition_fee" value="{{ fee_structure.tuition_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="insurance_fee" value="{{ fee_structure.insurance_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="examination_fee" value="{{ fee_structure.examination_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="registration_fee" value="{{ fee_structure.registration_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="gymkhana_fee" value="{{ fee_structure.gymkhana_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="medical_fee" value="{{ fee_structure.medical_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="student_benevolent_fund" value="{{ fee_structure.student_benevolent_fund }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="lab_fee" value="{{ fee_structure.lab_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="semester_mess_advance" value="{{ fee_structure.semester_mess_advance }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="one_time_fee" value="{{ fee_structure.one_time_fee }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="refundable_security_deposit" value="{{ fee_structure.refundable_security_deposit }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="accommodation_charges" value="{{ fee_structure.accommodation_charges }}" class="border rounded-md px-4 py-2"></td>
+                    <td class="border px-4 py-2"><input type="number" name="student_welfare_fund" value="{{ fee_structure.student_welfare_fund }}" class="border rounded-md px-4 py-2"></td>
+                </form>
+            </tr>  
+        </tbody>
+    </table>
+</div>
+{% endblock %}  

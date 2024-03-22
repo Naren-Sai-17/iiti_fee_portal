@@ -41,7 +41,7 @@ def add_students_insert(student_data):
             semester_mess_advance = student_data[14],
             one_time_fee = student_data[15],
             refundable_security_deposit = student_data[16],
-            accomodation_charges = student_data[17],
+            accommodation_charges = student_data[17],
             student_welfare_fund = student_data[18],
             mess_rebate = student_data[20]
         )

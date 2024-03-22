@@ -10,3 +10,9 @@ class LoginForm(forms.Form):
    
 class StudentUploadForm(forms.Form):
     student_upload_sheet = forms.FileField() 
+
+class FeeStructureForm(forms.ModelForm): 
+    class Meta: 
+        model = models.FeeStructure
+        fields = '__all__'
+        

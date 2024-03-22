@@ -4,7 +4,6 @@ from django.contrib.auth import logout as dj_logout
 from allauth.account.views import LogoutView 
 from .decorators import is_student
 from django.http import HttpResponse
-# 
 from admin_portal.models import Students
 
 # Create your views here.
@@ -22,7 +21,7 @@ def logout(request):
     return redirect(reverse("student_portal:login"))
 
 def not_authorized(request): 
-    return render(request,"not_authorized.html")
+    return render(request,"student_portal/not_authorized.html")
 
 # print(type(current_student))
 

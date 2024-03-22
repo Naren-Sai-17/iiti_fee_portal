@@ -9,7 +9,6 @@ class Students(models.Model):
     category = models.CharField(max_length = 15) 
     department = models.CharField(max_length = 10)
     # email = models.EmailField() 
-
     # fee details 
     tuition_fee = models.IntegerField()
     insurance_fee = models.IntegerField() 
@@ -22,7 +21,7 @@ class Students(models.Model):
     semester_mess_advance = models.IntegerField() 
     one_time_fee = models.IntegerField()
     refundable_security_deposit = models.IntegerField()
-    accomodation_charges = models.IntegerField() 
+    accommodation_charges = models.IntegerField() 
     student_welfare_fund = models.IntegerField() 
     mess_rebate = models.IntegerField() 
 
@@ -40,7 +39,7 @@ class Students(models.Model):
             self.semester_mess_advance + 
             self.one_time_fee +
             self.refundable_security_deposit +
-            self.accomodation_charges + 
+            self.accommodation_charges + 
             self.student_welfare_fund + 
             self.mess_rebate 
         )
@@ -61,3 +60,23 @@ class LoanPayments(models.Model):
 
 class CustomUser(AbstractUser): 
     isAdmin = models.BooleanField(default = False) 
+
+class FeeStructure(models.Model): 
+    course = models.CharField(max_length = 10) 
+    category = models.CharField(max_length = 15) 
+    tuition_fee = models.IntegerField()
+    insurance_fee = models.IntegerField() 
+    examination_fee = models.IntegerField()
+    registration_fee = models.IntegerField() 
+    gymkhana_fee = models.IntegerField() 
+    medical_fee = models.IntegerField() 
+    student_benevolent_fund = models.IntegerField() 
+    lab_fee = models.IntegerField() 
+    semester_mess_advance = models.IntegerField() 
+    one_time_fee = models.IntegerField()
+    refundable_security_deposit = models.IntegerField()
+    accommodation_charges = models.IntegerField() 
+    student_welfare_fund = models.IntegerField() 
+
+
+        
