@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">
@@ -106,23 +105,6 @@
 
 
         <div class="flex-1 p-6 sm:ml-64 transition-all duration-300">
-            <div x-show="showFlash" x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 transform translate-x-4"
-                x-transition:enter-end="opacity-100 transform translate-x-0"
-                x-transition:leave="transition ease-in duration-300"
-                x-transition:leave-start="opacity-100 transform translate-x-0"
-                x-transition:leave-end="opacity-0 transform translate-x-4" :class="{
-                'bg-green-500 text-white': flashType === 'success',
-                'bg-red-500 text-white': flashType === 'error',
-                'bg-yellow-500 text-black': flashType === 'warning',
-                'bg-blue-500 text-white': flashType === 'info',
-            }" class="fixed top-4 right-4 px-4 py-2 rounded-md shadow-md z-50" @click.away="" x-init="
-                setTimeout(() => {
-                    showFlash = false;
-                }, 1000);
-            ">
-                <span x-text="flashMessage">hello</span>
-            </div>
             
             {% if messages %}
             <div class="fixed top-0 left-0 right-0 z-50 flex justify-center" id="messageBox">
@@ -142,16 +124,7 @@
             {% endblock %}
         </div>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const messageBox = document.getElementById("messageBox");
-            if (messageBox) {
-                setTimeout(function () {
-                    messageBox.remove();
-                }, 2000);
-            }
-        });
-    </script>
+
 
 </body>
 
