@@ -7,7 +7,9 @@
     <h1 class="text-3xl font-bold mb-8">Student Profile</h1>
     <!-- Display profile photo -->
     <div class="bg-white rounded-lg shadow-md p-6">
-        <form>
+        <form action="{% url 'admin_portal:update_profile' student_details.roll_number %}" method="post">
+             {% csrf_token %} 
+
             <div class="mb-4">
                 <label class="block text-gray-700 font-bold mb-2" for="roll_number">Roll Number:</label>
                 <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="roll_number" type="text" value="{{ student_details.roll_number }}">
@@ -84,6 +86,10 @@
                 <label class="block text-gray-700 font-bold mb-2" for="mess_rebate">Mess Rebate:</label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="mess_rebate" type="text" value="{{ student_details.mess_rebate }}">
             </div>
+             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Update
+            </button>
+
         </form>
     </div>
 </div>

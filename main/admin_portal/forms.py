@@ -23,3 +23,8 @@ class FeeStructureForm(forms.ModelForm):
         model = models.FeeStructure
         fields = '__all__'
         
+class Profile(forms.ModelForm):
+    class Meta:
+        model=models.Students
+        fields = '__all__'
+

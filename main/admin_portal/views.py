@@ -6,6 +6,7 @@ from . import utils
 from django.views.generic import ListView
 from . import forms
 from . import models
+from django.forms.models import model_to_dict
 from .filters import studentfilter
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -134,6 +135,42 @@ def profile(request, roll_number):
         error_message = f"An error occurred: {str(e)}"
         print(error_message)
         return HttpResponse(error_message)
+
+@is_admin
+def update_profile(request,roll_number):
+    
+    if request.method == 'POST':
+            student = models.Students.objects.get(roll_number=roll_number)
+            initial_data = model_to_dict(student)
+
+            form = forms.Profile(request.POST, instance = student)
+            if form.is_valid():
+                 form_data = form.cleaned_data
+                 changes = {}
+                 for field, value in form_data.items():
+                    if value != initial_data[field]:
+                        changes[field] = value
+                        return render(request, 'admin_portal/profile_changes.html', {'changes': changes, 'roll_number': roll_number})
+            else:
+                return redirect(reverse('admin_portal:update_profile_confirm', kwargs={'roll_number': roll_number}))
+        
+           
+    else:
+        return render(request, 'admin_portal/profile.html')
+
+
+def update_profile_confirm(request, roll_number):
+    if request.method == 'POST':
+        instance = get_object_or_404(models.Students, roll_number=roll_number)
+        form = forms.Profile(request.POST, instance=instance)
+        form.save()  
+    return redirect(reverse('admin_portal:update_profile_confirm', kwargs={'roll_number': roll_number}))
+
+def update_profile_cancel(request):
+    return redirect(reverse('admin_portal:profile'))
+
+
+
 
 
 ########## Admin logs ##########
