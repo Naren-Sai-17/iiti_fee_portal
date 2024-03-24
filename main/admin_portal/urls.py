@@ -14,5 +14,8 @@ urlpatterns = [
     path("logout", views.logout, name = "logout"), 
     path("not_authorized", views.not_authorized, name = "not_authorized"), 
     path("profile/<str:roll_number>/",views.profile,name = "profile"),
+    path("update_profile/<str:roll_number>/", views.update_profile, name='update_profile'),
+    path("update_profile_confirm/<str:roll_number>/", views.update_profile_confirm, name='update_profile_confirm'),
+    path("update_profile_cancel/", views.update_profile_cancel, name='update_profile_cancel'),
     path("structure",views.fee_structure_list, name = "structure"), 
 ]
