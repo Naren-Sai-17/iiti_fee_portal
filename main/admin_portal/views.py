@@ -7,6 +7,8 @@ from django.views.generic import ListView
 from . import forms
 from . import models
 from django.forms.models import model_to_dict
+from django.http import QueryDict
+
 from .filters import studentfilter
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -72,6 +74,13 @@ class list(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter"] = self.filterset
+        
+    
+     # Retain filter parameters in pagination links
+        querydict = QueryDict(mutable=True)
+        querydict.update(self.request.GET)
+        context['querydict'] = querydict.urlencode()
+
         return context
 
     @method_decorator(is_admin)
