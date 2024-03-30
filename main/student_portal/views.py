@@ -23,6 +23,8 @@ def logout(request):
 def not_authorized(request): 
     return render(request,"student_portal/not_authorized.html")
 
+# def generate_receipt(request): 
+    # return HttpResponse()
 # print(type(current_student))
 
 

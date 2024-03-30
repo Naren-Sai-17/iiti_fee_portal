@@ -24,40 +24,98 @@ def dashboard(request):
     return render(request, "admin_portal/dashboard.html")
 
 
+@is_admin
+def activate(request):
+    return render(reverse("admin_portal:dashboard"))
+
+
 ########## Add Students ##########
 @is_admin
 def upload(request):
-    if request.method == "GET": 
+    if request.method == "GET":
         return render(request, "admin_portal/upload.html")
-    else: 
-        try: 
-            print(request.POST)
-            if models.Students.objects.filter(roll_number = request.POST['roll_number']).exists():
+    else:
+        try:
+            if models.Students.objects.filter(
+                roll_number=request.POST["roll_number"]
+            ).exists():
                 raise Exception("Student already exists")
-            student = models.Students() 
-            student.name = request.POST['name']
-            student.roll_number = request.POST['roll_number']
-            student.course = request.POST['course']
-            student.category = request.POST['category'] 
-            student.department = request.POST['department']
-            utils.calculate_fee_structure(student) 
-            messages.success(request,'Student added succesfully')
+            student = models.Students()
+            student.name = request.POST["name"]
+            student.roll_number = request.POST["roll_number"]
+            student.course = request.POST["course"]
+            student.category = request.POST["category"]
+            student.department = request.POST["department"]
+            utils.calculate_fee_structure(student)
+            messages.success(request, "Student added succesfully")
             return redirect(reverse("admin_portal:upload"))
 
-        except Exception as e: 
-            messages.error(request,str(e)) 
-            return redirect(reverse("admin_portal:upload"))      
+        except Exception as e:
+            messages.error(request, str(e))
+            return redirect(reverse("admin_portal:upload"))
+
 
 ########## Delete Students ##########
-def delete(request,roll_number): 
-    try: 
-        student = models.Students.objects.get(roll_number = roll_number) 
-        student.delete() 
-        messages.success(request,"student deleted succesfully") 
-        return redirect(reverse("admin_portal:list")) 
-    except Exception as e: 
-        messages.error(request,e) 
+def delete(request, roll_number):
+    try:
+        student = models.Students.objects.get(roll_number=roll_number)
+        student.delete()
+        messages.success(request, "student deleted succesfully")
         return redirect(reverse("admin_portal:list"))
+    except Exception as e:
+        messages.error(request, e)
+        return redirect(reverse("admin  _portal:list"))
+
+
+########## Fee Remission ##########
+@is_admin
+def remission(request): 
+    if request.method  == "POST":
+        try: 
+            roll_number = request.POST['roll_number']
+            remission_percentage = request.POST['remission_percentage']
+            utils.set_remission(roll_number,int(remission_percentage))
+            messages.success(request,"database updated succesfully")
+        except Exception as e: 
+            print(e)
+            messages.error(request,e)
+        return redirect(reverse("admin_portal:remission")) 
+    else: 
+        queryset = models.FeeRemission.objects.all() 
+        return render(request, "admin_portal/remission.html", {"remission_list" : queryset}) 
+
+@is_admin
+def clear_remission(request): 
+    try:
+        for remission_instance in models.FeeRemission.objects.all(): 
+            utils.delete_remission(remission_instance)
+        messages.success(request,"database cleared succesfully") 
+    except: 
+        messages.error(request,"Error")
+    return redirect(reverse("admin_portal:remission"))
+
+@is_admin
+def delete_remission(request,id): 
+    try: 
+        student_instance = models.Students.objects.get(roll_number = id)
+        remission_instance = student_instance.remission
+        utils.delete_remission(remission_instance)
+        messages.success(request,"deleted succesfully")
+    except Exception as e: 
+        messages.error(request, e) 
+    return redirect(reverse("admin_portal:remission"))
+
+
+@is_admin
+@require_POST
+def group_remission(request): 
+    try:   
+        excel_file = request.FILES["excel_file"]
+        utils.excel_remission(excel_file)
+        messages.success(request,"database updated succesfully")
+    except Exception as e: 
+        messages.error(request,f"error: {e}")     
+    return redirect(reverse("admin_portal:remission"))
 
 ########## Student List ##########
 class list(ListView):
@@ -74,12 +132,11 @@ class list(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["filter"] = self.filterset
-        
-    
-     # Retain filter parameters in pagination links
+
+        # Retain filter parameters in pagination links
         querydict = QueryDict(mutable=True)
         querydict.update(self.request.GET)
-        context['querydict'] = querydict.urlencode()
+        context["querydict"] = querydict.urlencode()
 
         return context
 
@@ -95,9 +152,7 @@ def fee_structure_list(request):
     if request.method == "POST":
         fee_structure_id = request.POST.get("fee_structure_id")
         try:
-            fee_structure_instance = get_object_or_404(
-                models.FeeStructure, id=fee_structure_id
-            )
+            fee_structure_instance = models.FeeStructure.objects.get(id = fee_structure_id)
             form = forms.FeeStructureForm(request.POST, instance=fee_structure_instance)
             if form.is_valid():
                 fee_structure_instance = form.save()
@@ -109,7 +164,6 @@ def fee_structure_list(request):
             else:
                 return redirect(reverse("admin_portal:structure"))
         except Exception as e:
-            print(e)
             form = forms.FeeStructureForm(request.POST, auto_id=True)
             try:
                 fee_structure_instance = form.save()
@@ -145,41 +199,22 @@ def profile(request, roll_number):
         print(error_message)
         return HttpResponse(error_message)
 
+
 @is_admin
-def update_profile(request,roll_number):
-    
-    if request.method == 'POST':
-            student = models.Students.objects.get(roll_number=roll_number)
-            initial_data = model_to_dict(student)
-
-            form = forms.Profile(request.POST, instance = student)
-            if form.is_valid():
-                 form_data = form.cleaned_data
-                 changes = {}
-                 for field, value in form_data.items():
-                    if value != initial_data[field]:
-                        changes[field] = value
-                        return render(request, 'admin_portal/profile_changes.html', {'changes': changes, 'roll_number': roll_number})
-            else:
-                return redirect(reverse('admin_portal:update_profile_confirm', kwargs={'roll_number': roll_number}))
-        
-           
+@require_POST
+def update_profile(request):
+    roll_number = request.POST["roll_number"]
+    student = models.Students.objects.get(roll_number=roll_number)
+    form = forms.Profile(request.POST, instance=student)
+    print(form)
+    if form.is_valid():
+        print(form.cleaned_data)
+        form.save()
+        messages.success(request, "fee updated succesfully")
+        return redirect(reverse("admin_portal:profile", args=[roll_number]))
     else:
-        return render(request, 'admin_portal/profile.html')
-
-
-def update_profile_confirm(request, roll_number):
-    if request.method == 'POST':
-        instance = get_object_or_404(models.Students, roll_number=roll_number)
-        form = forms.Profile(request.POST, instance=instance)
-        form.save()  
-    return redirect(reverse('admin_portal:update_profile_confirm', kwargs={'roll_number': roll_number}))
-
-def update_profile_cancel(request):
-    return redirect(reverse('admin_portal:profile'))
-
-
-
+        messages.error(request, "invalid input")
+        return redirect(reverse("admin_portal:profile", args=[roll_number]))
 
 
 ########## Admin logs ##########

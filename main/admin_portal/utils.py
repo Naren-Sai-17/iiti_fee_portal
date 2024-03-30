@@ -1,13 +1,39 @@
 from . import models 
 import pandas as pd 
 
+def set_remission(roll_number, remission_percentage): 
+    print(roll_number,remission_percentage)
+    student = models.Students.objects.get(roll_number = roll_number)
+    queryset = models.FeeRemission.objects.filter(student = student) 
+    if queryset.exists(): 
+        fee_remission_instance = queryset[0] 
+        fee_remission_instance.percentage = remission_percentage
+        fee_remission_instance.save() 
+    else: 
+        fee_remission_instance = models.FeeRemission(student = student, percentage = remission_percentage) 
+        fee_remission_instance.save() 
+    calculate_fee_structure(student) 
+
+def delete_remission(remission_instance : models.FeeRemission): 
+    student = remission_instance.student 
+    remission_instance.delete()  
+    calculate_fee_structure(student) 
+
+def excel_remission(excel_file):
+    col_range='A:B'
+    df = pd.read_excel(excel_file,usecols = col_range)
+    cols = df.columns
+    for _,row in df.iterrows(): 
+        set_remission(row[cols[0]],row[cols[1]]) 
+
+# calculate fee structure of newly added student 
 def calculate_fee_structure(student : models.Students): 
-    course = student.course
+    course = student.course.split('-')[0] 
     category = student.category 
     fee_structure = models.FeeStructure.objects.get(course__icontains = course, category = category)
     assign_fee(student, fee_structure)
 
-
+# recalculate fee structure when changed 
 def recalculate_fee_structure(fee_structure : models.FeeStructure): 
     course = fee_structure.course
     category = fee_structure.category 
@@ -16,8 +42,14 @@ def recalculate_fee_structure(fee_structure : models.FeeStructure):
         assign_fee(student, fee_structure)
     return len(students) 
 
+
 def assign_fee(student : models.Students, fee_structure : models.FeeStructure): 
-    student.tuition_fee = fee_structure.tuition_fee
+    if hasattr(student, 'remission'):    
+        percentage = student.remission.percentage
+        student.tuition_fee = int((fee_structure.tuition_fee)*(100 - percentage)/100) 
+    else: 
+        student.tuition_fee = fee_structure.tuition_fee
+    student.tuition_fee = fee_structure.tuition_fee 
     student.insurance_fee = fee_structure.insurance_fee
     student.examination_fee = fee_structure.examination_fee
     student.registration_fee = fee_structure.registration_fee

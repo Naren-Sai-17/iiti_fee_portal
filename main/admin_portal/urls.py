@@ -4,18 +4,26 @@ from . import views
 app_name = "admin_portal" # refer namespacing in django 
 
 urlpatterns = [
-    path("",views.login, name = "login"),
     path("dashboard", views.dashboard, name = "dashboard"),
-    path("upload", views.upload, name = "upload"), 
-    path("delete/<str:roll_number>/",views.delete, name = "delete"), 
-    path("list", views.list.as_view(), name = "list"), 
+
+    # remission  
+    path("remission",views.remission,name = "remission"),
+    path("group_remission", views.group_remission, name = "group_remission"),
+    path("delete_remission/<str:id>/", views.delete_remission, name = "delete_remission"), 
+    path("clear_remission", views.clear_remission,name = "clear_remission"),
     path("logs", views.logs, name = "logs"), 
+    path("structure",views.fee_structure_list, name = "structure"), 
+
+    # student management 
+    path("delete/<str:roll_number>/",views.delete, name = "delete"),
+    path("upload", views.upload, name = "upload"), 
     path("upload_excel", views.upload_excel, name = "upload_excel"),
+    path("profile/<str:roll_number>/",views.profile,name = "profile"),
+    path("update_profile", views.update_profile, name='update_profile'),
+    path("list", views.list.as_view(), name = "list"), 
+
+    # authorization 
+    path("",views.login, name = "login"),
     path("logout", views.logout, name = "logout"), 
     path("not_authorized", views.not_authorized, name = "not_authorized"), 
-    path("profile/<str:roll_number>/",views.profile,name = "profile"),
-    path("update_profile/<str:roll_number>/", views.update_profile, name='update_profile'),
-    path("update_profile_confirm/<str:roll_number>/", views.update_profile_confirm, name='update_profile_confirm'),
-    path("update_profile_cancel/", views.update_profile_cancel, name='update_profile_cancel'),
-    path("structure",views.fee_structure_list, name = "structure"), 
 ]
