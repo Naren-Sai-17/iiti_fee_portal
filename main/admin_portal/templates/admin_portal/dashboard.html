@@ -1,5 +1,8 @@
 {% extends "admin_portal/base.html" %}
 {% block content %}
+
+{% url 'admin_portal:activate' as activate_url %} 
+<button onclick="window.location.href = '{{ activate_url }}'"> activate </button>
 <div class="bg-gray-100 min-h-screen p-8">
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 	  <div class="bg-white rounded-lg shadow-md p-6">
