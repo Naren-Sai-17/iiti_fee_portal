@@ -8,6 +8,7 @@ from . import forms
 from . import models
 from django.forms.models import model_to_dict
 from django.http import QueryDict
+from django.views import View
 
 from .filters import studentfilter
 from django.shortcuts import render, redirect
@@ -26,7 +27,11 @@ def dashboard(request):
 
 @is_admin
 def activate(request):
-    return render(reverse("admin_portal:dashboard"))
+    for student in models.Students.objects.all(): 
+        student.activate() 
+    messages.success(request,"activated succesfully")
+    utils.log("fee portal activated")
+    return redirect(reverse("admin_portal:dashboard"))
 
 
 ########## Add Students ##########
@@ -48,6 +53,7 @@ def upload(request):
             student.department = request.POST["department"]
             utils.calculate_fee_structure(student)
             messages.success(request, "Student added succesfully")
+            utils.log(f"student {student.roll_number} added")
             return redirect(reverse("admin_portal:upload"))
 
         except Exception as e:
@@ -56,66 +62,84 @@ def upload(request):
 
 
 ########## Delete Students ##########
-def delete(request, roll_number):
+@is_admin
+def delete_student(request, roll_number):
     try:
         student = models.Students.objects.get(roll_number=roll_number)
         student.delete()
+        utils.log(f"student {roll_number} deleted")
         messages.success(request, "student deleted succesfully")
         return redirect(reverse("admin_portal:list"))
     except Exception as e:
+        print(e) 
         messages.error(request, e)
-        return redirect(reverse("admin  _portal:list"))
+        return redirect(reverse("admin_portal:list"))
 
-
+@is_admin 
+def delete(request): 
+    if request.method == "POST":  
+            try:
+                excel_file = request.FILES["excel_file"]
+                utils.excel_remission(excel_file)
+                messages.success(request, "database updated succesfully")
+            except Exception as e:
+                messages.error(request, f"error: {e}")
+    else: 
+        return render(request,"admin_portal/delete.html")
 ########## Fee Remission ##########
 @is_admin
-def remission(request): 
-    if request.method  == "POST":
-        try: 
-            roll_number = request.POST['roll_number']
-            remission_percentage = request.POST['remission_percentage']
-            utils.set_remission(roll_number,int(remission_percentage))
-            messages.success(request,"database updated succesfully")
-        except Exception as e: 
+def remission(request):
+    if request.method == "POST":
+        try:
+            roll_number = request.POST["roll_number"]
+            remission_percentage = request.POST["remission_percentage"]
+            utils.set_remission(roll_number, int(remission_percentage))
+            messages.success(request, "database updated succesfully")
+        except Exception as e:
             print(e)
-            messages.error(request,e)
-        return redirect(reverse("admin_portal:remission")) 
-    else: 
-        queryset = models.FeeRemission.objects.all() 
-        return render(request, "admin_portal/remission.html", {"remission_list" : queryset}) 
+            messages.error(request, e)
+        return redirect(reverse("admin_portal:remission"))
+    else:
+        queryset = models.FeeRemission.objects.all()
+        return render(
+            request, "admin_portal/remission.html", {"remission_list": queryset}
+        )
+
 
 @is_admin
-def clear_remission(request): 
+def clear_remission(request):
     try:
-        for remission_instance in models.FeeRemission.objects.all(): 
+        for remission_instance in models.FeeRemission.objects.all():
             utils.delete_remission(remission_instance)
-        messages.success(request,"database cleared succesfully") 
-    except: 
-        messages.error(request,"Error")
+        messages.success(request, "database cleared succesfully")
+    except:
+        messages.error(request, "Error")
     return redirect(reverse("admin_portal:remission"))
 
+
 @is_admin
-def delete_remission(request,id): 
-    try: 
-        student_instance = models.Students.objects.get(roll_number = id)
+def delete_remission(request, id):
+    try:
+        student_instance = models.Students.objects.get(roll_number=id)
         remission_instance = student_instance.remission
         utils.delete_remission(remission_instance)
-        messages.success(request,"deleted succesfully")
-    except Exception as e: 
-        messages.error(request, e) 
+        messages.success(request, "deleted succesfully")
+    except Exception as e:
+        messages.error(request, e)
     return redirect(reverse("admin_portal:remission"))
 
 
 @is_admin
 @require_POST
-def group_remission(request): 
-    try:   
+def group_remission(request):
+    try:
         excel_file = request.FILES["excel_file"]
         utils.excel_remission(excel_file)
-        messages.success(request,"database updated succesfully")
-    except Exception as e: 
-        messages.error(request,f"error: {e}")     
+        messages.success(request, "database updated succesfully")
+    except Exception as e:
+        messages.error(request, f"error: {e}")
     return redirect(reverse("admin_portal:remission"))
+
 
 ########## Student List ##########
 class list(ListView):
@@ -152,7 +176,9 @@ def fee_structure_list(request):
     if request.method == "POST":
         fee_structure_id = request.POST.get("fee_structure_id")
         try:
-            fee_structure_instance = models.FeeStructure.objects.get(id = fee_structure_id)
+            fee_structure_instance = models.FeeStructure.objects.get(
+                id=fee_structure_id
+            )
             form = forms.FeeStructureForm(request.POST, instance=fee_structure_instance)
             if form.is_valid():
                 fee_structure_instance = form.save()
@@ -220,7 +246,8 @@ def update_profile(request):
 ########## Admin logs ##########
 @is_admin
 def logs(request):
-    return render(request, "admin_portal/logs.html")
+    logs = models.Log.objects.all().order_by('-timestamp')
+    return render(request, 'admin_portal/logs.html', {'logs': logs})
 
 
 @require_POST
