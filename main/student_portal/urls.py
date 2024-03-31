@@ -12,5 +12,6 @@ urlpatterns = [
     path("dashboard",views.dashboard, name = "dashboard"),
     path("logout",views.logout, name = "logout"),
     path("not_authorized",views.not_authorized, name = "not_authorized"),
-    path('student_details/', views.display_student_details, name='student_details')
+    path('student_details/', views.display_student_details, name='student_details'),
+    path('generate-receipts/', views.generate_receipts, name='generate_receipts')
 ]
