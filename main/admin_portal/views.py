@@ -30,6 +30,7 @@ def activate(request):
     for student in models.Students.objects.all(): 
         student.activate() 
     messages.success(request,"activated succesfully")
+    utils.log("fee portal activated")
     return redirect(reverse("admin_portal:dashboard"))
 
 
@@ -52,6 +53,7 @@ def upload(request):
             student.department = request.POST["department"]
             utils.calculate_fee_structure(student)
             messages.success(request, "Student added succesfully")
+            utils.log(f"student {student.roll_number} added")
             return redirect(reverse("admin_portal:upload"))
 
         except Exception as e:
@@ -65,13 +67,25 @@ def delete_student(request, roll_number):
     try:
         student = models.Students.objects.get(roll_number=roll_number)
         student.delete()
+        utils.log(f"student {roll_number} deleted")
         messages.success(request, "student deleted succesfully")
         return redirect(reverse("admin_portal:list"))
     except Exception as e:
+        print(e) 
         messages.error(request, e)
-        return redirect(reverse("admin  _portal:list"))
+        return redirect(reverse("admin_portal:list"))
 
-
+@is_admin 
+def delete(request): 
+    if request.method == "POST":  
+            try:
+                excel_file = request.FILES["excel_file"]
+                utils.excel_remission(excel_file)
+                messages.success(request, "database updated succesfully")
+            except Exception as e:
+                messages.error(request, f"error: {e}")
+    else: 
+        return render(request,"admin_portal/delete.html")
 ########## Fee Remission ##########
 @is_admin
 def remission(request):
@@ -232,7 +246,8 @@ def update_profile(request):
 ########## Admin logs ##########
 @is_admin
 def logs(request):
-    return render(request, "admin_portal/logs.html")
+    logs = models.Log.objects.all().order_by('-timestamp')
+    return render(request, 'admin_portal/logs.html', {'logs': logs})
 
 
 @require_POST

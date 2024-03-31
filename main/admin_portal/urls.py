@@ -16,6 +16,7 @@ urlpatterns = [
 
     # student management 
     path("delete_student/<str:roll_number>/",views.delete_student, name = "delete_student"),
+    path("delete", views.delete, name = "delete"), 
     path("upload", views.upload, name = "upload"), 
     path("upload_excel", views.upload_excel, name = "upload_excel"),
     path("profile/<str:roll_number>/",views.profile,name = "profile"),

@@ -129,3 +129,7 @@ class FeeStructure(models.Model):
 class FeeRemission(models.Model):  
     student = models.OneToOneField(Students, on_delete = models.CASCADE, primary_key = True, related_name = "remission") 
     percentage = models.IntegerField()  
+
+class Log(models.Model):
+    action = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)

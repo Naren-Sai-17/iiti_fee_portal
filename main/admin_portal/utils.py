@@ -1,6 +1,10 @@
 from . import models 
 import pandas as pd 
 
+def log(action : str): 
+    log_entry = models.Log(action = action) 
+    log_entry.save() 
+
 def set_remission(roll_number, remission_percentage): 
     print(roll_number,remission_percentage)
     student = models.Students.objects.get(roll_number = roll_number)
