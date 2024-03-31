@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fee Receipt - Spring 2024</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 p-8">
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded-md shadow-md">
+      <h1 class="text-2xl font-bold text-center mb-4">
+        INDIAN INSTITUTE OF TECHNOLOGY INDORE
+      </h1>
+      <p class="text-center">Khandwa Road, Simrol, Indore 453552</p>
+      <h2 class="text-xl font-bold text-center mt-4 mb-2">
+        FEE RECEIPT (SPRING 2024)
+      </h2>
+      <table class="w-full border-collapse border border-gray-300 mb-4">
+        <tbody>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2">RECEIPT NO.</th>
+            <td class="border border-gray-300 px-4 py-2">{{receipt_no}}</td>
+            <th class="border border-gray-300 px-4 py-2">DATE</th>
+            <td class="border border-gray-300 px-4 py-2">{{date}}</td>
+          </tr>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2">ROLL NO.</th>
+            <td class="border border-gray-300 px-4 py-2">{{roll_number}}</td>
+            <th class="border border-gray-300 px-4 py-2">COURSE</th>
+            <td class="border border-gray-300 px-4 py-2">{{course}}</td>
+          </tr>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2">NAME</th>
+            <td class="border border-gray-300 px-4 py-2" colspan="3">{{name}}</td>
+            
+          </tr>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2">CATEGORY</th>
+            <td class="border border-gray-300 px-4 py-2">{{category}}</td>
+            <th class="border border-gray-300 px-4 py-2">DEPARTMENT</th>
+            <td class="border border-gray-300 px-4 py-2">{{department}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2">SR.NO.</th>
+            <th class="border border-gray-300 px-4 py-2">PARTICULARS</th>
+            <th class="border border-gray-300 px-4 py-2">AMOUNT (Rs.)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">1</td>
+            <td class="border border-gray-300 px-4 py-2">Tuition Fee</td>
+            <td class="border border-gray-300 px-4 py-2">{{tution_fee}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">2</td>
+            <td class="border border-gray-300 px-4 py-2">Insurance Fee</td>
+            <td class="border border-gray-300 px-4 py-2">{{insurance_fee}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">3</td>
+            <td class="border border-gray-300 px-4 py-2">Examination Fees</td>
+            <td class="border border-gray-300 px-4 py-2">{{examination_fee}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">4</td>
+            <td class="border border-gray-300 px-4 py-2">Registration Fee</td>
+            <td class="border border-gray-300 px-4 py-2">{{registration_fee}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">5</td>
+            <td class="border border-gray-300 px-4 py-2">Gymkhana Fee</td>
+            <td class="border border-gray-300 px-4 py-2">{{gymkhana_fee}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">6</td>
+            <td class="border border-gray-300 px-4 py-2">Medical Fee</td>
+            <td class="border border-gray-300 px-4 py-2">{{medical_fee}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">7</td>
+            <td class="border border-gray-300 px-4 py-2">
+              Student Benevolent Fund
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{student_benevolent_fund}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">8</td>
+            <td class="border border-gray-300 px-4 py-2">
+              Laboratory/Research Facilities Fee
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{lab_fee}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">9</td>
+            <td class="border border-gray-300 px-4 py-2">
+              Semester Mess Advance
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{semester_mess_advance}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">10</td>
+            <td class="border border-gray-300 px-4 py-2">One time Fee</td>
+            <td class="border border-gray-300 px-4 py-2">{{one_time_fee}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">11</td>
+            <td class="border border-gray-300 px-4 py-2">
+              Refundable Security Deposits
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{refundable_security_deposit}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">12</td>
+            <td class="border border-gray-300 px-4 py-2">
+              Accomodation and other facilities Charges
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{accommodation_charges}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">13</td>
+            <td class="border border-gray-300 px-4 py-2">
+              Student Welfare Fund
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{student_welfare_fund}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="text-xl font-bold text-center mt-4 mb-2">Total Fee Summary</h2>
+      <table class="w-full border-collapse border border-gray-300 mb-4">
+        <tbody>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">Total Fee (A)</th>
+            <td class="border border-gray-300 px-4 py-2">{{total_fee}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">
+              (B) Mess Rebate of Autumn 2023
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{mess_rebate}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">
+              (C) Fee Receivable for Spring 2024 (A-B)
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{fee_receivable}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">
+              (D) Fee arrear of Autumn Semester
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{fee_arrear}}</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">
+              (E) Total amount payable for Spring 2024 (C-D)
+            </td>
+            <td class="border border-gray-300 px-4 py-2">#N/A</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">
+              (F) Total Fee Received from Student for Spring 2024
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{fee_received}}</td>
+          </tr>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2">
+              AMOUNT IN WORDS (`):-
+            </th>
+            <td class="border border-gray-300 px-4 py-2">#NAME?</td>
+          </tr>
+        </tbody>
+      </table>
+       <h2 class="text-xl font-bold text-center mt-4 mb-2">(G) Details of Fees Received</h2>
+      <div class="table-container">
+        <table class="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr>
+              <th class="border border-gray-300 px-2 py-2">Mode</th>
+              <th class="border border-gray-300 px-2 py-2">Bank</th>
+              <th class="border border-gray-300 px-2 py-2">Date</th>
+              <th class="border border-gray-300 px-2 py-2">Transaction Details</th>
+              <th class="border border-gray-300 px-2 py-2">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+            </tr>
+            <tr>
+              <th class="border border-gray-300 px-2 py-2" colspan="4">(H) Total Fee Received from Student for Spring 2024</th>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+            </tr>
+            <tr>
+              <th class="border border-gray-300 px-2 py-2" colspan="4">(I) Net Receivable/(Payable) Rs.</th>
+              <td class="border border-gray-300 px-2 py-2">#N/A</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
