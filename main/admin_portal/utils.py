@@ -1,67 +1,109 @@
-from . import models 
+from . import models
 import pandas as pd
-from .models import Students 
+from .models import Students
 
-def log(action : str): 
-    log_entry = models.Log(action = action) 
-    log_entry.save() 
 
-def set_remission(roll_number, remission_percentage): 
-    print(roll_number,remission_percentage)
-    student = models.Students.objects.get(roll_number = roll_number)
-    queryset = models.FeeRemission.objects.filter(student = student) 
-    if queryset.exists(): 
-        fee_remission_instance = queryset[0] 
+def export_students():
+    queryset = models.Students.objects.all()
+    student_data = {
+        "Roll Number": [student.roll_number for student in queryset],
+        "Name": [student.name for student in queryset],
+        "Course": [student.course for student in queryset],
+        "Category": [student.category for student in queryset],
+        "Department": [student.department for student in queryset],
+        "Tuition Fee": [student.tuition_fee for student in queryset],
+        "Insurance Fee": [student.insurance_fee for student in queryset],
+        "Examination Fee": [student.examination_fee for student in queryset],
+        "Registration Fee": [student.registration_fee for student in queryset],
+        "Gymkhana Fee": [student.gymkhana_fee for student in queryset],
+        "Medical Fee": [student.medical_fee for student in queryset],
+        "Student Benevolent Fund": [student.student_benevolent_fund for student in queryset],
+        "Lab Fee": [student.lab_fee for student in queryset],
+        "Semester Mess Advance":[student.semester_mess_advance for student in queryset],
+        "One Time Fee": [student.one_time_fee for student in queryset],
+        "Refundable Security Deposit": [student.refundable_security_deposit for student in queryset],
+        "Accommodation Charges": [student.accommodation_charges for student in queryset],
+        "Student Welfare Fund": [student.student_welfare_fund for student in queryset],
+        "Mess Rebate": [student.mess_rebate for student in queryset],
+        "Fee Arrear": [student.fee_arrear for student in queryset],
+        "Fee Payable": [student.fee_payable for student in queryset],
+    }
+    df = pd.DataFrame(student_data)
+    return df 
+
+
+def log(action: str):
+    log_entry = models.Log(action=action)
+    log_entry.save()
+
+
+def set_remission(roll_number, remission_percentage):
+    print(roll_number, remission_percentage)
+    student = models.Students.objects.get(roll_number=roll_number)
+    queryset = models.FeeRemission.objects.filter(student=student)
+    if queryset.exists():
+        fee_remission_instance = queryset[0]
         fee_remission_instance.percentage = remission_percentage
-        fee_remission_instance.save() 
-    else: 
-        fee_remission_instance = models.FeeRemission(student = student, percentage = remission_percentage) 
-        fee_remission_instance.save() 
+        fee_remission_instance.save()
+    else:
+        fee_remission_instance = models.FeeRemission(
+            student=student, percentage=remission_percentage
+        )
+        fee_remission_instance.save()
 
-def delete_remission(remission_instance : models.FeeRemission): 
-    student = remission_instance.student 
-    remission_instance.delete()  
+
+def delete_remission(remission_instance: models.FeeRemission):
+    student = remission_instance.student
+    remission_instance.delete()
+
 
 def excel_remission(excel_file):
     #  roll number and percentage of remission
-    col_range='A:B'
-    df = pd.read_excel(excel_file,usecols = col_range)
+    col_range = "A:B"
+    df = pd.read_excel(excel_file, usecols=col_range)
     cols = df.columns
-    for _,row in df.iterrows(): 
-        set_remission(row[cols[0]],row[cols[1]]) 
+    for _, row in df.iterrows():
+        set_remission(row[cols[0]], row[cols[1]])
+
 
 def excel_delete(excel_file):
     df = pd.read_excel(excel_file)
     cols = df.columns
-    success = 0 
-    fail = 0 
-    for _,row in df.iterrows(): 
+    success = 0
+    fail = 0
+    for _, row in df.iterrows():
         roll_number = row[cols[0]]
-        try: 
-            student = models.Students.objects.get(roll_number = roll_number) 
+        try:
+            student = models.Students.objects.get(roll_number=roll_number)
             student.delete()
-            success += 1 
-        except: 
-            fail += 1 
+            success += 1
+        except:
+            fail += 1
 
-# calculate fee structure of newly added student 
-def calculate_fee_structure(student : models.Students): 
-    course = student.course.split('-')[0] 
-    category = student.category 
-    fee_structure = models.FeeStructure.objects.get(course__icontains = course, category = category)
+
+# calculate fee structure of newly added student
+def calculate_fee_structure(student: models.Students):
+    course = student.course.split("-")[0]
+    category = student.category
+    fee_structure = models.FeeStructure.objects.get(
+        course__icontains=course, category=category
+    )
     assign_fee(student, fee_structure)
 
-# recalculate fee structure when changed 
-def recalculate_fee_structure(fee_structure : models.FeeStructure): 
+
+# recalculate fee structure when changed
+def recalculate_fee_structure(fee_structure: models.FeeStructure):
     course = fee_structure.course
-    category = fee_structure.category 
-    students = models.Students.objects.filter(course__icontains = course, category = category)
-    for student in students: 
+    category = fee_structure.category
+    students = models.Students.objects.filter(
+        course__icontains=course, category=category
+    )
+    for student in students:
         assign_fee(student, fee_structure)
-    return len(students) 
+    return len(students)
 
 
-def assign_fee(student : models.Students, fee_structure : models.FeeStructure): 
+def assign_fee(student: models.Students, fee_structure: models.FeeStructure):
     student.base_tuition_fee = fee_structure.base_tuition_fee
     student.insurance_fee = fee_structure.insurance_fee
     student.examination_fee = fee_structure.examination_fee
@@ -75,47 +117,54 @@ def assign_fee(student : models.Students, fee_structure : models.FeeStructure):
     student.refundable_security_deposit = fee_structure.refundable_security_deposit
     student.accommodation_charges = fee_structure.accommodation_charges
     student.student_welfare_fund = fee_structure.student_welfare_fund
-    student.save() 
+    student.save()
 
-def add_students(excel_file): 
-    col_range='A:X'
-    try: 
-        df = pd.read_excel(excel_file,usecols = col_range, skiprows=1, thousands=',', skipfooter=1)
-        pd.set_option('display.max_columns', None)
-        pd.set_option('display.max_rows', None)
-        numerical_cols = list(range(6,24))
-        df[numerical_cols] = df[numerical_cols].apply(pd.to_numeric, errors='coerce').fillna(0).astype('int64')
-        for index, excel_row in df.iterrows(): 
+
+def add_students(excel_file):
+    col_range = "A:X"
+    try:
+        df = pd.read_excel(
+            excel_file, usecols=col_range, skiprows=1, thousands=",", skipfooter=1
+        )
+        pd.set_option("display.max_columns", None)
+        pd.set_option("display.max_rows", None)
+        numerical_cols = list(range(6, 24))
+        df[numerical_cols] = (
+            df[numerical_cols]
+            .apply(pd.to_numeric, errors="coerce")
+            .fillna(0)
+            .astype("int64")
+        )
+        for index, excel_row in df.iterrows():
             add_students_excel(excel_row)
-    except Exception as e: 
+    except Exception as e:
         print(e)
-        return {'status' : 'error', 
-                'exception' : e}
-    
-def add_students_excel(student_data): 
-    try: 
-        student = models.Students( 
-            roll_number = student_data[1], 
-            name = student_data[2],
-            course = student_data[3], 
-            category = student_data[4], 
-            department = student_data[5], 
-            base_tuition_fee = student_data[6], 
-            insurance_fee = student_data[7],
-            examination_fee = student_data[8],
-            registration_fee = student_data[9],
-            gymkhana_fee = student_data[10],
-            medical_fee = student_data[11],
-            student_benevolent_fund = student_data[12],
-            lab_fee = student_data[13],
-            semester_mess_advance = student_data[14],
-            one_time_fee = student_data[15],
-            refundable_security_deposit = student_data[16],
-            accommodation_charges = student_data[17],
-            student_welfare_fund = student_data[18],
-            mess_rebate = student_data[20]
+        return {"status": "error", "exception": e}
+
+
+def add_students_excel(student_data):
+    try:
+        student = models.Students(
+            roll_number=student_data[1],
+            name=student_data[2],
+            course=student_data[3],
+            category=student_data[4],
+            department=student_data[5],
+            base_tuition_fee=student_data[6],
+            insurance_fee=student_data[7],
+            examination_fee=student_data[8],
+            registration_fee=student_data[9],
+            gymkhana_fee=student_data[10],
+            medical_fee=student_data[11],
+            student_benevolent_fund=student_data[12],
+            lab_fee=student_data[13],
+            semester_mess_advance=student_data[14],
+            one_time_fee=student_data[15],
+            refundable_security_deposit=student_data[16],
+            accommodation_charges=student_data[17],
+            student_welfare_fund=student_data[18],
+            mess_rebate=student_data[20],
         )
         student.save()
     except Exception as e:
-        print(e) 
-
+        print(e)

@@ -1,5 +1,5 @@
 import pandas as pd
-from .models import Students 
+from .models import Students
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -13,7 +13,7 @@ from django.http import QueryDict
 from django.views import View
 from django.conf import settings
 
-import os 
+import os
 from .filters import studentfilter
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -31,9 +31,9 @@ def dashboard(request):
 
 @is_admin
 def activate(request):
-    for student in models.Students.objects.all(): 
-        student.activate() 
-    messages.success(request,"activated succesfully")
+    for student in models.Students.objects.all():
+        student.activate()
+    messages.success(request, "activated succesfully")
     utils.log("fee portal activated")
     return redirect(reverse("admin_portal:dashboard"))
 
@@ -75,21 +75,24 @@ def delete_student(request, roll_number):
         messages.success(request, "student deleted succesfully")
         return redirect(reverse("admin_portal:list"))
     except Exception as e:
-        print(e) 
+        print(e)
         messages.error(request, e)
         return redirect(reverse("admin_portal:list"))
 
-@is_admin 
-def delete(request): 
-    if request.method == "POST":  
-            try:
-                excel_file = request.FILES["excel_file"]
-                utils.delete_student(excel_file)
-                messages.success(request, "deleted students succesfully")
-            except Exception as e:
-                messages.error(request, f"error: {e}")
-    else: 
-        return render(request,"admin_portal/delete.html")
+
+@is_admin
+def delete(request):
+    if request.method == "POST":
+        try:
+            excel_file = request.FILES["excel_file"]
+            utils.delete_student(excel_file)
+            messages.success(request, "deleted students succesfully")
+        except Exception as e:
+            messages.error(request, f"error: {e}")
+    else:
+        return render(request, "admin_portal/delete.html")
+
+
 ########## Fee Remission ##########
 @is_admin
 def remission(request):
@@ -172,39 +175,14 @@ class list(ListView):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-####### Downloading student list #####
-def download_students_excel(request):
-    # Query all students
-    all_students = Students.objects.all()
 
-    # Create a DataFrame from the queryset
-    data = {
-        'Roll Number': [student.roll_number for student in all_students],
-        'Name': [student.name for student in all_students],
-        'Course': [student.course for student in all_students],
-        'Category': [student.category for student in all_students],
-        'Department': [student.department for student in all_students],
-        'Tuition Fee': [student.tuition_fee for student in all_students],
-        'Insurance Fee': [student.insurance_fee for student in all_students],
-        'Examination Fee': [student.examination_fee for student in all_students],
-        'Registration Fee': [student.registration_fee for student in all_students],
-        'Gymkhana Fee': [student.gymkhana_fee for student in all_students],
-        'Medical Fee': [student.medical_fee for student in all_students],
-        'Student Benevolent Fund': [student.student_benevolent_fund for student in all_students],
-        'Lab Fee': [student.lab_fee for student in all_students],
-        'Semester Mess Advance': [student.semester_mess_advance for student in all_students],
-        'One Time Fee': [student.one_time_fee for student in all_students],
-        'Refundable Security Deposit': [student.refundable_security_deposit for student in all_students],
-        'Accommodation Charges': [student.accommodation_charges for student in all_students],
-        'Student Welfare Fund': [student.student_welfare_fund for student in all_students],
-        'Mess Rebate': [student.mess_rebate for student in all_students],
-        'Fee Arrear': [student.fee_arrear for student in all_students],
-        'Fee Payable': [student.fee_payable for student in all_students],
-    }
-    df = pd.DataFrame(data)
-    # Write DataFrame to Excel
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=students.xlsx'
+########## Downloading student list ##########
+def download_students_excel(request):
+    df = utils.export_students()
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = "attachment; filename=students.xlsx"
     df.to_excel(response, index=False)
     return response
 
@@ -239,7 +217,8 @@ def fee_structure_list(request):
                     request, f"fee structure of {update_count} updated successfully"
                 )
                 return redirect(reverse("admin_portal:structure"))
-            except:
+            except Exception as e:
+                print(e)
                 messages.error(request, "incorrect formatting")
                 return redirect(reverse("admin_portal:structure"))
     else:
@@ -247,6 +226,15 @@ def fee_structure_list(request):
             request, "admin_portal/structure.html", {"fee_structures": fee_structures}
         )
 
+@is_admin
+def delete_structure(request,id): 
+    try: 
+        fee_structure_instance = models.FeeStructure.objects.get(id = id) 
+        fee_structure_instance.delete()
+        messages.success(request,"deleted succesfully")
+    except:
+        messages.error(request,"could not find the specified entry")
+    return redirect(reverse("admin_portal:structure"))
 
 ########## Student Profile ##########
 @is_admin
@@ -281,14 +269,18 @@ def update_profile(request):
         messages.error(request, "invalid input")
         return redirect(reverse("admin_portal:profile", args=[roll_number]))
 
+
 ########## Download Excel ##########
 def download_excel(request, id):
     id += ".xlsx"
-    excel_file_path = os.path.join(settings.BASE_DIR, 'static', 'excel', id)    
+    excel_file_path = os.path.join(settings.BASE_DIR, "static", "excel", id)
     try:
-        with open(excel_file_path, 'rb') as excel_file:
-            response = HttpResponse(excel_file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')        
-            response['Content-Disposition'] = f'attachment; filename="{id}"'
+        with open(excel_file_path, "rb") as excel_file:
+            response = HttpResponse(
+                excel_file.read(),
+                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            )
+            response["Content-Disposition"] = f'attachment; filename="{id}"'
             return response
     except FileNotFoundError:
         print("File not found:", excel_file_path)
@@ -296,12 +288,14 @@ def download_excel(request, id):
     except Exception as e:
         print("An error occurred:", e)
         return HttpResponse("An error occurred.", status=500)
-    
+
+
 ########## Admin logs ##########
 @is_admin
 def logs(request):
-    logs = models.Log.objects.all().order_by('-timestamp')
-    return render(request, 'admin_portal/logs.html', {'logs': logs})
+    logs = models.Log.objects.all().order_by("-timestamp")
+    return render(request, "admin_portal/logs.html", {"logs": logs})
+
 
 @require_POST
 @is_admin
