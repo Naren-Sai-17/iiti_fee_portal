@@ -1,5 +1,6 @@
 from . import models 
-import pandas as pd 
+import pandas as pd
+from .models import Students 
 
 def log(action : str): 
     log_entry = models.Log(action = action) 

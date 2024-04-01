@@ -28,7 +28,6 @@ class Students(models.Model):
     fee_arrear = models.IntegerField(default = 0) 
     # fee to be payed
     fee_payable = models.IntegerField(default = 0)
-
     @property
     def total_fee(self):
         percentage = 0 
