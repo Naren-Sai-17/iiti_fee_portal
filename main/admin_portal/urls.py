@@ -14,7 +14,7 @@ urlpatterns = [
     path("logs", views.logs, name = "logs"), 
     path("download_excel/<str:id>/",views.download_excel, name = "download_excel"), 
     path("structure",views.fee_structure_list, name = "structure"), 
-
+    path("delete_structure/<str:id>/",views.delete_structure, name = "delete_structure"), 
     # student management 
     path("delete_student/<str:roll_number>/",views.delete_student, name = "delete_student"),
     path("delete", views.delete, name = "delete"), 

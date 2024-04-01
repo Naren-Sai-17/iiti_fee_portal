@@ -11,7 +11,7 @@ class Students(models.Model):
     department = models.CharField(max_length=10)
 
     # fee details
-    base_tution_fee = models.IntegerField()
+    base_tuition_fee = models.IntegerField()
     insurance_fee = models.IntegerField()
     examination_fee = models.IntegerField()
     registration_fee = models.IntegerField()
@@ -29,16 +29,15 @@ class Students(models.Model):
     # fee to be payed
     fee_payable = models.IntegerField(default = 0)
 
-    # tution fee considering remission 
     @property 
-    def tution_fee(self): 
-        return self.base_tution_fee 
+    def tuition_fee(self): 
         # add remission logic 
+        return self.base_tuition_fee 
     
     @property
     def total_fee(self):
         return (
-            self.tution_fee
+            self.tuition_fee
             + self.insurance_fee
             + self.examination_fee
             + self.registration_fee
