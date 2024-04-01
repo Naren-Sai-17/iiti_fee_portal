@@ -22,6 +22,7 @@ def delete_remission(remission_instance : models.FeeRemission):
     remission_instance.delete()  
 
 def excel_remission(excel_file):
+    #  roll number and percentage of remission
     col_range='A:B'
     df = pd.read_excel(excel_file,usecols = col_range)
     cols = df.columns
@@ -60,8 +61,7 @@ def recalculate_fee_structure(fee_structure : models.FeeStructure):
 
 
 def assign_fee(student : models.Students, fee_structure : models.FeeStructure): 
-    student.tuition_fee = fee_structure.tuition_fee
-    student.tuition_fee = fee_structure.tuition_fee 
+    student.base_tuition_fee = fee_structure.base_tuition_fee
     student.insurance_fee = fee_structure.insurance_fee
     student.examination_fee = fee_structure.examination_fee
     student.registration_fee = fee_structure.registration_fee
@@ -99,7 +99,7 @@ def add_students_excel(student_data):
             course = student_data[3], 
             category = student_data[4], 
             department = student_data[5], 
-            tuition_fee = student_data[6], 
+            base_tuition_fee = student_data[6], 
             insurance_fee = student_data[7],
             examination_fee = student_data[8],
             registration_fee = student_data[9],

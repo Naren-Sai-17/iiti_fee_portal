@@ -34,7 +34,6 @@
     <div class="bg-white rounded-lg shadow-md p-6">
         <form action="{% url 'admin_portal:update_profile' %}" method="post">
             {% csrf_token %}
-            {% csrf_token %}
             <div class="mb-4">
                 <label class="block text-gray-700 font-bold mb-2" for="roll_number">Roll Number:</label>
                 <input readonly

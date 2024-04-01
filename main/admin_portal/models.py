@@ -11,7 +11,7 @@ class Students(models.Model):
     department = models.CharField(max_length=10)
 
     # fee details
-    tuition_fee = models.IntegerField()
+    base_tution_fee = models.IntegerField()
     insurance_fee = models.IntegerField()
     examination_fee = models.IntegerField()
     registration_fee = models.IntegerField()
@@ -29,14 +29,16 @@ class Students(models.Model):
     # fee to be payed
     fee_payable = models.IntegerField(default = 0)
 
+    # tution fee considering remission 
+    @property 
+    def tution_fee(self): 
+        return self.base_tution_fee 
+        # add remission logic 
+    
     @property
     def total_fee(self):
-        percentage = 0 
-        if hasattr(self,"remission"): 
-            percentage = self.remission.percentage
-        percentage = 100 - percentage 
         return (
-            int(self.tuition_fee * percentage / 100) 
+            self.tution_fee
             + self.insurance_fee
             + self.examination_fee
             + self.registration_fee
@@ -112,7 +114,7 @@ class CustomUser(AbstractUser):
 class FeeStructure(models.Model):
     course = models.CharField(max_length=10)
     category = models.CharField(max_length=15)
-    tuition_fee = models.IntegerField()
+    base_tuition_fee = models.IntegerField()
     insurance_fee = models.IntegerField()
     examination_fee = models.IntegerField()
     registration_fee = models.IntegerField()

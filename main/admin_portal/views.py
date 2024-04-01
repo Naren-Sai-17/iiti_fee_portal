@@ -234,7 +234,6 @@ def update_profile(request):
     roll_number = request.POST["roll_number"]
     student = models.Students.objects.get(roll_number=roll_number)
     form = forms.Profile(request.POST, instance=student)
-    print(form)
     if form.is_valid():
         print(form.cleaned_data)
         form.save()
