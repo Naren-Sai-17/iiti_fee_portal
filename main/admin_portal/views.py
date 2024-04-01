@@ -1,3 +1,5 @@
+import pandas as pd
+from .models import Students 
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -169,6 +171,42 @@ class list(ListView):
     @method_decorator(is_admin)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
+
+####### Downloading student list #####
+def download_students_excel(request):
+    # Query all students
+    all_students = Students.objects.all()
+
+    # Create a DataFrame from the queryset
+    data = {
+        'Roll Number': [student.roll_number for student in all_students],
+        'Name': [student.name for student in all_students],
+        'Course': [student.course for student in all_students],
+        'Category': [student.category for student in all_students],
+        'Department': [student.department for student in all_students],
+        'Tuition Fee': [student.tuition_fee for student in all_students],
+        'Insurance Fee': [student.insurance_fee for student in all_students],
+        'Examination Fee': [student.examination_fee for student in all_students],
+        'Registration Fee': [student.registration_fee for student in all_students],
+        'Gymkhana Fee': [student.gymkhana_fee for student in all_students],
+        'Medical Fee': [student.medical_fee for student in all_students],
+        'Student Benevolent Fund': [student.student_benevolent_fund for student in all_students],
+        'Lab Fee': [student.lab_fee for student in all_students],
+        'Semester Mess Advance': [student.semester_mess_advance for student in all_students],
+        'One Time Fee': [student.one_time_fee for student in all_students],
+        'Refundable Security Deposit': [student.refundable_security_deposit for student in all_students],
+        'Accommodation Charges': [student.accommodation_charges for student in all_students],
+        'Student Welfare Fund': [student.student_welfare_fund for student in all_students],
+        'Mess Rebate': [student.mess_rebate for student in all_students],
+        'Fee Arrear': [student.fee_arrear for student in all_students],
+        'Fee Payable': [student.fee_payable for student in all_students],
+    }
+    df = pd.DataFrame(data)
+    # Write DataFrame to Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=students.xlsx'
+    df.to_excel(response, index=False)
+    return response
 
 
 ########## Fee Structure ##########

@@ -23,9 +23,12 @@ urlpatterns = [
     path("profile/<str:roll_number>/",views.profile,name = "profile"),
     path("update_profile", views.update_profile, name='update_profile'),
     path("list", views.list.as_view(), name = "list"), 
+    path('download/students/excel/', views.download_students_excel, name='download_students_excel'),
 
     # authorization 
     path("",views.login, name = "login"),
     path("logout", views.logout, name = "logout"), 
     path("not_authorized", views.not_authorized, name = "not_authorized"), 
+
+
 ]
