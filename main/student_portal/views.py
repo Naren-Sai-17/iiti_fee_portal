@@ -5,7 +5,7 @@ from allauth.account.views import LogoutView
 from .decorators import is_student
 from django.http import HttpResponse
 from admin_portal.models import Students
-from admin_portal.models import GatewayPayments
+from admin_portal.models import Payments
 
 # Create your views here.
 def index(request): 
@@ -119,7 +119,7 @@ def generate_receipts(request):
     roll_number_match = re.search(r'\d+', email.split('@')[0])
     roll_number = roll_number_match.group()
     student = Students.objects.get(roll_number=roll_number)
-    student_data = GatewayPayments.objects.get(student=student)
+    student_data = Payments.objects.get(student=student)
     print(student_data)
 
     context ={

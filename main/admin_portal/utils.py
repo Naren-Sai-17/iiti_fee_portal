@@ -28,6 +28,20 @@ def excel_remission(excel_file):
     for _,row in df.iterrows(): 
         set_remission(row[cols[0]],row[cols[1]]) 
 
+def excel_delete(excel_file):
+    df = pd.read_excel(excel_file)
+    cols = df.columns
+    success = 0 
+    fail = 0 
+    for _,row in df.iterrows(): 
+        roll_number = row[cols[0]]
+        try: 
+            student = models.Students.objects.get(roll_number = roll_number) 
+            student.delete()
+            success += 1 
+        except: 
+            fail += 1 
+
 # calculate fee structure of newly added student 
 def calculate_fee_structure(student : models.Students): 
     course = student.course.split('-')[0] 

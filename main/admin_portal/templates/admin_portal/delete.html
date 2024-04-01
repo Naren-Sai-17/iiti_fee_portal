@@ -12,6 +12,9 @@
 		class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
 		Submit
 	</button>
+	{% url 'admin_portal:download_excel' 'delete_sample' as download_url %}
+	<button type="button" onclick="window.location.href = '{{download_url}}'" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors duration-300">Sample</button>
+
 	</form>
 </div>
 {% endblock %}

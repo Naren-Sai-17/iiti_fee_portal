@@ -9,7 +9,9 @@ from . import models
 from django.forms.models import model_to_dict
 from django.http import QueryDict
 from django.views import View
+from django.conf import settings
 
+import os 
 from .filters import studentfilter
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -80,8 +82,8 @@ def delete(request):
     if request.method == "POST":  
             try:
                 excel_file = request.FILES["excel_file"]
-                utils.excel_remission(excel_file)
-                messages.success(request, "database updated succesfully")
+                utils.delete_student(excel_file)
+                messages.success(request, "deleted students succesfully")
             except Exception as e:
                 messages.error(request, f"error: {e}")
     else: 
@@ -242,13 +244,27 @@ def update_profile(request):
         messages.error(request, "invalid input")
         return redirect(reverse("admin_portal:profile", args=[roll_number]))
 
-
+########## Download Excel ##########
+def download_excel(request, id):
+    id += ".xlsx"
+    excel_file_path = os.path.join(settings.BASE_DIR, 'static', 'excel', id)    
+    try:
+        with open(excel_file_path, 'rb') as excel_file:
+            response = HttpResponse(excel_file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')        
+            response['Content-Disposition'] = f'attachment; filename="{id}"'
+            return response
+    except FileNotFoundError:
+        print("File not found:", excel_file_path)
+        return HttpResponse("File not found.", status=404)
+    except Exception as e:
+        print("An error occurred:", e)
+        return HttpResponse("An error occurred.", status=500)
+    
 ########## Admin logs ##########
 @is_admin
 def logs(request):
     logs = models.Log.objects.all().order_by('-timestamp')
     return render(request, 'admin_portal/logs.html', {'logs': logs})
-
 
 @require_POST
 @is_admin

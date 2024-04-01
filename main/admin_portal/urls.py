@@ -12,6 +12,7 @@ urlpatterns = [
     path("delete_remission/<str:id>/", views.delete_remission, name = "delete_remission"), 
     path("clear_remission", views.clear_remission,name = "clear_remission"),
     path("logs", views.logs, name = "logs"), 
+    path("download_excel/<str:id>/",views.download_excel, name = "download_excel"), 
     path("structure",views.fee_structure_list, name = "structure"), 
 
     # student management 
