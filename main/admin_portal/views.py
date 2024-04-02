@@ -85,12 +85,14 @@ def delete(request):
     if request.method == "POST":
         try:
             excel_file = request.FILES["excel_file"]
-            utils.delete_student(excel_file)
-            messages.success(request, "deleted students succesfully")
+            utils.excel_delete(excel_file)
+            messages.success(request, "deleted students successfully")
+            return render(request, "admin_portal/delete.html")  # Return after success
         except Exception as e:
             messages.error(request, f"error: {e}")
     else:
-        return render(request, "admin_portal/delete.html")
+        return render(request, "admin_portal/delete.html")  # Existing return for GET
+
 
 
 ########## Fee Remission ##########
