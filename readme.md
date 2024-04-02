@@ -1,16 +1,56 @@
-To run the project 
+## IITI Fee Portal
 
-python -m venv venv
-venv\Scripts\activate 
-pip install -r requirements.txt
-cd main
-py manage.py runserver 
+Welcome to the IITI Fee Portal! This is a Python-based project designed to manage fees and provide portals for both administrators and students. Below are the instructions to set up and run the project.
 
-add /admin to the link to access admin portal 
-username : admin
-password : adminpassword 
+### Installation and Setup
 
-add /student to the link to access student portal 
-use institute email id (a student email id if possible) to access the student portal 
+1. Clone the repository to your local machine:
+    ```
+    git clone https://github.com/Naren-Sai-17/iiti_fee_portal.git
+    ```
 
-git repo :  https://github.com/Naren-Sai-17/iiti_fee_portal
+2. Navigate to the project directory:
+    ```
+    cd iiti_fee_portal
+    ```
+
+3. Create a virtual environment using `venv`:
+    ```
+    python -m venv venv
+    ```
+
+4. Activate the virtual environment:
+    - On Windows:
+    ```
+    venv\Scripts\activate
+    ```
+    - On Unix or MacOS:
+    ```
+    source venv/bin/activate
+    ```
+
+5. Install project dependencies from `requirements.txt`:
+    ```
+    pip install -r requirements.txt
+    ```
+
+### Running the Project
+
+6. Navigate to the main directory:
+    ```
+    cd main
+    ```
+
+7. Run the Django server:
+    ```
+    py manage.py runserver
+    ```
+
+### Accessing Portals
+
+- To access the **admin portal**, add `/admin` to the server link. You will need to use the following credentials:
+  - Username: admin
+  - Password: adminpassword
+
+- To access the **student portal**, add `/student` to the server link. Use your institute email ID (preferably a student email ID) to log in.
+
