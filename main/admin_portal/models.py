@@ -54,11 +54,46 @@ class Students(models.Model):
 
     def activate(self):
         self.fee_arrear += self.fee_payable 
-        self.fee_payable = self.total_fee - self.mess_rebate + self.fee_arrear 
+        self.fee_payable = self.total_fee - self.mess_rebate
         # self.mess_rebate = 0 
         # self.one_time_fee = 0 
         # self.refundable_security_deposit = 0 
         self.save() 
+
+    def make_payment(self,amt): 
+        # create a new payment 
+        payment = Payments() 
+        payment.student = self 
+        # payment.receipt_number
+        # payment.date 
+        payment.tuition_fee = self.tuition_fee
+        payment.insurance_fee = self.insurance_fee
+        payment.examination_fee = self.insurance_fee
+        payment.examination_fee = self.examination_fee
+        payment.registration_fee = self.registration_fee
+        payment.gymkhana_fee = self.gymkhana_fee
+        payment.medical_fee = self.medical_fee
+        payment.student_benevolent_fund = self.student_benevolent_fund
+        payment.lab_fee = self.lab_fee
+        payment.semester_mess_advance = self.semester_mess_advance
+        payment.one_time_fee = self.one_time_fee
+        payment.refundable_security_deposit = self.refundable_security_deposit
+        payment.accommodation_charges = self.accommodation_charges
+        payment.student_welfare_fund = self.student_welfare_fund
+        payment.fee_arrear = self.fee_arrear 
+        payment.mess_rebate = self.mess_rebate 
+        payment.fee_payable = self.fee_payable
+        payment.fee_received = amt 
+        
+        payment.mode = "DUMMY"
+        payment.type = "DUMMY" 
+        payment.save() 
+
+        # update the student details 
+        self.fee_arrear = payment.fee_payable + payment.fee_arrear - payment.fee_received
+        self.fee_payable = 0
+        self.save() 
+
 
 class Payments(models.Model):
     student = models.ForeignKey(Students, on_delete=models.CASCADE)
@@ -79,6 +114,7 @@ class Payments(models.Model):
     student_welfare_fund = models.IntegerField()
     fee_arrear = models.IntegerField() 
     mess_rebate = models.IntegerField()
+    fee_payable = models.IntegerField()
     fee_received = models.IntegerField() 
     mode = models.CharField(max_length = 20)
     type = models.CharField(max_length = 20)
@@ -102,9 +138,6 @@ class Payments(models.Model):
             + self.mess_rebate
         )
 
-    @property
-    def fee_receivable(self):
-        return self.total_fee - self.mess_rebate 
 
 class CustomUser(AbstractUser):
     isAdmin = models.BooleanField(default=False)
