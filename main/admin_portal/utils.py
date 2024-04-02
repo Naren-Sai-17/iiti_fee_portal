@@ -121,14 +121,13 @@ def assign_fee(student: models.Students, fee_structure: models.FeeStructure):
 
 
 def add_students(excel_file):
-    col_range = "A:X"
+    col_range = "A:U"
     try:
-        df = pd.read_excel(
-            excel_file, usecols=col_range, skiprows=1, thousands=",", skipfooter=1
-        )
+        df = pd.read_excel(excel_file, usecols=col_range, skiprows=0, header=None)
+        print(df.columns)
         pd.set_option("display.max_columns", None)
         pd.set_option("display.max_rows", None)
-        numerical_cols = list(range(6, 24))
+        numerical_cols = list(range(5, 21))
         df[numerical_cols] = (
             df[numerical_cols]
             .apply(pd.to_numeric, errors="coerce")
@@ -145,25 +144,27 @@ def add_students(excel_file):
 def add_students_excel(student_data):
     try:
         student = models.Students(
-            roll_number=student_data[1],
-            name=student_data[2],
-            course=student_data[3],
-            category=student_data[4],
-            department=student_data[5],
-            base_tuition_fee=student_data[6],
-            insurance_fee=student_data[7],
-            examination_fee=student_data[8],
-            registration_fee=student_data[9],
-            gymkhana_fee=student_data[10],
-            medical_fee=student_data[11],
-            student_benevolent_fund=student_data[12],
-            lab_fee=student_data[13],
-            semester_mess_advance=student_data[14],
-            one_time_fee=student_data[15],
-            refundable_security_deposit=student_data[16],
-            accommodation_charges=student_data[17],
-            student_welfare_fund=student_data[18],
-            mess_rebate=student_data[20],
+            roll_number=student_data[0],
+            name=student_data[1],
+            course=student_data[2],
+            category=student_data[3],
+            department=student_data[4],
+            base_tuition_fee=student_data[5],
+            insurance_fee=student_data[6],
+            examination_fee=student_data[7],
+            registration_fee=student_data[8],
+            gymkhana_fee=student_data[9],
+            medical_fee=student_data[10],
+            student_benevolent_fund=student_data[11],
+            lab_fee=student_data[12],
+            semester_mess_advance=student_data[13],
+            one_time_fee=student_data[14],
+            refundable_security_deposit=student_data[15],
+            accommodation_charges=student_data[16],
+            student_welfare_fund=student_data[17],
+            mess_rebate=student_data[18],
+            fee_arrear=student_data[19],
+            fee_payable=student_data[20],
         )
         student.save()
     except Exception as e:
