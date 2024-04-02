@@ -169,3 +169,29 @@ def add_students_excel(student_data):
         student.save()
     except Exception as e:
         print(e)
+
+def add_students2(excel_file):
+    col_range = "A:E"
+    try:
+        df = pd.read_excel(excel_file, usecols=col_range, skiprows=1, header=None)
+        pd.set_option("display.max_columns", None)
+        pd.set_option("display.max_rows", None)
+        for index, excel_row in df.iterrows():
+            add_students_excel2(excel_row)
+    except Exception as e:
+        print(e)
+        return {"status": "error", "exception": e}
+
+def add_students_excel2(student_data):
+    try:
+        student = models.Students(
+            roll_number=student_data[0],
+            name=student_data[1],
+            course=student_data[2],
+            category=student_data[3],
+            department=student_data[4],
+        )
+        calculate_fee_structure(student)
+        student.save()
+    except Exception as e:
+        print(e)

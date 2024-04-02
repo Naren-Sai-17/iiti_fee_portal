@@ -20,6 +20,7 @@ urlpatterns = [
     path("delete", views.delete, name = "delete"), 
     path("upload", views.upload, name = "upload"), 
     path("upload_excel", views.upload_excel, name = "upload_excel"),
+    path("upload_excel2", views.upload_excel2, name = "upload_excel2"),
     path("profile/<str:roll_number>/",views.profile,name = "profile"),
     path("update_profile", views.update_profile, name='update_profile'),
     path("list", views.list.as_view(), name = "list"), 

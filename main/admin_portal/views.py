@@ -306,6 +306,13 @@ def upload_excel(request):
     utils.add_students(excel_file)
     return redirect(reverse("admin_portal:upload"))
 
+@require_POST
+@is_admin
+def upload_excel2(request):
+    excel_file = request.FILES["excel_file"]
+    utils.add_students2(excel_file)
+    return redirect(reverse("admin_portal:upload"))
+
 
 ########## Authentication ##########
 def login(request):
