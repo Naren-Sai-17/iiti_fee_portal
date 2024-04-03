@@ -1,25 +1,37 @@
-<!-- dashboard.html -->
 {% extends "student_portal/base.html" %}
+
 {% block content %}
 <div class="container mx-auto py-10">
     <div class="flex items-center justify-center">
         <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
-            <h2 class="text-2xl font-bold text-blue-500 mb-4">Fee Due:</h2>
-            <p class="text-gray-700 mb-6">Your payment is due soon. Please click below to pay.</p>
-            <a href="#" class="block w-full text-center bg-blue-500 text-white py-3 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 transition duration-300 ease-in-out">
-                Click here to pay
+            <h2 class="text-3xl font-bold mb-4">Fee Payment Reminder</h2>
+            <p class="text-gray-800 mb-6">Your payment is due soon. Please click below to pay.</p>
+            <a href="#" class="block w-full text-center bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 transition duration-300 ease-in-out">
+                <span class="font-semibold">Click here to pay</span>
             </a>
         </div>
     </div>
-    <div class="flex flex-col items-center justify-center mt-10">
-        <h3 class="text-xl font-bold text-gray-700 mb-6">Previous Payments</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <span class="text-lg font-semibold">#### ####</span>
-                <p class="text-sm text-gray-600 mt-2">Payment details here...</p>
-            </div>
-            <!-- Add more payment details here -->
-        </div>
+
+    <div class="mt-12 px-12">
+        <h2 class="text-3xl font-bold mb-4">Transaction History</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for transaction in transactions %}
+              {% url 'student_portal:receipt' transaction.id as receipt_url %}
+              <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="px-6 py-4">
+                  <div class="font-bold text-lg mb-2">Transaction #{{ transaction.id }}</div>
+                  <p class="text-gray-800 text-base">
+                    {{ transaction.description }}
+                  </p>
+                </div>
+                <div class="px-6 py-4">
+                  <a href="{{ receipt_url }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full inline-block">
+                    View Receipt
+                  </a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
     </div>
 </div>
 {% endblock %}
