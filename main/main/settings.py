@@ -11,21 +11,22 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import dj_database_url
+import environ
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+environ.Env.read_env('.env')
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wxgc^aby+e%t09pgal2o3)4+6p(p3emi^^#zu9++z$i-8o2d_j'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.onrender.com','localhost','127.0.0.1']
 
 # Application definition
 
@@ -94,6 +95,9 @@ DATABASES = {
     }
 }
 
+DATABASES['default'] = dj_database_url.parse(
+    env('DATABASE_URL'),
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -141,8 +145,8 @@ AUTH_USER_MODEL = 'admin_portal.CustomUser'
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': '85598459249-bn6hngrbkdaq51c8scaev1fo3rpm2qft.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': env('CLIENT_ID'),
+            'secret': env('SECRET'),
             'key': ''
         },
         'SCOPE': [
