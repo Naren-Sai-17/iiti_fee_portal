@@ -1,6 +1,4 @@
-{% extends "admin_portal/base.html" %} {% block content %} {% url
-'admin_portal:activate' as activate_url %}
-
+{% extends "admin_portal/base.html" %} {% block content %} 
 <button onclick="window.location.href = '{{ activate_url }}'">Activate</button>
 <div style="width: 30%">
   <canvas id="pieChart1"></canvas>
