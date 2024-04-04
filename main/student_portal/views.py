@@ -77,6 +77,7 @@ def receipt(request,id):
         "mode": payment.mode,
         "type": payment.type,
     }
+    models.studentStats.objects.create(student=payment.student,hasReceipt=True)
     return render(request, "student_portal/receipt.html", context)
 
 
