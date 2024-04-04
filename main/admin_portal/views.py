@@ -8,6 +8,7 @@ from . import utils
 from django.views.generic import ListView
 from . import forms
 from . import models
+from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.http import QueryDict
 from django.views import View
@@ -26,7 +27,60 @@ from django.contrib import messages
 ########## Dashboard ##########
 @is_admin
 def dashboard(request):
-    return render(request, "admin_portal/dashboard.html")
+    # Get all students who have receipts
+    student_with_receipts = models.studentStats.objects.all()
+
+    # Get all students
+    students = Students.objects.all()
+
+    # Count the number of students who have receipts
+    num_students_with_receipts = len(student_with_receipts)
+
+    # Count the total number of students
+    total_students = len(students)
+    
+    # Count the number of students who have course=B.Tech and have receipts
+    students_btech_with_receipts = models.studentStats.objects.filter(Q(student__course='B.TECH-I') | Q(student__course='B.TECH-II') |Q(student__course='B.TECH-III') | Q(student__course='B.TECH-IV')).count()
+   
+    # Count the total number of students with course=B.Tech
+    total_btech_students = Students.objects.filter(Q(course='B.TECH-I') | Q(course='B.TECH-II')|Q(course='B.TECH-III') | Q(course='B.TECH-IV')).count()
+
+    # Count the number of students who have course=M.Tech and have receipts
+    students_mtech_with_receipts = models.studentStats.objects.filter(Q(student__course='M.Tech-I') | Q(student__course='M.Tech-II')).count()
+
+    # Count the total number of students with course=M.Tech
+    total_mtech_students = Students.objects.filter(Q(course='M.Tech-I') | Q(course='M.Tech-II')).count()
+
+    # Count the number of students who have course=Phd and have receipts
+    students_msc_with_receipts = models.studentStats.objects.filter(Q(student__course='MSc-I') | Q(student__course='MSc-II')).count()
+
+    # Count the total number of students with course=Phd
+    total_msc_students = Students.objects.filter(Q(course='MSc-I') | Q(course='MSc-II')).count()
+
+    # Count the number of students who have course=Msc and have receipts
+    students_phd_with_receipts = models.studentStats.objects.filter(student__course='Phd').count()
+
+    # Count the total number of students with course=Msc
+    total_phd_students = Students.objects.filter(course='Phd').count()
+
+    activate_url = reverse("admin_portal:activate")
+    
+    context = {
+        'activate_url': activate_url,
+        'num_students_with_receipts': num_students_with_receipts,
+        'total_students': total_students,
+        'students_btech_with_receipts': students_btech_with_receipts,
+        'total_btech_students': total_btech_students,
+        'students_mtech_with_receipts': students_mtech_with_receipts,
+        'total_mtech_students': total_mtech_students,
+        'students_msc_with_receipts': students_msc_with_receipts,
+        'total_msc_students': total_msc_students,
+        'students_phd_with_receipts': students_phd_with_receipts,
+        'total_phd_students': total_phd_students,
+    }
+
+
+    return render(request, "admin_portal/dashboard.html",context)
 
 
 @is_admin
@@ -35,6 +89,7 @@ def activate(request):
         student.activate()
     messages.success(request, "activated succesfully")
     utils.log("fee portal activated")
+    models.studentStats.objects.all().delete()
     return redirect(reverse("admin_portal:dashboard"))
 
 
@@ -325,6 +380,7 @@ def login(request):
             if user is not None:
                 dj_login(request, user)
                 return redirect(reverse("admin_portal:dashboard"))
+                
     else:
         form = forms.LoginForm()
     return render(request, "admin_portal/login.html", {"form": form})

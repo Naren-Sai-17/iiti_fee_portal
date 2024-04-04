@@ -167,3 +167,12 @@ class FeeRemission(models.Model):
 class Log(models.Model):
     action = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+class studentStats(models.Model):  
+    student = models.OneToOneField(Students, on_delete = models.CASCADE, primary_key = True, related_name = "stats") 
+    hasReceipt = models.BooleanField(default=False)  
+
+
+
+
+
