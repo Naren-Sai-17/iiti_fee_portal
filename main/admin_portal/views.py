@@ -24,6 +24,22 @@ from .decorators import is_admin
 from django.contrib import messages
 
 
+def make_payment(request):
+    if request.method == "GET": 
+        return render(request,'admin_portal/make_payment.html') 
+    else: 
+        roll_number = request.POST['roll_number']
+        amount = request.POST['amount'] 
+        student = models.Students.objects.get(roll_number = roll_number) 
+        student.make_payment(amt=amount) 
+        return redirect(reverse('admin_portal:profile',args = [roll_number]))
+
+def loan(request): 
+    if request.method == "GET": 
+        return render(request,'admin_portal/loan.html')
+    else: 
+        return HttpResponse("post request sent")
+
 ########## Dashboard ##########
 @is_admin
 def dashboard(request):
@@ -389,7 +405,6 @@ def login(request):
 def logout(request):
     dj_logout(request)
     return redirect(reverse("admin_portal:login"))
-
 
 def not_authorized(request):
     return render(request, "admin_portal/not_authorized.html")

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from datetime import datetime
 
 
 class Students(models.Model):
@@ -24,11 +25,14 @@ class Students(models.Model):
     refundable_security_deposit = models.IntegerField()
     accommodation_charges = models.IntegerField()
     student_welfare_fund = models.IntegerField()
+
+    # extra fee 
     mess_rebate = models.IntegerField(default = 0)
     fee_arrear = models.IntegerField(default = 0) 
-    # fee to be payed
-    fee_payable = models.IntegerField(default = 0)
 
+    # fee payed in this semester 
+    fee_paid = models.IntegerField(default = 0) 
+    
     @property 
     def tuition_fee(self): 
         # add remission logic 
@@ -52,20 +56,25 @@ class Students(models.Model):
             + self.student_welfare_fund
         )
 
+    @property   
+    def fee_payable(self): 
+        return self.total_fee - self.mess_rebate + self.fee_arrear - self.fee_paid 
+
     def activate(self):
-        self.fee_arrear += self.fee_payable 
-        self.fee_payable = self.total_fee - self.mess_rebate
-        # self.mess_rebate = 0 
-        # self.one_time_fee = 0 
-        # self.refundable_security_deposit = 0 
+        self.fee_arrear = self.fee_payable 
+        self.fee_paid = 0 
+        self.mess_rebate = 0 
+        # self.one_time_fee = 0  
+        # self.refundable_security_deposit = 0
         self.save() 
 
-    def make_payment(self,amt): 
+    def make_payment(self,amt : int): 
+        amt = int(amt)
         # create a new payment 
         payment = Payments() 
         payment.student = self 
-        # payment.receipt_number
-        # payment.date 
+        payment.receipt_number = "temp"
+        payment.date = datetime.now() 
         payment.tuition_fee = self.tuition_fee
         payment.insurance_fee = self.insurance_fee
         payment.examination_fee = self.insurance_fee
@@ -84,14 +93,12 @@ class Students(models.Model):
         payment.mess_rebate = self.mess_rebate 
         payment.fee_payable = self.fee_payable
         payment.fee_received = amt 
-        
         payment.mode = "DUMMY"
         payment.type = "DUMMY" 
         payment.save() 
 
         # update the student details 
-        self.fee_arrear = payment.fee_payable + payment.fee_arrear - payment.fee_received
-        self.fee_payable = 0
+        self.fee_paid += amt
         self.save() 
 
 

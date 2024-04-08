@@ -22,144 +22,114 @@
 </a>
 
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8">Student Profile</h1>
+    <h1 class="text-3xl font-bold mb-6">Student Profile</h1>
 
     {% url 'admin_portal:delete_student' student_details.roll_number as delete_url %}
-    <a href="{{ delete_url }}"
-        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block"
-        onclick="return confirmDelete()">
+    <a href="{{ delete_url }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-flex items-center mb-6" onclick="return confirmDelete()">
         <i class="fas fa-trash-alt mr-2"></i> Delete Student
     </a>
 
-    <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="profile-info bg-white shadow-md rounded-lg p-6">
         <form action="{% url 'admin_portal:update_profile' %}" method="post">
             {% csrf_token %}
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="roll_number">Roll Number:</label>
-                <input readonly
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="roll_number" type="text" value="{{ student_details.roll_number }}">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="form-group">
+                    <label for="roll_number" class="block font-medium mb-1">Roll Number:</label>
+                    <input readonly name="roll_number" type="text" value="{{ student_details.roll_number }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="name" class="block font-medium mb-1">Name:</label>
+                    <input readonly name="name" type="text" value="{{ student_details.name }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="course" class="block font-medium mb-1">Course:</label>
+                    <input readonly name="course" type="text" value="{{ student_details.course }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="category" class="block font-medium mb-1">Category:</label>
+                    <input readonly name="category" type="text" value="{{ student_details.category }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="department" class="block font-medium mb-1">Department:</label>
+                    <input readonly name="department" type="text" value="{{ student_details.department }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
             </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="name">Name:</label>
-                <input readonly
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="name" type="text" value="{{ student_details.name }}">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+                <div class="form-group">
+                    <label for="tuition_fee" class="block font-medium mb-1">Tuition Fee:</label>
+                    <input type="number" name="base_tuition_fee" type="text" value="{{ student_details.tuition_fee }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label class="block font-medium mb-1">Tuition Fee after remission:</label>
+                    <div class="px-3 py-2 border rounded-md">{{ student_details.tuition_fee }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="insurance_fee" class="block font-medium mb-1">Insurance Fee:</label>
+                    <input name="insurance_fee" type="text" value="{{ student_details.insurance_fee }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="examination_fee" class="block font-medium mb-1">Examination Fee:</label>
+                    <input name="examination_fee" type="text" value="{{ student_details.examination_fee }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="registration_fee" class="block font-medium mb-1">Registration Fee:</label>
+                    <input name="registration_fee" type="text" value="{{ student_details.registration_fee }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="gymkhana_fee" class="block font-medium mb-1">Gymkhana Fee:</label>
+                    <input name="gymkhana_fee" type="text" value="{{ student_details.gymkhana_fee }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="medical_fee" class="block font-medium mb-1">Medical Fee:</label>
+                    <input name="medical_fee" type="text" value="{{ student_details.medical_fee }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="student_benevolent_fund" class="block font-medium mb-1">Student Benevolent Fund:</label>
+                    <input name="student_benevolent_fund" type="text" value="{{ student_details.student_benevolent_fund }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="lab_fee" class="block font-medium mb-1">Lab Fee:</label>
+                    <input name="lab_fee" type="text" value="{{ student_details.lab_fee }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="semester_mess_advance" class="block font-medium mb-1">Semester Mess Advance:</label>
+                    <input name="semester_mess_advance" type="text" value="{{ student_details.semester_mess_advance }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="one_time_fee" class="block font-medium mb-1">One-time Fee:</label>
+                    <input name="one_time_fee" type="text" value="{{ student_details.one_time_fee }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="refundable_security_deposit" class="block font-medium mb-1">Refundable Security Deposit:</label>
+                    <input name="refundable_security_deposit" type="text" value="{{ student_details.refundable_security_deposit }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="accommodation_charges" class="block font-medium mb-1">Accommodation Charges:</label>
+                    <input name="accommodation_charges" type="text" value="{{ student_details.accommodation_charges }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="student_welfare_fund" class="block font-medium mb-1">Student Welfare Fund:</label>
+                    <input name="student_welfare_fund" type="text" value="{{ student_details.student_welfare_fund }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="mess_rebate" class="block font-medium mb-1">Mess Rebate:</label>
+                    <input name="mess_rebate" type="text" value="{{ student_details.mess_rebate }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="fee_paid" class="block font-medium mb-1">Fee paid:</label>
+                    <input name="fee_paid" type="text" value="{{ student_details.fee_paid }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+                <div class="form-group">
+                    <label for="fee_arrear" class="block font-medium mb-1">Fee arrear:</label>
+                    <input name="fee_arrear" type="text" value="{{ student_details.fee_arrear }}" class="w-full px-3 py-2 border rounded-md">
+                </div>
+    
             </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="course">Course:</label>
-                <input readonly
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="course" type="text" value="{{ student_details.course }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="category">Category:</label>
-                <input readonly
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="category" type="text" value="{{ student_details.category }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="department">Department:</label>
-                <input readonly
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="department" type="text" value="{{ student_details.department }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="tuition_fee">Tuition Fee:</label>
-                <input type="number"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="tuition_fee" type="text" value="{{ student_details.tuition_fee }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="insurance_fee">Insurance Fee:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="insurance_fee" type="text" value="{{ student_details.insurance_fee }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="examination_fee">Examination Fee:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="examination_fee" type="text" value="{{ student_details.examination_fee }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="registration_fee">Registration Fee:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="registration_fee" type="text" value="{{ student_details.registration_fee }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="gymkhana_fee">Gymkhana Fee:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="gymkhana_fee" type="text" value="{{ student_details.gymkhana_fee }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="medical_fee">Medical Fee:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="medical_fee" type="text" value="{{ student_details.medical_fee }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="student_benevolent_fund">Student Benevolent
-                    Fund:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="student_benevolent_fund" type="text" value="{{ student_details.student_benevolent_fund }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="lab_fee">Lab Fee:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="lab_fee" type="text" value="{{ student_details.lab_fee }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="semester_mess_advance">Semester Mess
-                    Advance:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="semester_mess_advance" type="text" value="{{ student_details.semester_mess_advance }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="one_time_fee">One-time Fee:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="one_time_fee" type="text" value="{{ student_details.one_time_fee }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="refundable_security_deposit">Refundable Security
-                    Deposit:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="refundable_security_deposit" type="text"
-                    value="{{ student_details.refundable_security_deposit }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="accommodation_charges">Accommodation
-                    Charges:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="accommodation_charges" type="text" value="{{ student_details.accommodation_charges }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="student_welfare_fund">Student Welfare
-                    Fund:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="student_welfare_fund" type="text" value="{{ student_details.student_welfare_fund }}">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="mess_rebate">Mess Rebate:</label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="mess_rebate" type="text" value="{{ student_details.mess_rebate }}">
-            </div>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-6">
                 <i class="fas fa-save mr-2"></i> Update
             </button>
         </form>
     </div>
-</div>
 </div>
 
 <script>
@@ -215,3 +185,4 @@
 </style>
 
 {% endblock %}
+

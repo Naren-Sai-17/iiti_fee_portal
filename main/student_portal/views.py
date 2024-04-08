@@ -15,7 +15,11 @@ def dashboard(request):
         roll_number = roll_number_match.group()
         student_instance = models.Students.objects.get(roll_number = roll_number)
         transactions = models.Payments.objects.filter(student = student_instance)
-        return render(request, "student_portal/dashboard.html", {'transactions' : transactions })
+        context = {
+            'student' : student_instance , 
+            'transactions' : transactions
+        }
+        return render(request, "student_portal/dashboard.html", context)
     except Exception as e: 
         return HttpResponse(e)
 
@@ -77,7 +81,7 @@ def receipt(request,id):
         "mode": payment.mode,
         "type": payment.type,
     }
-    models.studentStats.objects.create(student=payment.student,hasReceipt=True)
+    # models.studentStats.objects.create(student=payment.student,hasReceipt=True)
     return render(request, "student_portal/receipt.html", context)
 
 
