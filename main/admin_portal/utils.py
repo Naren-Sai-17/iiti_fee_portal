@@ -6,6 +6,7 @@ from .models import Students
 def export_students():
     queryset = models.Students.objects.all()
     student_data = {
+        "S. No.": list(range(1, len(queryset)+1)),
         "Roll Number": [student.roll_number for student in queryset],
         "Name": [student.name for student in queryset],
         "Course": [student.course for student in queryset],
@@ -124,10 +125,9 @@ def add_students(excel_file):
     col_range = "A:U"
     try:
         df = pd.read_excel(excel_file, usecols=col_range, skiprows=0, header=None)
-        print(df.columns)
         pd.set_option("display.max_columns", None)
         pd.set_option("display.max_rows", None)
-        numerical_cols = list(range(5, 21))
+        numerical_cols = list(range(6, 21))
         df[numerical_cols] = (
             df[numerical_cols]
             .apply(pd.to_numeric, errors="coerce")
@@ -140,38 +140,37 @@ def add_students(excel_file):
         print(e)
         return {"status": "error", "exception": e}
 
-
 def add_students_excel(student_data):
     try:
+        increment = 1
         student = models.Students(
-            roll_number=student_data[0],
-            name=student_data[1],
-            course=student_data[2],
-            category=student_data[3],
-            department=student_data[4],
-            base_tuition_fee=student_data[5],
-            insurance_fee=student_data[6],
-            examination_fee=student_data[7],
-            registration_fee=student_data[8],
-            gymkhana_fee=student_data[9],
-            medical_fee=student_data[10],
-            student_benevolent_fund=student_data[11],
-            lab_fee=student_data[12],
-            semester_mess_advance=student_data[13],
-            one_time_fee=student_data[14],
-            refundable_security_deposit=student_data[15],
-            accommodation_charges=student_data[16],
-            student_welfare_fund=student_data[17],
-            mess_rebate=student_data[18],
-            fee_arrear=student_data[19],
-            fee_payable=student_data[20],
+            roll_number=student_data[0 + increment],
+            name=student_data[1 + increment],
+            course=student_data[2 + increment],
+            category=student_data[3 + increment],
+            department=student_data[4 + increment],
+            base_tuition_fee=student_data[5 + increment],
+            insurance_fee=student_data[6 + increment],
+            examination_fee=student_data[7 + increment],
+            registration_fee=student_data[8 + increment],
+            gymkhana_fee=student_data[9 + increment],
+            medical_fee=student_data[10 + increment],
+            student_benevolent_fund=student_data[11 + increment],
+            lab_fee=student_data[12 + increment],
+            semester_mess_advance=student_data[13 + increment],
+            one_time_fee=student_data[14 + increment],
+            refundable_security_deposit=student_data[15 + increment],
+            accommodation_charges=student_data[16 + increment],
+            student_welfare_fund=student_data[17 + increment],
+            mess_rebate=student_data[18 + increment],
+            fee_arrear=student_data[19 + increment],
         )
         student.save()
     except Exception as e:
         print(e)
 
 def add_students2(excel_file):
-    col_range = "A:E"
+    col_range = "A:F"
     try:
         df = pd.read_excel(excel_file, usecols=col_range, skiprows=1, header=None)
         pd.set_option("display.max_columns", None)
@@ -184,12 +183,13 @@ def add_students2(excel_file):
 
 def add_students_excel2(student_data):
     try:
+        increment = 1
         student = models.Students(
-            roll_number=student_data[0],
-            name=student_data[1],
-            course=student_data[2],
-            category=student_data[3],
-            department=student_data[4],
+            roll_number=student_data[0 + increment],
+            name=student_data[1 + increment],
+            course=student_data[2 + increment],
+            category=student_data[3 + increment],
+            department=student_data[4 + increment],
         )
         calculate_fee_structure(student)
         student.save()
