@@ -50,11 +50,11 @@ def dashboard(request):
     msc_students = Students.objects.filter(course__icontains = 'MSC')
     phd_students = Students.objects.filter(course__icontains = 'PHD')
     all_students = Students.objects.all() 
-    btech_no_due = len([students for students in btech_students if students.fee_payable == 0])
-    mtech_no_due = len([students for students in mtech_students if students.fee_payable == 0])
-    msc_no_due = len([students for students in msc_students if students.fee_payable == 0])
-    phd_no_due = len([students for students in phd_students if students.fee_payable == 0])
-    all_no_due = len([students for students in all_students if students.fee_payable == 0])
+    btech_no_due = len([students for students in btech_students if students.fee_payable <= 0])
+    mtech_no_due = len([students for students in mtech_students if students.fee_payable <= 0])
+    msc_no_due = len([students for students in msc_students if students.fee_payable <= 0])
+    phd_no_due = len([students for students in phd_students if students.fee_payable <= 0])
+    all_no_due = len([students for students in all_students if students.fee_payable <= 0])
     
     context = {
         'all_students': all_students.count(),
@@ -70,7 +70,7 @@ def dashboard(request):
     }
 
 
-    return render(request, "admin_portal/dashboard.html")
+    return render(request, "admin_portal/dashboard.html",context = context)
 
 
 @is_admin

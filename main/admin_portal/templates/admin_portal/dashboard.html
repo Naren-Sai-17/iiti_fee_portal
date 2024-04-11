@@ -1,4 +1,7 @@
-{% extends "admin_portal/base.html" %} {% block content %} 
+{% extends "admin_portal/base.html" %}
+{% block content %} 
+
+{% url 'admin_portal:activate' as activate_url %}
 <button onclick="window.location.href = '{{ activate_url }}'">Activate</button>
 <div style="width: 30%">
   <canvas id="pieChart1"></canvas>
@@ -27,7 +30,7 @@
            data: {
                labels: ['Students who Paid their fee', 'Total Students'],
                datasets: [{
-                   data: [{{ num_students_with_receipts }}, {{ total_students}} - {{num_students_with_receipts }}],
+                   data: [{{ all_no_due }}, {{ all_students }} - {{ all_no_due }}],
                    backgroundColor: ['#36a2eb', '#ff6384']
                }]
            },
@@ -43,7 +46,7 @@
            data: {
                labels: ['Students who Paid their fee', 'Total B.Tech Students'],
                datasets: [{
-                   data: [{{ students_btech_with_receipts }}, {{ total_btech_students}} - {{students_btech_with_receipts }}],
+                   data: [{{ btech_no_due }}, {{ btech_students }} - {{ btech_no_due }}],
                    backgroundColor: ['#36a2eb', '#ff6384']
                }]
            },
@@ -59,7 +62,7 @@
            data: {
                labels: ['Students who Paid their fee', 'Total M.Tech Students'],
                datasets: [{
-                   data: [{{ students_mtech_with_receipts }}, {{ total_mtech_students}} - {{students_mtech_with_receipts }}],
+                   data: [{{ mtech_no_due }}, {{ mtech_students}} - {{ mtech_no_due }}],
                    backgroundColor: ['#36a2eb', '#ff6384']
                }]
            },
@@ -75,7 +78,7 @@
            data: {
                labels: ['Students who Paid their fee', 'Total Msc Students'],
                datasets: [{
-                   data: [{{ students_msc_with_receipts }}, {{ total_msc_students}} - {{students_msc_with_receipts }}],
+                   data: [{{ msc_no_due }}, {{ msc_students }} - {{msc_no_due }}],
                    backgroundColor: ['#36a2eb', '#ff6384']
                }]
            },
@@ -91,7 +94,7 @@
            data: {
                labels: ['Students who Paid their fee', 'Total Phd Students'],
                datasets: [{
-                   data: [{{ students_phd_with_receipts }}, {{ total_phd_students}} - {{students_phd_with_receipts }}],
+                   data: [{{ phd_no_due }}, {{ phd_students }} - {{ phd_no_due }}],
                    backgroundColor: ['#36a2eb', '#ff6384']
                }]
            },
