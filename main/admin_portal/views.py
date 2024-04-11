@@ -24,6 +24,7 @@ from .decorators import is_admin
 from django.contrib import messages
 
 
+# dummy function for testing purpose 
 def make_payment(request):
     if request.method == "GET": 
         return render(request,'admin_portal/make_payment.html') 
@@ -43,60 +44,33 @@ def loan(request):
 ########## Dashboard ##########
 @is_admin
 def dashboard(request):
-    # Get all students who have receipts
-    student_with_receipts = models.studentStats.objects.all()
 
-    # Get all students
-    students = Students.objects.all()
-
-    # Count the number of students who have receipts
-    num_students_with_receipts = len(student_with_receipts)
-
-    # Count the total number of students
-    total_students = len(students)
-    
-    # Count the number of students who have course=B.Tech and have receipts
-    students_btech_with_receipts = models.studentStats.objects.filter(Q(student__course='B.TECH-I') | Q(student__course='B.TECH-II') |Q(student__course='B.TECH-III') | Q(student__course='B.TECH-IV')).count()
-   
-    # Count the total number of students with course=B.Tech
-    total_btech_students = Students.objects.filter(Q(course='B.TECH-I') | Q(course='B.TECH-II')|Q(course='B.TECH-III') | Q(course='B.TECH-IV')).count()
-
-    # Count the number of students who have course=M.Tech and have receipts
-    students_mtech_with_receipts = models.studentStats.objects.filter(Q(student__course='M.Tech-I') | Q(student__course='M.Tech-II')).count()
-
-    # Count the total number of students with course=M.Tech
-    total_mtech_students = Students.objects.filter(Q(course='M.Tech-I') | Q(course='M.Tech-II')).count()
-
-    # Count the number of students who have course=Phd and have receipts
-    students_msc_with_receipts = models.studentStats.objects.filter(Q(student__course='MSc-I') | Q(student__course='MSc-II')).count()
-
-    # Count the total number of students with course=Phd
-    total_msc_students = Students.objects.filter(Q(course='MSc-I') | Q(course='MSc-II')).count()
-
-    # Count the number of students who have course=Msc and have receipts
-    students_phd_with_receipts = models.studentStats.objects.filter(student__course='Phd').count()
-
-    # Count the total number of students with course=Msc
-    total_phd_students = Students.objects.filter(course='Phd').count()
-
-    activate_url = reverse("admin_portal:activate")
+    btech_students = Students.objects.filter(course__icontains = 'B.TECH')
+    mtech_students = Students.objects.filter(course__icontains = 'M.TECH')
+    msc_students = Students.objects.filter(course__icontains = 'MSC')
+    phd_students = Students.objects.filter(course__icontains = 'PHD')
+    all_students = Students.objects.all() 
+    btech_no_due = len([students for students in btech_students if students.fee_payable == 0])
+    mtech_no_due = len([students for students in mtech_students if students.fee_payable == 0])
+    msc_no_due = len([students for students in msc_students if students.fee_payable == 0])
+    phd_no_due = len([students for students in phd_students if students.fee_payable == 0])
+    all_no_due = len([students for students in all_students if students.fee_payable == 0])
     
     context = {
-        'activate_url': activate_url,
-        'num_students_with_receipts': num_students_with_receipts,
-        'total_students': total_students,
-        'students_btech_with_receipts': students_btech_with_receipts,
-        'total_btech_students': total_btech_students,
-        'students_mtech_with_receipts': students_mtech_with_receipts,
-        'total_mtech_students': total_mtech_students,
-        'students_msc_with_receipts': students_msc_with_receipts,
-        'total_msc_students': total_msc_students,
-        'students_phd_with_receipts': students_phd_with_receipts,
-        'total_phd_students': total_phd_students,
+        'all_students': all_students.count(),
+        'btech_students': btech_students.count(),
+        'mtech_students': mtech_students.count(),
+        'msc_students': msc_students.count(),
+        'phd_students': phd_students.count(),
+        'all_no_due': all_no_due, 
+        'btech_no_due': btech_no_due, 
+        'mtech_no_due': mtech_no_due, 
+        'msc_no_due': msc_no_due, 
+        'phd_no_due': phd_no_due, 
     }
 
 
-    return render(request, "admin_portal/dashboard.html",context)
+    return render(request, "admin_portal/dashboard.html")
 
 
 @is_admin
