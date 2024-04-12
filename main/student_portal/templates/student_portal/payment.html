@@ -85,14 +85,14 @@
 <body>
     <div><h4>Proceed to Pay!</h4></div>
     <div><h5>Are you sure you want to proceed the payment of Rs {{amount}}?</h5></div>
-    <form action='https://test.payu.in/_payment' method='post'>
+    <form action='https://secure.payu.in/_payment' method='post'>
         {% csrf_token %}
-    <input name="key" value="{{key}}" />
-    <input name="txnid" value="{{txnid}}" />
-    <input name="productinfo" value="{{productinfo}}" />
+    <input name="key" value="{{merchant_key}}" />
+    <input name="txnid" value="{{transaction_id}}" />
+    <input name="productinfo" value="{{product_info}}" />
     <input name="amount" value="{{amount}}" />
     <input name="email" value="{{email}}" />
-    <input name="firstname" value="{{firstname}}" />
+    <input name="firstname" value="{{first_name}}" />
     <input name="lastname" value="" />
     <input name="surl" value="{{surl}}" />
     <input name="furl" value="{{furl}}" />

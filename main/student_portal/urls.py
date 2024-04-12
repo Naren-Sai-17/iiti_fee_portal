@@ -14,5 +14,7 @@ urlpatterns = [
     path("not_authorized",views.not_authorized, name = "not_authorized"),
     path('profile/', views.profile, name='profile'),
     path('receipt/<int:id>/', views.receipt, name='receipt'), 
-    path('payment',views.payment, name = 'payment'), 
+    path('payment',views.payment, name = 'payment'),
+    path('payment_success',views.payment_success,name = 'payment_success'), 
+    path('payment_failure', views.payment_failure, name ='payment_failure'), 
 ]

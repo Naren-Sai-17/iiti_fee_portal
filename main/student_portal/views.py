@@ -8,50 +8,34 @@ from django.conf import settings
 import re 
 from hashlib import sha512
 import time, urllib
-
+from uuid import uuid4
 @is_student
 def payment(request):
-    student = request.user
-    email = student.email
-    roll_number_match = re.search(r"\d+", email.split("@")[0])
-    roll_number = roll_number_match.group()
-    student_instance = models.Students.objects.get(roll_number = roll_number)
-    payment_link = "https://secure.payu.in/_payment"
-
-    merchant_key = settings.PAYU_CONFIG.get('merchant_key')
     salt = settings.PAYU_CONFIG.get('merchant_salt')
-    amount = "100.00"
-    productInfo = "IIT Indore"
-    firstName = "naren"
-    email = email 
-    surl = reverse('student_portal:dashboard')
-    furl = reverse('student_portal:dashboard')
-    txnId = str(int(time.time())) 
-    # surl = f"http://127.0.0.1:8000/payment_response/?reservation_id={reservation_id}"
-    # furl = f"http://127.0.0.1:8000/payment_response/?reservation_id={reservation_id}"
-
-    # Create a map of parameters to pass to the PayU API
-    params = {
-        "key": merchant_key,
-        "txnid": txnId,
-        "amount": amount,
-        "productinfo": productInfo,
-        "firstname": firstName, 
-        "email": email,
-        "surl": surl,
-        "furl": furl
+    data =  {
+        'merchant_key' : settings.PAYU_CONFIG.get('merchant_key'),
+        'transaction_id' : uuid4().hex,
+        'amount' : '100.00',
+        'product_info': 'IIT Indore',
+        'first_name': 'test', 
+        'email': 'test@example.com',
+        'phone' : '8328570494', 
+        'surl' : reverse('student_portal:payment_success'), 
+        'furl' : reverse('student_portal:payment_failure')
     }
+    data['hash'] = generate_hash(data,salt)
+    print(data['hash'])
+    return render(request,'student_portal/payment.html',context = data)
 
-    hashValue = generateHash(params, salt)
-    params["hash"] = hashValue
-    encodedParams = urllib.parse.urlencode(params)
-    url = payment_link + "?" + encodedParams
-    return render(request, "student_portal/payment.html", params)
-
-def generateHash(params, salt):
-    hashString = params["key"] + "|" + params["txnid"] + "|" + str(params["amount"]) + "|" + params["productinfo"] + "|" + params['firstname'] + "|" + params['email'] + "|" +"|" +"|" +"|" +"|" +"|" + "|" +"|" +"|" +"|" + "|" + salt
+def generate_hash(data, salt):
+    hashString = data["merchant_key"] + "|" + data["transaction_id"] + "|" + data["amount"] + "|" + data["product_info"] + "|" + data['first_name'] + "|" + data['email'] + "|" +"|" +"|" +"|" +"|" +"|" + "|" +"|" +"|" +"|" + "|" + salt
     return sha512(hashString.encode('utf-8')).hexdigest()
 
+def payment_success(request): 
+    return HttpResponse("payment success") 
+
+def payment_failure(request): 
+    return HttpResponse("payment failure")
 
 @is_student
 def dashboard(request):

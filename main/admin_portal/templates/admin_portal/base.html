@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +17,7 @@
             aria-label="Sidebar">
             <div class="h-full px-3 py-4 overflow-y-auto flex flex-col">
                 <div class="flex items-center justify-center mb-8">
-                    <span class="text-white text-2xl font-semibold">Admin</span>
+                    <img src="{% static 'logo.png' %}" class="logo"> 
                 </div>
                 <ul class="space-y-2 mb-auto">
                     <li>
