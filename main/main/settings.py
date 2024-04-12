@@ -165,3 +165,13 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = '/student/dashboard'
+
+
+### PayU ###
+PAYU_CONFIG = {
+    "merchant_key": env('MERCHANT_KEY'),
+    "merchant_salt": env('SALT'),
+    "mode": "test"
+    }
+
+PAYMENT_HOST = 'example.com'

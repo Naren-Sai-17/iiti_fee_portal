@@ -1,17 +1,24 @@
 {% extends "student_portal/base.html" %}
 
 {% block content %}
-<div class="container mx-auto py-10">
-    <div class="flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
-            <h2 class="text-3xl font-bold mb-4">Fee Payment Reminder</h2>
-            {{ student.fee_payable }}
-            <p class="text-gray-800 mb-6">Your payment is due soon. Please click below to pay.</p>
-            <a href="#" class="block w-full text-center bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 transition duration-300 ease-in-out">
-                <span class="font-semibold">Click here to pay</span>
-            </a>
-        </div>
+<div class="flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+    {% if student.fee_payable > 0 %}
+    <h2 class="text-3xl font-bold mb-4 text-center text-gray-800">Fee Payment Reminder</h2>
+    <p class="text-gray-800 mb-6 text-center">Your payment is due soon. Please click below to pay.</p>
+    <div class="flex justify-center">
+      {%  url 'student_portal:payment' as payment_url %}
+      <a href="{{payment_url}}" class="text-center bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 transition duration-300 ease-in-out">
+        <span class="font-semibold">Click here to pay</span>
+      </a>
     </div>
+    {% else %}
+    <h2 class="text-3xl font-bold mb-4 text-center text-gray-800">Fee Payment Reminder</h2>
+    <p class="text-gray-800 mb-6 text-center">You have no fee due</p>
+    {% endif %}
+  </div>
+</div>
+  
 
     <div class="mt-12 px-12">
         <h2 class="text-3xl font-bold mb-4">Transaction History</h2>

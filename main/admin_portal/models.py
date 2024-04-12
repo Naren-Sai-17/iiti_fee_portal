@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from datetime import datetime
-
+import math
 
 class Students(models.Model):
     # student details
@@ -35,8 +35,11 @@ class Students(models.Model):
     
     @property 
     def tuition_fee(self): 
-        # add remission logic 
-        return self.base_tuition_fee 
+        if(hasattr(self,'remission')): 
+            return self.base_tuition_fee - math.ceil(self.base_tuition_fee*self.remission.percentage/100)
+        else: 
+            return self.base_tuition_fee
+            
     
     @property
     def total_fee(self):
@@ -64,8 +67,8 @@ class Students(models.Model):
         self.fee_arrear = self.fee_payable 
         self.fee_paid = 0 
         self.mess_rebate = 0 
-        # self.one_time_fee = 0  
-        # self.refundable_security_deposit = 0
+        self.one_time_fee = 0  
+        self.refundable_security_deposit = 0
         self.save() 
 
     def make_payment(self,amt : int): 
@@ -142,7 +145,6 @@ class Payments(models.Model):
             + self.refundable_security_deposit
             + self.accommodation_charges
             + self.student_welfare_fund
-            + self.mess_rebate
         )
 
 
