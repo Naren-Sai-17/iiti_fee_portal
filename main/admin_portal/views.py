@@ -120,7 +120,6 @@ def delete_student(request, roll_number):
         messages.success(request, "student deleted succesfully")
         return redirect(reverse("admin_portal:list"))
     except Exception as e:
-        print(e)
         messages.error(request, e)
         return redirect(reverse("admin_portal:list"))
 

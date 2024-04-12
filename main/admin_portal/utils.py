@@ -124,7 +124,7 @@ def assign_fee(student: models.Students, fee_structure: models.FeeStructure):
 def add_students(excel_file):
     col_range = "A:U"
     try:
-        df = pd.read_excel(excel_file, usecols=col_range, skiprows=0, header=None)
+        df = pd.read_excel(excel_file, usecols=col_range, skiprows=1, header=None)
         pd.set_option("display.max_columns", None)
         pd.set_option("display.max_rows", None)
         numerical_cols = list(range(6, 21))
