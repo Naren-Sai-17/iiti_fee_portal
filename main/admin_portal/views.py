@@ -55,7 +55,6 @@ def dashboard(request):
     msc_no_due = len([students for students in msc_students if students.fee_payable <= 0])
     phd_no_due = len([students for students in phd_students if students.fee_payable <= 0])
     all_no_due = len([students for students in all_students if students.fee_payable <= 0])
-    
     context = {
         'all_students': all_students.count(),
         'btech_students': btech_students.count(),
@@ -79,7 +78,6 @@ def activate(request):
         student.activate()
     messages.success(request, "activated succesfully")
     utils.log("fee portal activated")
-    models.studentStats.objects.all().delete()
     return redirect(reverse("admin_portal:dashboard"))
 
 
@@ -130,6 +128,7 @@ def delete(request):
         try:
             excel_file = request.FILES["excel_file"]
             utils.excel_delete(excel_file)
+            utils.log("deleted students, reference: uploaded excel")
             messages.success(request, "deleted students successfully")
             return render(request, "admin_portal/delete.html")  # Return after success
         except Exception as e:
@@ -147,6 +146,7 @@ def remission(request):
             roll_number = request.POST["roll_number"]
             remission_percentage = request.POST["remission_percentage"]
             utils.set_remission(roll_number, int(remission_percentage))
+            utils.log("fee remission updated")
             messages.success(request, "database updated succesfully")
         except Exception as e:
             print(e)
@@ -164,6 +164,7 @@ def clear_remission(request):
     try:
         for remission_instance in models.FeeRemission.objects.all():
             utils.delete_remission(remission_instance)
+            utils.log("Cleared Fee Remissions")
         messages.success(request, "database cleared succesfully")
     except:
         messages.error(request, "Error")
@@ -176,6 +177,7 @@ def delete_remission(request, id):
         student_instance = models.Students.objects.get(roll_number=id)
         remission_instance = student_instance.remission
         utils.delete_remission(remission_instance)
+        utils.log(f"fee remission for {id} deleted")
         messages.success(request, "deleted succesfully")
     except Exception as e:
         messages.error(request, e)
@@ -188,6 +190,7 @@ def group_remission(request):
     try:
         excel_file = request.FILES["excel_file"]
         utils.excel_remission(excel_file)
+        utils.log("Added remission for students, reference: uploaded excel file")
         messages.success(request, "database updated succesfully")
     except Exception as e:
         messages.error(request, f"error: {e}")
@@ -247,6 +250,7 @@ def fee_structure_list(request):
             if form.is_valid():
                 fee_structure_instance = form.save()
                 update_count = utils.recalculate_fee_structure(fee_structure_instance)
+                utils.log(f"fee structure of {fee_structure_instance.course} : {fee_structure_instance.category} updated")
                 messages.success(
                     request, f"fee structure of {update_count} updated successfully"
                 )
@@ -259,6 +263,7 @@ def fee_structure_list(request):
                 fee_structure_instance = form.save()
                 messages.success(request, "fee structure added succesfully")
                 update_count = utils.recalculate_fee_structure(fee_structure_instance)
+                utils.log(f"added fee structure for {fee_structure_instance.course} : {fee_structure_instance.category}")
                 messages.success(
                     request, f"fee structure of {update_count} updated successfully"
                 )
@@ -277,6 +282,7 @@ def delete_structure(request,id):
     try: 
         fee_structure_instance = models.FeeStructure.objects.get(id = id) 
         fee_structure_instance.delete()
+        utils.log(f"fee structure of {fee_structure_instance.course} : {fee_structure_instance.category} deleted")
         messages.success(request,"deleted succesfully")
     except:
         messages.error(request,"could not find the specified entry")
@@ -309,6 +315,7 @@ def update_profile(request):
     if form.is_valid():
         print(form.cleaned_data)
         form.save()
+        utils.log(f"updated details of {roll_number}")
         messages.success(request, "fee updated succesfully")
         return redirect(reverse("admin_portal:profile", args=[roll_number]))
     else:
@@ -348,6 +355,7 @@ def logs(request):
 def upload_excel(request):
     excel_file = request.FILES["excel_file"]
     utils.add_students(excel_file)
+    utils.log("Added students from uploaded excel file")
     return redirect(reverse("admin_portal:upload"))
 
 @require_POST
@@ -355,6 +363,7 @@ def upload_excel(request):
 def upload_excel2(request):
     excel_file = request.FILES["excel_file"]
     utils.add_students2(excel_file)
+    utils.log("Added students from uploaded excel file(without fee details)")
     return redirect(reverse("admin_portal:upload"))
 
 

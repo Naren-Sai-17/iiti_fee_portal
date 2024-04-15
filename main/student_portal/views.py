@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from num2words import num2words
 from django.contrib.auth import logout as dj_logout
 from .decorators import is_student
 from django.http import HttpResponse, Http404
@@ -86,9 +87,10 @@ def receipt(request,id):
     context = {
         "receipt_no": payment.receipt_number,
         # Dummy receipt number
-        "roll_number": payment,
+        "roll_number": payment.student.roll_number,
         "name": payment.student.name,
         "date": payment.date,  # Dummy date
+        "year":payment.date.year,
         "course": payment.student.course,
         "category": payment.student.category,
         "department": payment.student.department,
@@ -108,9 +110,14 @@ def receipt(request,id):
         "fee_arrear": payment.fee_arrear,
         "mess_rebate": payment.mess_rebate,
         "total_fee": payment.total_fee,
+        "fee_receivable":payment.total_fee-payment.mess_rebate,
+        "fee_payable":payment.fee_payable,
         "fee_received": payment.fee_received,
+        "fee_paid":payment.student.fee_paid,
+        "amtInWords": num2words(payment.student.fee_paid).upper(),
         "mode": payment.mode,
         "type": payment.type,
+
     }
     # models.studentStats.objects.create(student=payment.student,hasReceipt=True)
     return render(request, "student_portal/receipt.html", context)
