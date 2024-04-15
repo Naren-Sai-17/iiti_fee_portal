@@ -20,6 +20,7 @@ urlpatterns = [
     path('payment',views.payment, name = 'payment'),
     path('payment_success',views.payment_success,name = 'payment_success'), 
     path('payment_failure', views.payment_failure, name ='payment_failure'), 
+    path('not_found',views.not_found,name = 'not_found'), 
 ]
 urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
 

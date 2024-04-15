@@ -1,111 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proceed to Pay</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Edu+SA+Beginner:wght@400;500;600;700&family=Lato:wght@300;400&family=Poppins:wght@300;400;500;600;700&family=Ubuntu:wght@300;400;700&display=swap');
-
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Ubuntu', cursive;
-            font-weight: 400;
-        }
-
-        :root{
-            --main-color: #fff;
-            --secondary-color: rgb(34,122,191);
-            --primary-color: #000;
-        }
-
-        body{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 80vh;
-            text-align: center;
-            flex-direction: column;
-        }
-
-        body h4{
-            color: var(--secondary-color);
-            font-size: 25px;
-            margin-bottom: 20px;
-        }
-
-        body h5{
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        input.btn{
-            background: transparent;
-            border: 1.5px solid var(--secondary-color);
-            border-radius: 20px;
-            text-decoration: none;
-            width: 100px;
-            text-align: center;
-            padding: 8px;
-            color: var(--secondary-color);
-            cursor: pointer;
-            margin-right: 30px;
-        }
-        
-        input.btn:hover{
-            color: #fff;
-            background-color: var(--secondary-color);
-        }
-
-        button.cancel{
-            background: transparent;
-            border: 1.5px solid red;
-            border-radius: 20px;
-            text-decoration: none;
-            width: 100px;
-            text-align: center;
-            padding: 8px;
-            color: red;
-            cursor: pointer;
-        }
-        
-        button.cancel:hover{
-            color: #fff;
-            background-color: red;
-        }
-    </style>
-</head>
-<body>
-    
-</body>
-</html>
-<body>
-    <div><h4>Proceed to Pay!</h4></div>
-    <div><h5>Are you sure you want to proceed the payment of Rs {{amount}}?</h5></div>
-    <form action='https://secure.payu.in/_payment' method='post'>
-        {% csrf_token %}
-    <input name="key" value="{{merchant_key}}" />
-    <input name="txnid" value="{{transaction_id}}" />
-    <input name="productinfo" value="{{product_info}}" />
-    <input name="amount" value="{{amount}}" />
-    <input name="email" value="{{email}}" />
-    <input name="firstname" value="{{first_name}}" />
-    <input name="lastname" value="" />
-    <input name="surl" value="{{surl}}" />
-    <input name="furl" value="{{furl}}" />
-    <input name="phone" value="{{phone}}"/>
-    <input name="hash" value = "{{hash}}">
-    <input name="service_provider" value="payu_paisa">
-    <input type="submit" class="btn" value="submit">
-    <button type="button" class="cancel" onclick="cancelPayment()" class="btn">Cancel</button>
-</form>
-<script>
-    function cancelPayment() {
-        window.location.href = "{% url 'student_portal:dashboard' %}";
-    }
-</script>
-</body>
-</html>
+{% extends "student_portal/base.html" %}
+{% block content %}
+    <div class="max-w-md mx-auto bg-white shadow-md p-8 mb-6">
+        <p class="text-lg font-semibold mb-4">Are you sure you want to proceed with the payment of Rs {{ amount }}?</p>
+        <form action='https://secure.payu.in/_payment' method='post'>
+            {% csrf_token %}
+            <input type="hidden" name="key" value="{{ merchant_key }}" />
+            <input type="hidden" name="txnid" value="{{ transaction_id }}" />
+            <input type="hidden" name="productinfo" value="{{ product_info }}" />
+            <div class="mb-4">
+                <label for="amount" class="block text-sm font-medium text-gray-700">Amount:</label>
+                <input name = "amount" class="block mt-1" value = {{amount}}>
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
+                <input name="email" class="block mt-1" value = "{{ email }}">
+            </div>
+            <div class="mb-4">
+                <label for="firstname" class="block text-sm font-medium text-gray-700">First Name:</label>
+                <input name="firstname" class="block mt-1" value = "{{ first_name }}">
+            </div>
+            <div class="mb-4">
+                <label for="phone" class="block text-sm font-medium text-gray-700">Phone:</label>
+                <input required name="phone" class="block mt-1">
+            </div>
+            <input type="hidden" name="lastname" value="" />
+            <input type="hidden" name="surl" value="{{ surl }}" />
+            <input type="hidden" name="furl" value="{{ furl }}" />
+            <input type="hidden" name="hash" value="{{ hash }}">
+            <input type="hidden" name="service_provider" value="payu_paisa">
+            <div class="flex justify-between items-center mt-6">
+                <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" value="Submit">
+                {% url 'dashboard' as cancel_url %}
+                <button type="button" onclick="window.location.href = '{{ cancel_url }}'" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded cursor-pointer">Cancel</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

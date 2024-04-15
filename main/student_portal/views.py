@@ -8,44 +8,67 @@ from admin_portal import models
 from django.conf import settings
 import re 
 from hashlib import sha512
-import time, urllib
 from uuid import uuid4
-@is_student
-def payment(request):
-    salt = settings.PAYU_CONFIG.get('merchant_salt')
-    data =  {
-        'merchant_key' : settings.PAYU_CONFIG.get('merchant_key'),
-        'transaction_id' : uuid4().hex,
-        'amount' : '100.00',
-        'product_info': 'IIT Indore',
-        'first_name': 'test', 
-        'email': 'test@example.com',
-        'phone' : '8328570494', 
-        'surl' : reverse('student_portal:payment_success'), 
-        'furl' : reverse('student_portal:payment_failure')
-    }
-    data['hash'] = generate_hash(data,salt)
-    print(data['hash'])
-    return render(request,'student_portal/payment.html',context = data)
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+
+def get_student(email): 
+    try: 
+        roll_number_match = re.search(r"\d+", email.split("@")[0])
+        roll_number = roll_number_match.group()
+        student_instance = models.Students.objects.get(roll_number = roll_number) 
+        return student_instance
+    except: 
+        return None
 
 def generate_hash(data, salt):
     hashString = data["merchant_key"] + "|" + data["transaction_id"] + "|" + data["amount"] + "|" + data["product_info"] + "|" + data['first_name'] + "|" + data['email'] + "|" +"|" +"|" +"|" +"|" +"|" + "|" +"|" +"|" +"|" + "|" + salt
     return sha512(hashString.encode('utf-8')).hexdigest()
 
+@is_student
+def payment(request):
+    try:
+        email = request.user.email 
+        student_instance = get_student(email) 
+        if student_instance is None:  
+            return redirect(reverse('student_portal:not_found'))
+        salt = settings.PAYU_CONFIG.get('merchant_salt')
+        base_url = request.build_absolute_uri('/')[:-1]
+        data =  {
+            'merchant_key' : settings.PAYU_CONFIG.get('merchant_key'),
+            'transaction_id' : uuid4().hex,
+            'amount' : str(student_instance.fee_payable),
+            'product_info': 'IIT Indore',
+            'first_name': student_instance.name, 
+            'email': request.user.email,
+            'surl' : base_url + reverse('student_portal:payment_success'), 
+            'furl' : base_url + reverse('student_portal:payment_failure')
+        }
+        data['hash'] = generate_hash(data,salt)
+        return render(request,'student_portal/payment.html',context = data)
+    except: 
+        raise Http404
+
+@csrf_exempt
 def payment_success(request): 
     return HttpResponse("payment success") 
 
+@csrf_exempt
 def payment_failure(request): 
-    return HttpResponse("payment failure")
+    messages.error(request,"payment failed")
+    return redirect(reverse('student_portal:dashboard'))
+
+@is_student
+def not_found(request): 
+    return render(request,"student_portal/not_found.html") 
 
 @is_student
 def dashboard(request):
     try: 
-        student = request.user
-        email = student.email
-        roll_number_match = re.search(r"\d+", email.split("@")[0])
-        roll_number = roll_number_match.group()
-        student_instance = models.Students.objects.get(roll_number = roll_number)
+        email = request.user.email 
+        student_instance = get_student(email) 
+        if student_instance is None:  
+            return redirect(reverse('student_portal:not_found'))
         transactions = models.Payments.objects.filter(student = student_instance)
         context = {
             'student' : student_instance , 
@@ -60,26 +83,15 @@ def profile(request):
     try:
         student = request.user
         email = student.email
-        roll_number_match = re.search(r"\d+", email.split("@")[0])
-        if roll_number_match:
-            roll_number = roll_number_match.group()
-            try:
-                student_details = models.Students.objects.get(roll_number=roll_number)
-                return render(
-                    request,
-                    "student_portal/student_details.html",
-                    {
-                        "student_details": student_details,
-                    },
-                )
-            except models.Students.DoesNotExist:
-                return HttpResponse("Student details not found.")
-        else:
-            return HttpResponse("Roll number not found in email.")
-    except Exception as e:
-        error_message = f"An error occurred: {str(e)}"
-        print(error_message)
-        return HttpResponse(error_message)
+        email = request.user.email 
+        student_instance = get_student(email) 
+        if student_instance is None:  
+            return redirect(reverse('admin_portal:not_found'))
+        else: 
+            return render(request,'student_portal/student_details.html',
+                          {'student_details': student_instance })
+    except: 
+        raise Http404
 
 @is_student
 def receipt(request,id):
