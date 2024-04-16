@@ -107,6 +107,47 @@ def upload(request):
             messages.error(request, str(e))
             return redirect(reverse("admin_portal:upload"))
 
+@is_admin
+def upload2(request):
+    if request.method == "GET":
+        return render(request, "admin_portal/upload.html")
+    else:
+        try:
+            if models.Students.objects.filter(
+                roll_number=request.POST["roll_number"]
+            ).exists():
+                raise Exception("Student already exists")
+            student = models.Students()
+            student.name = request.POST["name"]
+            student.roll_number = request.POST["roll_number"]
+            student.course = request.POST["course"]
+            student.category = request.POST["category"]
+            student.department = request.POST["department"]
+            student.base_tuition_fee = request.POST["base_tuition_fee"]
+            student.insurance_fee = request.POST["insurance_fee"]
+            student.examination_fee = request.POST["examination_fee"]
+            student.registration_fee = request.POST["registration_fee"]
+            student.gymkhana_fee = request.POST["gymkhana_fee"]
+            student.medical_fee = request.POST["medical_fee"]
+            student.student_benevolent_fund = request.POST["student_benevolent_fund"]
+            student.lab_fee = request.POST["lab_fee"]
+            student.semester_mess_advance = request.POST["semester_mess_advance"]
+            student.one_time_fee = request.POST["one_time_fee"]
+            student.refundable_security_deposit = request.POST["refundable_security_deposit"]
+            student.accommodation_charges = request.POST["accommodation_charges"]
+            student.student_welfare_fund = request.POST["student_welfare_fund"]
+            student.mess_rebate = request.POST["mess_rebate"]
+            student.fee_arrear = request.POST["fee_arrear"]
+            student.fee_paid = request.POST["fee_paid"]
+            student.save()
+            messages.success(request, "Student added successfully")
+            utils.log(f"Student {student.roll_number} added")
+            return redirect(reverse("admin_portal:upload"))
+
+        except Exception as e:
+            messages.error(request, str(e))
+            return redirect(reverse("admin_portal:upload"))
+
 
 ########## Delete Students ##########
 @is_admin

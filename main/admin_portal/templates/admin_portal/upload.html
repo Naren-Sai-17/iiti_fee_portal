@@ -70,7 +70,7 @@
 </div>
 
 <div class="bg-white rounded-lg shadow-md p-6">
-	<h2 class="text-xl font-semibold mb-4">Update Student</h2>
+	<h2 class="text-xl font-semibold mb-4">Upload Student</h2>
 	<form action="{% url 'admin_portal:upload' %}" method="POST">
 	{% csrf_token %}
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -101,5 +101,106 @@
 	</button>
 	</form>
 </div>
+
+<div class="bg-white rounded-lg shadow-md p-6">
+	<h2 class="text-xl font-semibold mb-4">Upload Student with fee details</h2>
+	<form action="{% url 'admin_portal:upload2' %}" method="POST">
+	{% csrf_token %}
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+		<div>
+			<label for="roll_number" class="block text-gray-700 font-semibold mb-2">Roll Number</label>
+			<input type="text" id="roll_number" name="roll_number" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="name" class="block text-gray-700 font-semibold mb-2">Name</label>
+			<input type="text" id="name" name="name" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="course" class="block text-gray-700 font-semibold mb-2">Course</label>
+			<input type="text" id="course" name="course" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="category" class="block text-gray-700 font-semibold mb-2">Category</label>
+			<input id="category" name="category" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="department" class="block text-gray-700 font-semibold mb-2">Department</label>
+			<input type="text" id="department" name="department" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<!-- Fee details -->
+		<div>
+			<label for="base_tuition_fee" class="block text-gray-700 font-semibold mb-2">Base Tuition Fee</label>
+			<input type="number" id="base_tuition_fee" name="base_tuition_fee" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="insurance_fee" class="block text-gray-700 font-semibold mb-2">Insurance Fee</label>
+			<input type="number" id="insurance_fee" name="insurance_fee" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="examination_fee" class="block text-gray-700 font-semibold mb-2">Examination Fee</label>
+			<input type="number" id="examination_fee" name="examination_fee" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="registration_fee" class="block text-gray-700 font-semibold mb-2">Registration Fee</label>
+			<input type="number" id="registration_fee" name="registration_fee" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="gymkhana_fee" class="block text-gray-700 font-semibold mb-2">Gymkhana Fee</label>
+			<input type="number" id="gymkhana_fee" name="gymkhana_fee" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="medical_fee" class="block text-gray-700 font-semibold mb-2">Medical Fee</label>
+			<input type="number" id="medical_fee" name="medical_fee" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="student_benevolent_fund" class="block text-gray-700 font-semibold mb-2">Student Benevolent Fund</label>
+			<input type="number" id="student_benevolent_fund" name="student_benevolent_fund" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="lab_fee" class="block text-gray-700 font-semibold mb-2">Lab Fee</label>
+			<input type="number" id="lab_fee" name="lab_fee" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="semester_mess_advance" class="block text-gray-700 font-semibold mb-2">Semester Mess Advance</label>
+			<input type="number" id="semester_mess_advance" name="semester_mess_advance" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="one_time_fee" class="block text-gray-700 font-semibold mb-2">One Time Fee</label>
+			<input type="number" id="one_time_fee" name="one_time_fee" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="refundable_security_deposit" class="block text-gray-700 font-semibold mb-2">Refundable Security Deposit</label>
+			<input type="number" id="refundable_security_deposit" name="refundable_security_deposit" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="accommodation_charges" class="block text-gray-700 font-semibold mb-2">Accommodation Charges</label>
+			<input type="number" id="accommodation_charges" name="accommodation_charges" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="student_welfare_fund" class="block text-gray-700 font-semibold mb-2">Student Welfare Fund</label>
+			<input type="number" id="student_welfare_fund" name="student_welfare_fund" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<!-- Extra fee -->
+		<div>
+			<label for="mess_rebate" class="block text-gray-700 font-semibold mb-2">Mess Rebate</label>
+			<input type="number" id="mess_rebate" name="mess_rebate" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+		<div>
+			<label for="fee_arrear" class="block text-gray-700 font-semibold mb-2">Fee Arrear</label>
+			<input type="number" id="fee_arrear" name="fee_arrear" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+    <div>
+			<label for="fee_paid" class="block text-gray-700 font-semibold mb-2">Fee Paid</label>
+			<input type="number" id="fee_paid" name="fee_paid" class="w-full p-2 border border-gray-300 rounded">
+		</div>
+	</div>
+	<button type="submit"
+		class="mt-6 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
+		Add Student
+	</button>
+	</form>
+</div>
+
+
 </div>
 {% endblock %}
