@@ -39,7 +39,6 @@ def log(action: str):
 
 
 def set_remission(roll_number, remission_percentage):
-    print(roll_number, remission_percentage)
     student = models.Students.objects.get(roll_number=roll_number)
     queryset = models.FeeRemission.objects.filter(student=student)
     if queryset.exists():
@@ -59,12 +58,11 @@ def delete_remission(remission_instance: models.FeeRemission):
 
 
 def excel_remission(excel_file):
-    #  roll number and percentage of remission
-    col_range = "A:B"
+    col_range = "A:C"
     df = pd.read_excel(excel_file, usecols=col_range)
     cols = df.columns
     for _, row in df.iterrows():
-        set_remission(row[cols[0]], row[cols[1]])
+        set_remission(row[cols[1]], row[cols[2]])
 
 
 def excel_delete(excel_file):
@@ -73,13 +71,15 @@ def excel_delete(excel_file):
     success = 0
     fail = 0
     for _, row in df.iterrows():
-        roll_number = row[cols[0]]
+        roll_number = row[cols[1]]
         try:
             student = models.Students.objects.get(roll_number=roll_number)
             student.delete()
             success += 1
         except:
             fail += 1
+    return {'success' : success ,
+            'fail' : fail}
 
 
 # calculate fee structure of newly added student
@@ -125,8 +125,6 @@ def add_students(excel_file):
     col_range = "A:U"
     try:
         df = pd.read_excel(excel_file, usecols=col_range, skiprows=1, header=None)
-        pd.set_option("display.max_columns", None)
-        pd.set_option("display.max_rows", None)
         numerical_cols = list(range(6, 21))
         df[numerical_cols] = (
             df[numerical_cols]
@@ -134,6 +132,7 @@ def add_students(excel_file):
             .fillna(0)
             .astype("int64")
         )
+        print(df)
         for index, excel_row in df.iterrows():
             add_students_excel(excel_row)
     except Exception as e:

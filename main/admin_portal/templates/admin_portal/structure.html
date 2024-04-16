@@ -1,83 +1,150 @@
 {% extends "admin_portal/base.html" %}
 {% load static %}
 {% block content %}
-<div class="container mx-auto py-8">
-    <div class="overflow-x-auto">
-        <table class="shadow-md rounded-lg" style="width: 200%;">
-            <thead class="bg-gray-200 text-gray-700">
-                <tr>
-                    <th class="px-4 py-3">Action</th>
-                    <th class="px-4 py-3">Course</th>
-                    <th class="px-4 py-3">Category</th>
-                    <th class="px-4 py-3">Tuition Fee</th>
-                    <th class="px-4 py-3">Insurance Fee</th>
-                    <th class="px-4 py-3">Examination Fee</th>
-                    <th class="px-4 py-3">Registration Fee</th>
-                    <th class="px-4 py-3">Gymkhana Fee</th>
-                    <th class="px-4 py-3">Medical Fee</th>
-                    <th class="px-4 py-3">Student Benevolent Fund</th>
-                    <th class="px-4 py-3">Lab Fee</th>
-                    <th class="px-4 py-3">Semester Mess Advance</th>
-                    <th class="px-4 py-3">One Time Fee</th>
-                    <th class="px-4 py-3">Refundable Security Deposit</th>
-                    <th class="px-4 py-3">Accommodation Charges</th>
-                    <th class="px-4 py-3">Student Welfare Fund</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200 text-gray-700">
-                {% for fee_structure in fee_structures %}
-                <tr>
-                    <form action="{% url 'admin_portal:structure' %}" method="post" class="w-full flex items-center">
-                        {% csrf_token %}
-                        <input type="hidden" id="fee_structure_id" name="fee_structure_id" value="{{ fee_structure.id }}">
-                        <td class="flex px-4 py-2">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300">Edit</button>
-                            {% url 'admin_portal:delete_structure' fee_structure.id as delete_url %}
-                            <button type="button" onclick="window.location.href = '{{delete_url}}'" class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300">Delete</button>
-                        </td>
-                        <td class="px-4 py-2"><input type="text" name="course" value="{{ fee_structure.course }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="text" name="category" value="{{ fee_structure.category }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="base_tuition_fee" value="{{ fee_structure.base_tuition_fee }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="insurance_fee" value="{{ fee_structure.insurance_fee }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="examination_fee" value="{{ fee_structure.examination_fee }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="registration_fee" value="{{ fee_structure.registration_fee }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="gymkhana_fee" value="{{ fee_structure.gymkhana_fee }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="medical_fee" value="{{ fee_structure.medical_fee }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="student_benevolent_fund" value="{{ fee_structure.student_benevolent_fund }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="lab_fee" value="{{ fee_structure.lab_fee }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="semester_mess_advance" value="{{ fee_structure.semester_mess_advance }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="one_time_fee" value="{{ fee_structure.one_time_fee }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="refundable_security_deposit" value="{{ fee_structure.refundable_security_deposit }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="accommodation_charges" value="{{ fee_structure.accommodation_charges }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="student_welfare_fund" value="{{ fee_structure.student_welfare_fund }}" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                    </form>
-                </tr>
-                {% endfor %}
-                <tr>
-                    <form action="{% url 'admin_portal:structure' %}" method="post" class="w-full flex items-center">
-                        {% csrf_token %}
-                        <td class="px-4 py-2">
-                            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300">Add</button>
-                        </td>
-                        <td class="px-4 py-2"><input type="text" name="course" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="text" name="category" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="base_tuition_fee" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="insurance_fee" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="examination_fee" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="registration_fee" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="gymkhana_fee" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="medical_fee" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="student_benevolent_fund" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="lab_fee" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="semester_mess_advance" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="one_time_fee" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="refundable_security_deposit" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="accommodation_charges" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                        <td class="px-4 py-2"><input type="number" name="student_welfare_fund" class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
-                    </form>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
+<div id="confirmationModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
+	<div class="flex items-center justify-center min-h-screen">
+		<div class="bg-white rounded-lg shadow-lg p-6 max-w-md">
+			<div id="confirmationMessage" class="text-gray-700 mb-4"></div>
+			<div class="flex justify-end">
+				<button id="confirmBtn"
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Confirm</button>
+				<button id="cancelBtn"
+					class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="text-sm text-gray-600 mb-2">
+	<ul class="list-disc ml-6">
+		<li>Set the fee structure for a course and category</li>
+		<li>Pressing the edit button will update fee structure of all students of that course and category</li>
+		<li>Fee details of those who have been changed will be updated too</li>
+		<li>Pressing the delete button will delete the fee structure</li>
+	</ul>
+</div>
+
+<div class="mx-auto py-8">
+	<table class="shadow-md rounded-lg" style="width: 150%;">
+		<thead class="bg-gray-200 text-gray-700">
+			<tr>
+				<th class="px-4 py-3">Action</th>
+				<th class="px-4 py-3">Course</th>
+				<th class="px-4 py-3">Category</th>
+				<th class="px-4 py-3">Tuition Fee</th>
+				<th class="px-4 py-3">Insurance Fee</th>
+				<th class="px-4 py-3">Examination Fee</th>
+				<th class="px-4 py-3">Registration Fee</th>
+				<th class="px-4 py-3">Gymkhana Fee</th>
+				<th class="px-4 py-3">Medical Fee</th>
+				<th class="px-4 py-3">Student Benevolent Fund</th>
+				<th class="px-4 py-3">Lab Fee</th>
+				<th class="px-4 py-3">Semester Mess Advance</th>
+				<th class="px-4 py-3">One Time Fee</th>
+				<th class="px-4 py-3">Refundable Security Deposit</th>
+				<th class="px-4 py-3">Accommodation Charges</th>
+				<th class="px-4 py-3">Student Welfare Fund</th>
+			</tr>
+		</thead>
+		<tbody class="bg-white divide-y divide-gray-200 text-gray-700">
+			{% for fee_structure in fee_structures %}
+			<tr>
+				<form action="{% url 'admin_portal:structure' %}" method="post" class="w-full flex items-center">
+					{% csrf_token %}
+					<input type="hidden" id="fee_structure_id" name="fee_structure_id" value="{{ fee_structure.id }}">
+					<td class="flex px-4 py-2">
+						<button type="submit"
+							class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300">Edit</button>
+						{% url 'admin_portal:delete_structure' fee_structure.id as delete_url %}
+						<button type="button" onclick="window.location.href = '{{delete_url}}'"
+							class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300">Delete</button>
+					</td>
+					<td class="px-4 py-2"><input type="text" name="course" value="{{ fee_structure.course }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="text" name="category" value="{{ fee_structure.category }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="base_tuition_fee"
+							value="{{ fee_structure.base_tuition_fee }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="insurance_fee"
+							value="{{ fee_structure.insurance_fee }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="examination_fee"
+							value="{{ fee_structure.examination_fee }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="registration_fee"
+							value="{{ fee_structure.registration_fee }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="gymkhana_fee"
+							value="{{ fee_structure.gymkhana_fee }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="medical_fee"
+							value="{{ fee_structure.medical_fee }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="student_benevolent_fund"
+							value="{{ fee_structure.student_benevolent_fund }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="lab_fee" value="{{ fee_structure.lab_fee }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="semester_mess_advance"
+							value="{{ fee_structure.semester_mess_advance }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="one_time_fee"
+							value="{{ fee_structure.one_time_fee }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="refundable_security_deposit"
+							value="{{ fee_structure.refundable_security_deposit }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="accommodation_charges"
+							value="{{ fee_structure.accommodation_charges }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="student_welfare_fund"
+							value="{{ fee_structure.student_welfare_fund }}"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+				</form>
+			</tr>
+			{% endfor %}
+			<tr>
+				<form action="{% url 'admin_portal:structure' %}" method="post" class="w-full flex items-center">
+					{% csrf_token %}
+					<td class="px-4 py-2">
+						<button type="submit"
+							class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300">Add</button>
+					</td>
+					<td class="px-4 py-2"><input type="text" name="course"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="text" name="category"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="base_tuition_fee"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="insurance_fee"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="examination_fee"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="registration_fee"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="gymkhana_fee"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="medical_fee"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="student_benevolent_fund"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="lab_fee"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="semester_mess_advance"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="one_time_fee"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="refundable_security_deposit"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="accommodation_charges"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+					<td class="px-4 py-2"><input type="number" name="student_welfare_fund"
+							class="w-full border border-gray-300 rounded-md px-2 py-1"></td>
+				</form>
+			</tr>
+		</tbody>
+	</table>
 </div>
 {% endblock %}

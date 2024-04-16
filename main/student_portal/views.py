@@ -42,7 +42,8 @@ def payment(request):
             'first_name': student_instance.name, 
             'email': request.user.email,
             'surl' : base_url + reverse('student_portal:payment_success'), 
-            'furl' : base_url + reverse('student_portal:payment_failure')
+            'furl' : base_url + reverse('student_portal:payment_failure'),
+            'student' : student_instance
         }
         data['hash'] = generate_hash(data,salt)
         return render(request,'student_portal/payment.html',context = data)
@@ -51,10 +52,13 @@ def payment(request):
 
 @csrf_exempt
 def payment_success(request): 
+    messages.success(request,"payment success")
+
     return HttpResponse("payment success") 
 
 @csrf_exempt
 def payment_failure(request): 
+    print(request.POST)
     messages.error(request,"payment failed")
     return redirect(reverse('student_portal:dashboard'))
 
@@ -98,10 +102,9 @@ def receipt(request,id):
     payment = models.Payments.objects.get(id = id)
     context = {
         "receipt_no": payment.receipt_number,
-        # Dummy receipt number
         "roll_number": payment.student.roll_number,
         "name": payment.student.name,
-        "date": payment.date,  # Dummy date
+        "date": payment.date,  
         "year":payment.date.year,
         "course": payment.student.course,
         "category": payment.student.category,
@@ -131,47 +134,10 @@ def receipt(request,id):
         "type": payment.type,
 
     }
-    # models.studentStats.objects.create(student=payment.student,hasReceipt=True)
     return render(request, "student_portal/receipt.html", context)
 
 
 # views.py
-
-# Assuming you have a Student model
-from django.template.loader import render_to_string
-
-
-# def generate_re(request):
-#     # Get all students
-#     students = (
-#         Students.objects.all()
-#     )  # Update with your actual query to get all students
-
-#     # Prepare receipt data for each student
-#     receipts = []
-#     for student in students:
-#         # Here, you would generate receipt data for each student
-#         # You can use the student data along with any other relevant data to generate the receipts
-
-#         # Example: Generating receipt data for each student
-#         receipt_data = {
-#             "student_name": student.name,
-#             "tuition_fee": 1000,  # Example tuition fee amount
-#             # Add other receipt data as needed
-#         }
-
-#         # Render receipt HTML using the receipt_data
-#         receipt_html = render_to_string("receipt.html", receipt_data)
-
-#         # Append the rendered receipt HTML to the receipts list
-#         receipts.append(receipt_html)
-
-#     # Join all receipt HTMLs into a single string
-#     all_receipts_html = "\n".join(receipts)
-
-#     # Return HTTP response with all receipts HTML
-#     return HttpResponse(all_receipts_html)
-
 ## authentication 
     
 def index(request):

@@ -1,68 +1,118 @@
-{% extends "admin_portal/base.html" %} 
+{% extends "admin_portal/base.html" %}
 {% load static %}
 {% block content %}
+<div class="text-sm text-gray-600 mb-2">
+    <ul class="list-disc ml-6">
+        <li>Set the remission amount for students</li>
+        <li>The value for remission should be '1' or '2/3'</li>
+        <li>The excel file should contain S.no, roll number and remission amount</li>
+        <li>You can also download a sample Excel file to see the required format by clicking the "Sample" button.
+        </li>
+    </ul>
+</div>
 <div class="container mx-auto mt-8">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="bg-white shadow-md rounded-md p-6">
             <h2 class="text-xl font-semibold mb-4">Enter Roll Number and Remission Percentage</h2>
-            <form action="{% url 'admin_portal:remission' %}" method="post" id="roll_rem_form">
+            <form action="{% url 'admin_portal:remission' %}" method="post" class="p-2">
                 {% csrf_token %}
                 <div class="mb-4">
                     <label for="roll_number" class="block text-sm font-medium text-gray-700">Roll Number</label>
-                    <input type="text" name="roll_number" id="roll_number" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    <input type="text" name="roll_number" id="roll_number"
+                        class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                 </div>
                 <div class="mb-4">
-                    <label for="remission_percentage" class="block text-sm font-medium text-gray-700">Remission Percentage</label>
-                    <input type="number" name="remission_percentage" id="remission_percentage" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" min="1" max="100" required>
+                    <label for="remission_percentage" class="block text-sm font-medium text-gray-700">Remission
+                        Amount</label>
+                    <select type="number" name="remission_percentage" id="remission_percentage"
+                        class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        required>
+                        <option value="1">1</option>
+                        <option value="2/3">2/3</option>
+                    </select>
+
                 </div>
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors duration-300">Submit</button>
+                <div class="flex justify-start space-x-4">
+                    <button type="submit"
+                        class="inline-flex justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-300">
+                        <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                        Submit
+                    </button>
+                </div>
             </form>
         </div>
         <div class="bg-white shadow-md rounded-md p-6">
             <h2 class="text-xl font-semibold mb-4">Upload Excel File</h2>
-            <form action="{% url 'admin_portal:group_remission' %}" method="post" enctype="multipart/form-data" id="excel_upload_form" class="space-y-4">
+            <form action="{% url 'admin_portal:group_remission' %}" method="post" enctype="multipart/form-data"
+                id="excel_upload_form" class="space-y-4">
                 {% csrf_token %}
-                <div>
-                  <label for="excel_file" class="block text-sm font-medium text-gray-700">Select Excel File</label>
-                  <div class="relative mt-1">
-                    <input type="file" name="excel_file" id="excel_file" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                      <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                      </svg>
-                    </div>
-                  </div>
+                <div class="mb-4 flex items-center justify-center w-full">
+                    <label for="excel_file"
+                        class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                            </svg>
+                            <p id="file-name-display"
+                                class="pt-1 text-xl tracking-wider text-gray-400 group-hover:text-blue-600">
+                                <span class="font-semibold">Click to upload</span> Excel file
+                            </p>
+                        </div>
+                        <input type="file" id="excel_file" name="excel_file" class="hidden" accept=".xlsx,.xls"
+                            onchange="displayFileName(this)" />
+                    </label>
                 </div>
                 <div class="flex justify-start space-x-4">
-                  <button type="submit" class="inline-flex justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-300">
-                    <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                    Upload
-                  </button>
-                  {% url 'admin_portal:download_excel' 'remission_sample' as download_url %}
-                  <button type="button" onclick="window.location.href = '{{ download_url }}'" class="inline-flex justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-300">
-                    <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Sample
-                  </button>
+                    <button type="submit"
+                        class="inline-flex justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-300">
+                        <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                        Upload
+                    </button>
+                    {% url 'admin_portal:download_excel' 'remission_sample' as download_url %}
+                    <button type="button" onclick="window.location.href = '{{ download_url }}'"
+                        class="inline-flex justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-300">
+                        <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Sample
+                    </button>
                 </div>
-              </form>
+            </form>
         </div>
     </div>
     <div class="mt-8">
-        <a href="{% url 'admin_portal:clear_remission' %}" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md transition-colors duration-300">Clear Remissions</a>
+        <a href="{% url 'admin_portal:clear_remission' %}"
+            class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md transition-colors duration-300">Clear
+            Remissions</a>
     </div>
     <div class="bg-white shadow-md rounded-md p-6 mt-8">
         <h2 class="text-xl font-semibold mb-4">Fee Remission List</h2>
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Roll Number</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remission Percentage</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Roll
+                        Number</th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remission
+                        Percentage</th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">View Profile</th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delete Remission</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -71,20 +121,29 @@
                     <td class="px-6 py-4 whitespace-nowrap">{{ fee_remission.student.roll_number }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ fee_remission.percentage }}</td>
                     <td>
-						{% url 'admin_portal:profile' fee_remission.student.roll_number as profile_url %} 
-                        <button onclick="window.location.href = '{{ profile_url }}'" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors duration-300">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        {% url 'admin_portal:profile' fee_remission.student.roll_number as profile_url %}
+                        <button onclick="window.location.href = '{{ profile_url }}'"
+                            class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors duration-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                </path>
                             </svg>
                         </button>
                     </td>
                     <td>
-						
-						{% url 'admin_portal:delete_remission' fee_remission.student.roll_number as delete_url %}
-                        <button onclick="window.location.href = '{{ delete_url }}'" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md transition-colors duration-300">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+
+                        {% url 'admin_portal:delete_remission' fee_remission.student.roll_number as delete_url %}
+                        <button onclick="confirmDelete('{{ delete_url }}')"
+                        class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md transition-colors duration-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
                             </svg>
                         </button>
                     </td>
@@ -94,4 +153,27 @@
         </table>
     </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    function displayFileName(input) {
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const fileName = input.value.split('\\').pop();
+        if (fileName) {
+            fileNameDisplay.innerHTML = `Uploaded file: <span class="font-semibold">${fileName}</span>`;
+        } else {
+            fileNameDisplay.innerHTML = '';
+        }
+    }
+
+    function confirmDelete(url) {
+        if (confirm("Are you sure you want to delete?")) {
+            window.location.href = url;
+        } else {
+            // Do nothing or handle cancellation
+        }
+    }
+
+</script>
 {% endblock %}

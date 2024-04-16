@@ -45,32 +45,42 @@ def loan(request):
 @is_admin
 def dashboard(request):
 
-    btech_students = Students.objects.filter(course__icontains = 'B.TECH')
-    mtech_students = Students.objects.filter(course__icontains = 'M.TECH')
-    msc_students = Students.objects.filter(course__icontains = 'MSC')
-    phd_students = Students.objects.filter(course__icontains = 'PHD')
-    all_students = Students.objects.all() 
-    btech_no_due = len([students for students in btech_students if students.fee_payable <= 0])
-    mtech_no_due = len([students for students in mtech_students if students.fee_payable <= 0])
-    msc_no_due = len([students for students in msc_students if students.fee_payable <= 0])
-    phd_no_due = len([students for students in phd_students if students.fee_payable <= 0])
-    all_no_due = len([students for students in all_students if students.fee_payable <= 0])
+    btech_students = Students.objects.filter(course__icontains='B.TECH').count()
+    mtech_students = Students.objects.filter(course__icontains='M.TECH').count()
+    msc_students = Students.objects.filter(course__icontains='MSC').count()
+    phd_students = Students.objects.filter(course__icontains='PHD').count()
+    all_students = Students.objects.all().count()
+    btech_no_due = Students.objects.filter(course__icontains='B.TECH', fee_payable__lte=0).count()
+    mtech_no_due = Students.objects.filter(course__icontains='M.TECH', fee_payable__lte=0).count()
+    msc_no_due = Students.objects.filter(course__icontains='MSC', fee_payable__lte=0).count()
+    phd_no_due = Students.objects.filter(course__icontains='PHD', fee_payable__lte=0).count()
+    all_no_due = Students.objects.filter(fee_payable__lte=0).count()
+    semester = models.Variable.objects.get(name = "semester")
     context = {
-        'all_students': all_students.count(),
-        'btech_students': btech_students.count(),
-        'mtech_students': mtech_students.count(),
-        'msc_students': msc_students.count(),
-        'phd_students': phd_students.count(),
+        'all_students': all_students,
+        'btech_students': btech_students,
+        'mtech_students': mtech_students,
+        'msc_students': msc_students,
+        'phd_students': phd_students,
         'all_no_due': all_no_due, 
         'btech_no_due': btech_no_due, 
         'mtech_no_due': mtech_no_due, 
         'msc_no_due': msc_no_due, 
         'phd_no_due': phd_no_due, 
+        'semester' : semester.value
     }
 
+    return render(request, "admin_portal/dashboard.html", context=context)
 
-    return render(request, "admin_portal/dashboard.html",context = context)
-
+def set_semester(request): 
+    semester = models.Variable.objects.get(name = "semester") 
+    semester.value = request.POST['semester']
+    semester.save() 
+    utils.log(f"semester changed to {semester.value}")
+    messages.success(request,'semester changed succesfully')
+    return redirect(reverse('admin_portal:dashboard'))
+    
+        
 
 @is_admin
 def activate(request):
@@ -127,14 +137,18 @@ def delete(request):
     if request.method == "POST":
         try:
             excel_file = request.FILES["excel_file"]
-            utils.excel_delete(excel_file)
+            status = utils.excel_delete(excel_file)
+            if(status['success'] > 0):
+                messages.success(request,f"{status['success']} deletes succesfully")
+            if(status['fail'] > 0):
+                messages.error(request,f"{status['fail']} deletes failed / not found")
             utils.log("deleted students, reference: uploaded excel")
-            messages.success(request, "deleted students successfully")
-            return render(request, "admin_portal/delete.html")  # Return after success
+            return render(request, "admin_portal/delete.html")  
         except Exception as e:
-            messages.error(request, f"error: {e}")
+            messages.error(request, "incorrect formatting")
+            return redirect(reverse('admin_portal:delete'))
     else:
-        return render(request, "admin_portal/delete.html")  # Existing return for GET
+        return render(request, "admin_portal/delete.html")  
 
 
 
@@ -344,10 +358,20 @@ def download_excel(request, id):
 
 
 ########## Admin logs ##########
-@is_admin
-def logs(request):
-    logs = models.Log.objects.all().order_by("-timestamp")
-    return render(request, "admin_portal/logs.html", {"logs": logs})
+class logs(ListView):
+    model = models.Log
+    template_name = "admin_portal/logs.html"
+    context_object_name = "logs"
+    paginate_by = 100
+
+    @method_decorator(is_admin)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.order_by('-timestamp')
+
 
 
 @require_POST

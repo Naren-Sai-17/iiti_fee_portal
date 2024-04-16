@@ -26,4 +26,4 @@ class FeeStructureForm(forms.ModelForm):
 class Profile(forms.ModelForm):
     class Meta:
         model=models.Students
-        fields = '__all__'
+        exclude = ['tuition_fee','total_fee','fee_payable']

@@ -1,119 +1,201 @@
-{% extends "admin_portal/base.html" %} 
-{% block content %} 
+{% extends "admin_portal/base.html" %}
+{% block content %}
 {% url 'admin_portal:activate' as activate_url %}
-
-<div class="flex mb-2">
-  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    onclick="window.location.href = '{{ activate_url }}'" >Activate</button>
+<div class="container mx-auto py-8">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold">Current Semester</h2>
+            <button id="editButton" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                Change Semester
+            </button>
+        </div>
+        <div id="semesterDisplay" class="flex items-center">
+            <h3 id="semesterName" class="text-3xl font-bold mr-4"> {{ semester }}</h3>
+        </div>
+        {% url 'admin_portal:set_semester' as change_url %}
+        <form action="{{change_url}}" method="post" id="semesterInput" class="hidden mt-4">
+            {% csrf_token %}
+            <input required type="text" name="semester"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Enter new semester name" />
+            <div class="flex justify-end mt-2">
+                <button id="cancelButton"
+                    class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
+                    Cancel
+                </button>
+                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                    Confirm
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
-
-<div class=" flex justify-center grid grid-cols-1 md:grid-cols-4 gap-2">
-  <div class="col-span-2 bg-slate-200 shadow-lg rounded-lg p-2">
-    <canvas id="pieChart1"></canvas>
+<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    <div class="flex justify-center mb-8">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300" onclick="window.location.href = '{{ activate_url }}'">
+        Activate
+      </button>
+    </div>
+    <div class="text-gray-700">
+      <ul class="list-disc ml-6">
+        <li>Press this button to activate the fee portal</li>
+        <li>Everyone's fee paid will be set to zero, any unpaid fee will be added to fee arrear</li>
+        <li>Make any fee changes like remission and fee structure after activating the fee portal</li>
+      </ul>
+    </div>
   </div>
+
+
+<div class="flex justify-center">
+    <div class="bg-slate-200 shadow-lg rounded-lg p-4 max-w-md text-center">
+        <div>
+            <canvas id="pieChart1" class="mx-auto"></canvas>
+        </div>
+        <p class="text-gray-700 m-2">Total Students: <span class="font-bold">{{ all_students }}</span></p>
+        <p class="text-gray-700">All students without Due: <span class="font-bold">{{ all_no_due }}</span></p>
+    </div>
+</div>  
+
+
+<div class="grid grid-cols-1 grid-cols-2 gap-6 mt-8 text-center">
+    <div class="bg-slate-200 shadow-lg rounded-lg p-4">
+        <div>
+            <canvas id="pieChart2" class="mx-auto"></canvas>
+        </div>
+        <p class="text-gray-700 m-2">Btech Students: <span class="font-bold">{{ btech_students }}</span></p>
+        <p class="text-gray-700">Btech students without Due: <span class="font-bold">{{ btech_no_due }}</span></p>
+    </div>
+    <div class="bg-slate-200 shadow-lg rounded-lg p-4">
+        <div>
+            <canvas id="pieChart3" class="mx-auto"></canvas>
+        </div>
+        <p class="text-gray-700 m-2">Mtech Students: <span class="font-bold">{{ mtech_students }}</span></p>
+        <p class="text-gray-700">Mtech students without Due: <span class="font-bold">{{ mtech_no_due }}</span></p>
+    </div>
+    <div class="bg-slate-200 shadow-lg rounded-lg p-4">
+        <div>
+            <canvas id="pieChart4" class="mx-auto"></canvas>
+        </div>
+        <p class="text-gray-700 m-2">MSc Students: <span class="font-bold">{{ msc_students }}</span></p>
+        <p class="text-gray-700">Msc students without Due: <span class="font-bold">{{ msc_no_due }}</span></p>
+    </div>
+    <div class="bg-slate-200 shadow-lg rounded-lg p-4">
+        <div>
+            <canvas id="pieChart5" class="mx-auto"></canvas>
+        </div>
+        <p class="text-gray-700 m-2">PhD Students: <span class="font-bold">{{ phd_students }}</span></p>
+        <p class="text-gray-700">PhD students without Due: <span class="font-bold">{{ phd_no_due }}</span></p>
+    </div>
 </div>
 
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-  <div class="bg-slate-200 shadow-lg rounded-lg p-2">
-    <canvas id="pieChart2"></canvas>
-  </div>
-  <div class="bg-slate-200 shadow-lg rounded-lg p-2">
-    <canvas id="pieChart3"></canvas>
-  </div>
-  <div class="bg-slate-200 shadow-lg rounded-lg p-2">
-    <canvas id="pieChart4"></canvas>
-  </div>
-  <div class="bg-slate-200 shadow-lg rounded-lg p-2">
-    <canvas id="pieChart5"></canvas>
-  </div>
-</div>
+{% endblock %}
 
+{% block js %}
+<script>
+    const confirmButton = document.getElementById('confirmButton');
+    const cancelButton = document.getElementById('cancelButton');
+    const saveButton = document.getElementById('saveButton');
+    const semesterName = document.getElementById('semesterName');
+    const semesterDisplay = document.getElementById('semesterDisplay');
+    const semesterInput = document.getElementById('semesterInput');
+
+    editButton.addEventListener('click', () => {
+        semesterDisplay.classList.add('hidden');
+        semesterInput.classList.remove('hidden');
+        saveButton.classList.remove('hidden');
+    });
+
+    cancelButton.addEventListener('click', () => {
+        semesterDisplay.classList.remove('hidden');
+        semesterInput.classList.add('hidden');
+        saveButton.classList.add('hidden');
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-   document.addEventListener('DOMContentLoaded', function () {
-       var ctx1 = document.getElementById('pieChart1').getContext('2d');
-       var pieChart1 = new Chart(ctx1, {
-           type: 'pie',
-           data: {
-               labels: ['Students who Paid their fee', 'Students with due'],
-               datasets: [{
-                   data: [{{ all_no_due }}, {{ all_students }} - {{ all_no_due }}],
-                   backgroundColor: ['#36a2eb', '#ff6384']
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx1 = document.getElementById('pieChart1').getContext('2d');
+        var pieChart1 = new Chart(ctx1, {
+            type: 'pie',
+            data: {
+                labels: ['Students who Paid their fee', 'Students with due'],
+                datasets: [{
+                    data: [{{ all_no_due }}, {{ all_students }} - {{ all_no_due }}],
+        backgroundColor: ['#36a2eb', '#ff6384']
                }]
            },
-           options: {
-               responsive: true,
-               maintainAspectRatio: false
-           }
+        options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
        });
 
-       var ctx2 = document.getElementById('pieChart2').getContext('2d');
-       var pieChart2 = new Chart(ctx2, {
-           type: 'pie',
-           data: {
-               labels: ['Students who Paid their fee', 'B.Tech with due'],
-               datasets: [{
-                   data: [{{ btech_no_due }}, {{ btech_students }} - {{ btech_no_due }}],
-                   backgroundColor: ['#36a2eb', '#ff6384']
+    var ctx2 = document.getElementById('pieChart2').getContext('2d');
+    var pieChart2 = new Chart(ctx2, {
+        type: 'pie',
+        data: {
+            labels: ['Students who Paid their fee', 'B.Tech with due'],
+            datasets: [{
+                data: [{{ btech_no_due }}, {{ btech_students }} - {{ btech_no_due }}],
+    backgroundColor: ['#36a2eb', '#ff6384']
                }]
            },
-           options: {
-               responsive: true,
-               maintainAspectRatio: false
-           }
+    options: {
+        responsive: true,
+            maintainAspectRatio: false
+    }
        });
 
-       var ctx3 = document.getElementById('pieChart3').getContext('2d');
-       var pieChart3 = new Chart(ctx3, {
-           type: 'pie',
-           data: {
-               labels: ['Students who Paid their fee', 'M.Tech with due'],
-               datasets: [{
-                   data: [{{ mtech_no_due }}, {{ mtech_students}} - {{ mtech_no_due }}],
-                   backgroundColor: ['#36a2eb', '#ff6384']
+    var ctx3 = document.getElementById('pieChart3').getContext('2d');
+    var pieChart3 = new Chart(ctx3, {
+        type: 'pie',
+        data: {
+            labels: ['Students who Paid their fee', 'M.Tech with due'],
+            datasets: [{
+                data: [{{ mtech_no_due }}, {{ mtech_students }} - {{ mtech_no_due }}],
+    backgroundColor: ['#36a2eb', '#ff6384']
                }]
            },
-           options: {
-               responsive: true,
-               maintainAspectRatio: false
-           }
+    options: {
+        responsive: true,
+            maintainAspectRatio: false
+    }
        });
 
-       var ctx4 = document.getElementById('pieChart4').getContext('2d');
-       var pieChart4 = new Chart(ctx4, {
-           type: 'pie',
-           data: {
-               labels: ['Students who Paid their fee', 'Msc with due'],
-               datasets: [{
-                   data: [{{ msc_no_due }}, {{ msc_students }} - {{msc_no_due }}],
-                   backgroundColor: ['#36a2eb', '#ff6384']
+    var ctx4 = document.getElementById('pieChart4').getContext('2d');
+    var pieChart4 = new Chart(ctx4, {
+        type: 'pie',
+        data: {
+            labels: ['Students who Paid their fee', 'Msc with due'],
+            datasets: [{
+                data: [{{ msc_no_due }}, {{ msc_students }} - {{ msc_no_due }}],
+    backgroundColor: ['#36a2eb', '#ff6384']
                }]
            },
-           options: {
-               responsive: true,
-               maintainAspectRatio: false
-           }
+    options: {
+        responsive: true,
+            maintainAspectRatio: false
+    }
        });
 
-  var ctx5 = document.getElementById('pieChart5').getContext('2d');
-       var pieChart5 = new Chart(ctx5, {
-           type: 'pie',
-           data: {
-               labels: ['Students who Paid their fee', 'Phd with due'],
-               datasets: [{
-                   data: [{{ phd_no_due }}, {{ phd_students }} - {{ phd_no_due }}],
-                   backgroundColor: ['#36a2eb', '#ff6384']
+    var ctx5 = document.getElementById('pieChart5').getContext('2d');
+    var pieChart5 = new Chart(ctx5, {
+        type: 'pie',
+        data: {
+            labels: ['Students who Paid their fee', 'Phd with due'],
+            datasets: [{
+                data: [{{ phd_no_due }}, {{ phd_students }} - {{ phd_no_due }}],
+    backgroundColor: ['#36a2eb', '#ff6384']
                }]
            },
-           options: {
-               responsive: true,
-               maintainAspectRatio: false
-           }
+    options: {
+        responsive: true,
+            maintainAspectRatio: false
+    }
        });
 
 
    });
 </script>
-
 {% endblock %}

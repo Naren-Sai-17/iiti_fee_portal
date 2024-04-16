@@ -6,6 +6,7 @@ app_name = "admin_portal" # refer namespacing in django
 urlpatterns = [
     path("make_payment", views.make_payment, name = "make_payment"), 
     path("dashboard", views.dashboard, name = "dashboard"),
+    path("set_semester",views.set_semester, name = "set_semester"), 
     path("activate", views.activate, name = "activate"), 
     path("loan",views.loan, name = "loan"), 
     # remission  
@@ -13,7 +14,7 @@ urlpatterns = [
     path("group_remission", views.group_remission, name = "group_remission"),
     path("delete_remission/<str:id>/", views.delete_remission, name = "delete_remission"), 
     path("clear_remission", views.clear_remission,name = "clear_remission"),
-    path("logs", views.logs, name = "logs"), 
+    path("logs", views.logs.as_view(), name = "logs"), 
     path("download_excel/<str:id>/",views.download_excel, name = "download_excel"), 
     path("structure",views.fee_structure_list, name = "structure"), 
     path("delete_structure/<str:id>/",views.delete_structure, name = "delete_structure"), 

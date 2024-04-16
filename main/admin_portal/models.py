@@ -33,18 +33,23 @@ class Students(models.Model):
     # fee payed in this semester 
     fee_paid = models.IntegerField(default = 0) 
     
-    @property 
-    def tuition_fee(self): 
+    # derived attributes
+    tuition_fee = models.IntegerField(default=0) 
+    total_fee = models.IntegerField(default=0) 
+    fee_payable = models.IntegerField(default=0)
+
+    def save(self,*args,**kwargs): 
+        tuition_fee_value = 0 
         if(hasattr(self,'remission')): 
-            return self.base_tuition_fee - math.ceil(self.base_tuition_fee*self.remission.percentage/100)
+            if self.remission.percentage == 1: 
+                tuition_fee_value = 0
+            else:
+                tuition_fee_value =  self.base_tuition_fee - math.ceil(self.base_tuition_fee*2/3)
         else: 
-            return self.base_tuition_fee
-            
-    
-    @property
-    def total_fee(self):
-        return (
-            self.tuition_fee
+            tuition_fee_value = self.base_tuition_fee
+
+        total_fee_value = (
+            tuition_fee_value
             + self.insurance_fee
             + self.examination_fee
             + self.registration_fee
@@ -59,9 +64,13 @@ class Students(models.Model):
             + self.student_welfare_fund
         )
 
-    @property   
-    def fee_payable(self): 
-        return self.total_fee - self.mess_rebate + self.fee_arrear - self.fee_paid 
+        fee_payable_value = total_fee_value - self.mess_rebate + self.fee_arrear - self.fee_paid
+
+        self.tuition_fee = tuition_fee_value
+        self.total_fee = total_fee_value
+        self.fee_payable = fee_payable_value
+
+        super().save(*args, **kwargs)
 
     def activate(self):
         self.fee_arrear = self.fee_payable 
@@ -73,7 +82,6 @@ class Students(models.Model):
 
     def make_payment(self,amt : int): 
         amt = int(amt)
-        # create a new payment 
         payment = Payments() 
         payment.student = self 
         payment.receipt_number = "temp"
@@ -171,13 +179,15 @@ class FeeStructure(models.Model):
 
 class FeeRemission(models.Model):  
     student = models.OneToOneField(Students, on_delete = models.CASCADE, primary_key = True, related_name = "remission") 
-    percentage = models.IntegerField()  
+    percentage = models.CharField(max_length=3,choices=(("1","1"),("2/3","2/3")))  
 
 class Log(models.Model):
     action = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-
+class Variable(models.Model): 
+    name = models.CharField(max_length=30)
+    value = models.CharField(max_length=30) 
 
 
 

@@ -1,38 +1,141 @@
 {% extends "student_portal/base.html" %}
 {% block content %}
-    <div class="max-w-md mx-auto bg-white shadow-md p-8 mb-6">
-        <p class="text-lg font-semibold mb-4">Are you sure you want to proceed with the payment of Rs {{ amount }}?</p>
-        <form action='https://secure.payu.in/_payment' method='post'>
-            {% csrf_token %}
-            <input type="hidden" name="key" value="{{ merchant_key }}" />
-            <input type="hidden" name="txnid" value="{{ transaction_id }}" />
-            <input type="hidden" name="productinfo" value="{{ product_info }}" />
-            <div class="mb-4">
-                <label for="amount" class="block text-sm font-medium text-gray-700">Amount:</label>
-                <input name = "amount" class="block mt-1" value = {{amount}}>
-            </div>
-            <div class="mb-4">
-                <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
-                <input name="email" class="block mt-1" value = "{{ email }}">
-            </div>
-            <div class="mb-4">
-                <label for="firstname" class="block text-sm font-medium text-gray-700">First Name:</label>
-                <input name="firstname" class="block mt-1" value = "{{ first_name }}">
-            </div>
-            <div class="mb-4">
-                <label for="phone" class="block text-sm font-medium text-gray-700">Phone:</label>
-                <input required name="phone" class="block mt-1">
-            </div>
-            <input type="hidden" name="lastname" value="" />
-            <input type="hidden" name="surl" value="{{ surl }}" />
-            <input type="hidden" name="furl" value="{{ furl }}" />
-            <input type="hidden" name="hash" value="{{ hash }}">
-            <input type="hidden" name="service_provider" value="payu_paisa">
-            <div class="flex justify-between items-center mt-6">
-                <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" value="Submit">
-                {% url 'dashboard' as cancel_url %}
-                <button type="button" onclick="window.location.href = '{{ cancel_url }}'" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded cursor-pointer">Cancel</button>
-            </div>
-        </form>
-    </div>
+
+
+<div class="max-w-md mx-auto bg-white shadow-md p-8 mb-6">
+    <p class="text-lg font-semibold mb-4">Are you sure you want to proceed with the payment of Rs {{ amount }}?</p>
+    <form action='https://secure.payu.in/_payment' method='post'>
+        {% csrf_token %}
+        <input type="hidden" name="key" value="{{ merchant_key }}" />
+        <input type="hidden" name="txnid" value="{{ transaction_id }}" />
+        <input type="hidden" name="productinfo" value="{{ product_info }}" />
+        <div class="mb-4">
+            <label for="amount" class="block text-sm font-medium text-gray-700">Amount:</label>
+            <input name="amount" class="block mt-1" value={{amount}}>
+        </div>
+        <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
+            <input name="email" class="block mt-1" value="{{ email }}">
+        </div>
+        <div class="mb-4">
+            <label for="firstname" class="block text-sm font-medium text-gray-700">First Name:</label>
+            <input name="firstname" class="block mt-1" value="{{ first_name }}">
+        </div>
+        <div class="mb-4">
+            <label for="phone" class="block text-sm font-medium text-gray-700">Phone:</label>
+            <input required name="phone" class="block mt-1">
+        </div>
+        <input type="hidden" name="lastname" value="" />
+        <input type="hidden" name="surl" value="{{ surl }}" />
+        <input type="hidden" name="furl" value="{{ furl }}" />
+        <input type="hidden" name="hash" value="{{ hash }}">
+        <input type="hidden" name="service_provider" value="payu_paisa">
+        <div class="flex justify-between items-center mt-6">
+            <input type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                value="Proceed">
+            {% url 'dashboard' as cancel_url %}
+            <button type="button" onclick="window.location.href = '{{ cancel_url }}'"
+                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded cursor-pointer">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<div class="max-w-md mx-auto bg-white shadow-md p-8 mb-6">
+    <h1 class="text-2xl font-bold mb-4">Fee Breakdown</h1>
+    <table class="table-auto w-full">
+        <tbody>
+            <tr>
+                <td class="border px-4 py-2">Roll Number</td>
+                <td class="border px-4 py-2">{{ student.roll_number }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Name</td>
+                <td class="border px-4 py-2">{{ student.name }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Course</td>
+                <td class="border px-4 py-2">{{ student.course }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Category</td>
+                <td class="border px-4 py-2">{{ student.category }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Department</td>
+                <td class="border px-4 py-2">{{ student.department }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Tuition Fee</td>
+                <td class="border px-4 py-2">{{ student.tuition_fee }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Insurance Fee</td>
+                <td class="border px-4 py-2">{{ student.insurance_fee }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Examination Fee</td>
+                <td class="border px-4 py-2">{{ student.examination_fee }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Registration Fee</td>
+                <td class="border px-4 py-2">{{ student.registration_fee }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Gymkhana Fee</td>
+                <td class="border px-4 py-2">{{ student.gymkhana_fee }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Medical Fee</td>
+                <td class="border px-4 py-2">{{ student.medical_fee }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Student Benevolent Fund</td>
+                <td class="border px-4 py-2">{{ student.student_benevolent_fund }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Lab Fee</td>
+                <td class="border px-4 py-2">{{ student.lab_fee }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Semester Mess Advance</td>
+                <td class="border px-4 py-2">{{ student.semester_mess_advance }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">One Time Fee</td>
+                <td class="border px-4 py-2">{{ student.one_time_fee }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Refundable Security Deposit</td>
+                <td class="border px-4 py-2">{{ student.refundable_security_deposit }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Accommodation Charges</td>
+                <td class="border px-4 py-2">{{ student.accommodation_charges }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Student Welfare Fund</td>
+                <td class="border px-4 py-2">{{ student.student_welfare_fund }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Mess Rebate</td>
+                <td class="border px-4 py-2">{{ student.mess_rebate }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Fee Arrear</td>
+                <td class="border px-4 py-2">{{ student.fee_arrear }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Total Fee</td>
+                <td class="border px-4 py-2">{{ student.total_fee }}</td>
+            </tr>
+            <tr>
+                <td class="border px-4 py-2">Fee Payable</td>
+                <td class="border px-4 py-2">{{ student.fee_payable }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
 {% endblock %}
