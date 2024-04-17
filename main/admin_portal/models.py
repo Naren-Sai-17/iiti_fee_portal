@@ -172,6 +172,8 @@ class PaymentComponents(models.Model):
     mode = models.CharField(max_length = 20)
     type = models.CharField(max_length = 50)
     utr = models.CharField(max_length=50)
+    amt = models.IntegerField(default=0)
+    
 
 
 class CustomUser(AbstractUser):

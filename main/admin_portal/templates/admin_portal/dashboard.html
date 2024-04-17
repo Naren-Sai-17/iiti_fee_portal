@@ -1,6 +1,6 @@
 {% extends "admin_portal/base.html" %}
 {% block content %}
-{% url 'admin_portal:activate' as activate_url %}
+
 <div class="container mx-auto py-8">
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex justify-between items-center mb-4">
@@ -30,23 +30,37 @@
         </form>
     </div>
 </div>
-
-<div class="bg-white rounded-lg shadow-md p-6 mb-6">
-    <div class="flex justify-center mb-8">
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300" onclick="window.location.href = '{{ activate_url }}'">
-        Activate
-      </button>
+<div class="grid grid-cols-2 justify-center">
+    <div class="bg-white rounded-lg shadow-md p-6 mr-6 mb-6">
+      <div class="flex justify-center mb-8">
+        {% url 'admin_portal:activate' as activate_url %}
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300" onclick="window.location.href = '{{ activate_url }}'">
+          Activate
+        </button>
+      </div>
+      <div class="text-gray-700">
+        <ul class="list-disc ml-6">
+          <li>Press this button to activate the fee portal</li>
+          <li>Everyone's fee paid will be set to zero, any unpaid fee will be added to fee arrear</li>
+          <li>Make any fee changes like remission and fee structure after activating the fee portal</li>
+        </ul>
+      </div>
     </div>
-    <div class="text-gray-700">
-      <ul class="list-disc ml-6">
-        <li>Press this button to activate the fee portal</li>
-        <li>Everyone's fee paid will be set to zero, any unpaid fee will be added to fee arrear</li>
-        <li>Make any fee changes like remission and fee structure after activating the fee portal</li>
-      </ul>
+  
+    {% url 'admin_portal:reconciliation' as reconciliation_url %}
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="flex justify-center mb-8">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300" onclick="window.location.href = '{{ reconciliation_url }}'">
+          Reconciliation
+        </button>
+      </div>
+      <div class="text-gray-700">
+        <ul class="list-disc ml-6">
+          <li>Press this button to export payment data for reconciliation</li>
+        </ul>
+      </div>
     </div>
   </div>
-
-
 <div class="flex justify-center">
     <div class="bg-slate-200 shadow-lg rounded-lg p-4 max-w-md text-center">
         <div>

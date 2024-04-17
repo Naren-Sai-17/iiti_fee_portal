@@ -1,6 +1,61 @@
 from . import models
 import pandas as pd
 from .models import Students
+import os 
+from django.conf import settings 
+from openpyxl import load_workbook
+
+def reconciliation(): 
+    id  = "reconciliation.xlsx"
+    excel_file_path = os.path.join(settings.BASE_DIR, "static", "excel", id)
+    wb = load_workbook(excel_file_path)
+    ws = wb.active 
+    for index,student in enumerate(models.Students.objects.all()[:50]): 
+        list = [index + 1, student.roll_number, student.name, student.course, student.category,
+                student.department,student.tuition_fee,student.insurance_fee,student.examination_fee,
+                student.registration_fee,student.gymkhana_fee,student.medical_fee,student.student_benevolent_fund,
+                student.lab_fee,student.semester_mess_advance,student.one_time_fee,student.refundable_security_deposit,
+                student.accommodation_charges,student.student_welfare_fund,student.total_fee,student.mess_rebate,
+                student.fee_payable - student.fee_arrear,student.fee_arrear,student.fee_payable]
+        try: 
+            payment = models.CurrentSemesterPayment.objects.get(student = student) 
+            components = payment.components.all() 
+            try: 
+                comp = components.objects.get(mode = "payu") 
+                list.extend([comp.mode,comp.type,"NA",comp.utr,comp.amt])
+            except: 
+                list.extend(["NA","NA","NA","NA",0]) 
+            try: 
+                comp = components.objects.get(mode = "neft") 
+                list.extend([comp.mode,comp.type,"NA",comp.utr,comp.amt])
+            except: 
+                list.extend(["NA","NA","NA","NA",0]) 
+            try: 
+                comp = components.objects.get(mode = "upi") 
+                list.extend([comp.mode,comp.type,"NA",comp.utr,comp.amt])
+            except: 
+                list.extend(["NA","NA","NA","NA",0]) 
+            try: 
+                comp = components.objects.get(mode = "qfix") 
+                list.extend([comp.mode,comp.type,"NA",comp.utr,comp.amt])
+            except: 
+                list.extend(["NA","NA","NA","NA",0]) 
+            print(list)
+        except: 
+            list.extend(["NA","NA","NA","NA",0])  
+            list.extend(["NA","NA","NA","NA",0])  
+            list.extend(["NA","NA","NA","NA",0])  
+            list.extend(["NA","NA","NA","NA",0])  
+        for col_index, value in enumerate(list, start=1):
+            ws.cell(row=index + 3, column=col_index, value=value)
+
+
+    print(ws.max_row)
+    save_path = os.path.join(settings.BASE_DIR, "static", "excel", "download.xlsx")
+    wb.save(save_path)
+    return save_path
+
+
 
 def loan_excel(excel_file): 
     col_range = "A:F" # sno,roll number,amt,mode,type,utr

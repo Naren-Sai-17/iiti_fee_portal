@@ -4,6 +4,7 @@ from . import views
 app_name = "admin_portal" # refer namespacing in django 
 
 urlpatterns = [
+    path("reconciliation",views.reconciliation,name = "reconciliation"), 
     path("make_payment", views.make_payment, name = "make_payment"), 
     path("dashboard", views.dashboard, name = "dashboard"),
     path("set_semester",views.set_semester, name = "set_semester"), 

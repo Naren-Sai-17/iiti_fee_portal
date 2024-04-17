@@ -23,6 +23,17 @@ from django.utils.decorators import method_decorator
 from .decorators import is_admin
 from django.contrib import messages
 
+def reconciliation(request): 
+    print("here")
+    save_path = utils.reconciliation()
+    with open(save_path, "rb") as excel_file:
+        response = HttpResponse(
+            excel_file.read(),
+            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+        response["Content-Disposition"] = f'attachment; filename="reconciliation.xlsx"'
+    return response
+
 
 # dummy function for testing purpose 
 def make_payment(request):
