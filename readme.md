@@ -74,7 +74,8 @@ This software is designed to automate several tasks currently handled manually b
 </div>
 
 <div align="center">
-    <img src="main\static\readmeImages\adminHomePage.png" alt="AdminHomePage" width="700px" height="auto">
+      <img src="main\static\readmeImages\adminHomePage.png" alt="AdminHomePage" width="700px" height="auto">
+      <img src="main\static\readmeImages\adminHomePage2.png" alt="AdminHomePage" width="700px" height="auto">
 </div>
     
 
