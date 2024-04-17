@@ -2,6 +2,21 @@ from . import models
 import pandas as pd
 from .models import Students
 
+def loan_excel(excel_file): 
+    col_range = "A:F" # sno,roll number,amt,mode,type,utr
+    df = pd.read_excel(excel_file, usecols=col_range)
+    cols = df.columns
+    for _, row in df.iterrows():
+        # try: 
+        roll_number = row[cols[1]]
+        student_instance = Students.objects.get(roll_number = roll_number)
+        amt = int(row[cols[2]]) 
+        mode = row[cols[3]]
+        type = row[cols[4]] 
+        utr = row[cols[5]] 
+        student_instance.make_payment(amt,mode,type,utr)
+        # except Exception as e: 
+            # print(e)
 
 def export_students():
     queryset = models.Students.objects.all()

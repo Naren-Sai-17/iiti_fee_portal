@@ -38,6 +38,7 @@ class Students(models.Model):
     total_fee = models.IntegerField(default=0) 
     fee_payable = models.IntegerField(default=0)
 
+
     def save(self,*args,**kwargs): 
         tuition_fee_value = 0 
         if(hasattr(self,'remission')): 
@@ -80,42 +81,55 @@ class Students(models.Model):
         self.refundable_security_deposit = 0
         self.save() 
 
-    def make_payment(self,amt : int): 
-        amt = int(amt)
-        payment = Payments() 
-        payment.student = self 
-        payment.receipt_number = "temp"
-        payment.date = datetime.now() 
-        payment.tuition_fee = self.tuition_fee
-        payment.insurance_fee = self.insurance_fee
-        payment.examination_fee = self.insurance_fee
-        payment.examination_fee = self.examination_fee
-        payment.registration_fee = self.registration_fee
-        payment.gymkhana_fee = self.gymkhana_fee
-        payment.medical_fee = self.medical_fee
-        payment.student_benevolent_fund = self.student_benevolent_fund
-        payment.lab_fee = self.lab_fee
-        payment.semester_mess_advance = self.semester_mess_advance
-        payment.one_time_fee = self.one_time_fee
-        payment.refundable_security_deposit = self.refundable_security_deposit
-        payment.accommodation_charges = self.accommodation_charges
-        payment.student_welfare_fund = self.student_welfare_fund
-        payment.fee_arrear = self.fee_arrear 
-        payment.mess_rebate = self.mess_rebate 
-        payment.fee_payable = self.fee_payable
-        payment.fee_received = amt 
-        payment.mode = "DUMMY"
-        payment.type = "DUMMY" 
-        payment.save() 
+    def make_payment(self,amt,mode,type,utr): 
+        if not CurrentSemesterPayment.objects.filter(student = self).exists():    
+            amt = int(amt)
+            payment = Payments() 
+            payment.student = self 
+            payment.receipt_number = "temp"
+            payment.date = datetime.now() 
+            payment.tuition_fee = self.tuition_fee
+            payment.insurance_fee = self.insurance_fee
+            payment.examination_fee = self.insurance_fee
+            payment.examination_fee = self.examination_fee
+            payment.registration_fee = self.registration_fee
+            payment.gymkhana_fee = self.gymkhana_fee
+            payment.medical_fee = self.medical_fee
+            payment.student_benevolent_fund = self.student_benevolent_fund
+            payment.lab_fee = self.lab_fee
+            payment.semester_mess_advance = self.semester_mess_advance
+            payment.one_time_fee = self.one_time_fee
+            payment.refundable_security_deposit = self.refundable_security_deposit
+            payment.accommodation_charges = self.accommodation_charges
+            payment.student_welfare_fund = self.student_welfare_fund
+            payment.fee_arrear = self.fee_arrear 
+            payment.mess_rebate = self.mess_rebate 
+            payment.fee_payable = self.fee_payable
+            payment.fee_received = amt 
+            payment.save() 
+            component = PaymentComponents(payment = payment, mode = mode,type = type, utr = utr)
+            component.save() 
 
-        # update the student details 
-        self.fee_paid += amt
-        self.save() 
+            # update the student details 
+            self.fee_paid += amt
+            self.save() 
+
+            # add the current semester payment 
+            current_semester_payment = CurrentSemesterPayment(student = self, payment = payment)
+            current_semester_payment.save() 
+        else: 
+            # already a payment has been made just update it 
+            payment.fee_received += amt
+            self.fee_paid += amt 
+            payment.save()
+            self.save()  
+            component = PaymentComponents(payment = payment, mode = mode,type = type, utr = utr)
+            component.save() 
 
 
 class Payments(models.Model):
     student = models.ForeignKey(Students, on_delete=models.CASCADE)
-    receipt_number = models.CharField(max_length=50)
+    semester = models.CharField(max_length = 30)
     date = models.DateField()
     tuition_fee = models.IntegerField()
     insurance_fee = models.IntegerField()
@@ -134,8 +148,6 @@ class Payments(models.Model):
     mess_rebate = models.IntegerField()
     fee_payable = models.IntegerField()
     fee_received = models.IntegerField() 
-    mode = models.CharField(max_length = 20)
-    type = models.CharField(max_length = 20)
     
     @property
     def total_fee(self):
@@ -154,6 +166,12 @@ class Payments(models.Model):
             + self.accommodation_charges
             + self.student_welfare_fund
         )
+
+class PaymentComponents(models.Model):
+    payment = models.ForeignKey(to = Payments,on_delete=models.CASCADE,related_name="components",primary_key=True)
+    mode = models.CharField(max_length = 20)
+    type = models.CharField(max_length = 50)
+    utr = models.CharField(max_length=50)
 
 
 class CustomUser(AbstractUser):
@@ -189,7 +207,8 @@ class Variable(models.Model):
     name = models.CharField(max_length=30)
     value = models.CharField(max_length=30) 
 
+class CurrentSemesterPayment(models.Model): 
+    student = models.ForeignKey(Students,on_delete=models.CASCADE,primary_key=True)
+    payment = models.OneToOneField(Payments,on_delete=models.CASCADE,related_name="csempayment") 
 
-
-
-
+    

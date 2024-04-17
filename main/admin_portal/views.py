@@ -39,7 +39,11 @@ def loan(request):
     if request.method == "GET": 
         return render(request,'admin_portal/loan.html')
     else: 
-        return HttpResponse("post request sent")
+        excel_file = request.FILES["excel_file"]
+        utils.loan_excel(excel_file)
+        utils.log("Added loan payments")
+        messages.success(request, "database updated succesfully")
+        return redirect(reverse('admin_portal:loan'))
 
 ########## Dashboard ##########
 @is_admin
@@ -80,12 +84,12 @@ def set_semester(request):
     messages.success(request,'semester changed succesfully')
     return redirect(reverse('admin_portal:dashboard'))
     
-        
 
 @is_admin
 def activate(request):
     for student in models.Students.objects.all():
         student.activate()
+    models.CurrentSemesterPayment.objects.all().delete() 
     messages.success(request, "activated succesfully")
     utils.log("fee portal activated")
     return redirect(reverse("admin_portal:dashboard"))
