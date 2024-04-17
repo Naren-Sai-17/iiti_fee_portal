@@ -22,6 +22,7 @@ urlpatterns = [
     path("delete_student/<str:roll_number>/",views.delete_student, name = "delete_student"),
     path("delete", views.delete, name = "delete"), 
     path("upload", views.upload, name = "upload"), 
+    path("upload2", views.upload2, name = "upload2"), 
     path("upload_excel", views.upload_excel, name = "upload_excel"),
     path("upload_excel2", views.upload_excel2, name = "upload_excel2"),
     path("profile/<str:roll_number>/",views.profile,name = "profile"),
