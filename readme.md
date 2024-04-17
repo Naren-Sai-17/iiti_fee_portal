@@ -138,7 +138,7 @@ This software is designed to automate several tasks currently handled manually b
   - Upon successful payment, the system automatically generates downloadable fee receipts.
     
  <div align="center">
-    <img src="iiti_fee_portal\main\static\readmeImages\studentDashboard.png" alt="StudentDashboard" width="700px" height="auto">
+    <img src="main\static\readmeImages\studentDashboard.png" alt="StudentDashboard" width="700px" height="auto">
 </div>
 
 ## Documentation
