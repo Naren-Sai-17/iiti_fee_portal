@@ -70,11 +70,11 @@ This software is designed to automate several tasks currently handled manually b
   - Admins are directed to the home page upon successful login.
  
 <div align="center">
-    <img src="iiti_fee_portal\main\static\readmeImages\adminLogin.png" alt="AdminLogin" width="700px" height="auto">
+    <img src="main\static\readmeImages\adminLogin.png" alt="AdminLogin" width="700px" height="auto">
 </div>
 
 <div align="center">
-    <img src="iiti_fee_portal\main\static\readmeImages\adminHomePage.png" alt="AdminHomePage" width="700px" height="auto">
+    <img src="main\static\readmeImages\adminHomePage.png" alt="AdminHomePage" width="700px" height="auto">
 </div>
     
 
@@ -85,38 +85,38 @@ This software is designed to automate several tasks currently handled manually b
   - They can view student details using customized filters 
   
 <div align="center">
-    <img src="iiti_fee_portal\main\static\readmeImages\studentList.png" alt="StudentList" width="700px" height="auto">
+    <img src="main\static\readmeImages\studentList.png" alt="StudentList" width="700px" height="auto">
 </div>
 
 - They have access to edit the existing student fee details by navigating to the respective student's profile, add new registrations and remove passout students with maximum flexibility. 
     
   
   <div align="center">
-    <img src="iiti_fee_portal\main\static\readmeImages\uploadExcel.png" alt="UploadExcel"  width="700px" height="auto">
+    <img src="main\static\readmeImages\uploadExcel.png" alt="UploadExcel"  width="700px" height="auto">
 </div>
   
   
   <div align="center">
-    <img src="iiti_fee_portal\main\static\readmeImages\addStudent.png" alt="AddStudent" width="700px" height="auto">
+    <img src="main\static\readmeImages\addStudent.png" alt="AddStudent" width="700px" height="auto">
 </div>
   
  
    <div align="center">
-    <img src="iiti_fee_portal\main\static\readmeImages\deleteStudents.png" alt="DeleteStudents" width="700px" height="auto">
+    <img src="main\static\readmeImages\deleteStudents.png" alt="DeleteStudents" width="700px" height="auto">
 </div>
 
 - **Fee Remissions Management:** 
   - Admins can manage student fee remissions individually or in bulk(with excel upload).
     
   <div align="center">
-    <img src="iiti_fee_portal\main\static\readmeImages\remission.png" alt="FeeRemission" width="700px" height="auto">
+    <img src="main\static\readmeImages\remission.png" alt="FeeRemission" width="700px" height="auto">
 </div>
 
 - **Fee Structure Updates:** 
   - Admins can upload, modify, and manage the fee structure, ensuring flexibility in adapting to changing institutional requirements.
     
   <div align="center">
-    <img src="iiti_fee_portal\main\static\readmeImages\feeStructure.png" alt="FeeStructure" width="700px" height="auto">
+    <img src="main\static\readmeImages\feeStructure.png" alt="FeeStructure" width="700px" height="auto">
 </div>
 
 ## Student
