@@ -5,11 +5,11 @@ import math
 
 class Students(models.Model):
     # student details
-    roll_number = models.CharField(max_length=15, primary_key=True)
-    name = models.CharField(max_length=35)
-    course = models.CharField(max_length=10)
-    category = models.CharField(max_length=15)
-    department = models.CharField(max_length=10)
+    roll_number = models.CharField(max_length=150, primary_key=True)
+    name = models.CharField(max_length=100)
+    course = models.CharField(max_length=100)
+    category = models.CharField(max_length=150)
+    department = models.CharField(max_length=100)
 
     # fee details
     base_tuition_fee = models.IntegerField()
