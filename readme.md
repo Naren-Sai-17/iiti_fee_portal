@@ -86,14 +86,16 @@ Access Student Portal : http://127.0.0.1:8000/student
 - **Login:**
   
   - Admins are directed to the home page upon successful login.
-
-![[adminLogin.png]]
-
-![[adminHomePage.png]]
-
-![[adminHomePage2.png]]
-
  
+<div align="center">
+    <img src="main\static\readmeImages\adminLogin.png" alt="AdminLogin" width="700px" height="auto">
+</div>
+
+<div align="center">
+      <img src="main\static\readmeImages\adminHomePage.png" alt="AdminHomePage" width="700px" height="auto">
+      <img src="main\static\readmeImages\adminHomePage2.png" alt="AdminHomePage" width="700px" height="auto">
+</div>
+    
 
 - **Portal Activation:** 
   - Admins can activate the fee portal before the start of a new semester.
@@ -139,8 +141,21 @@ Access Student Portal : http://127.0.0.1:8000/student
 - **Receipts:** 
   - Upon successful payment, the system automatically generates downloadable fee receipts.
     
-![[studentDashboard.png]]
+ <div align="center">
+    <img src="main\static\readmeImages\studentDashboard.png" alt="StudentDashboard" width="700px" height="auto">
+</div>
 
+## Documentation
+
+Here is the [Documentation](https://linktodocumentation) for our project.
+
+## Contributing
+
+We welcome contributions from everyone. Please fork the repo and create a pull request. Before contributing, please take a moment to review the contribution guidelines.
+
+## License
+
+This project is licensed under the License Name - see the LICENSE file for details.
 
 ## Contact
 
